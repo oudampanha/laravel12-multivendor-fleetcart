@@ -103,7 +103,7 @@
     this.currentPath = '';
     this.selectedFiles = [];
     this.selectedItems = []; // For bulk selection
-    this.currentView = 'grid';
+    this.currentView = 'list';
     this.container = null;
     this.uploadModal = null;
     this.contextMenu = null;
@@ -2003,7 +2003,7 @@
       if (download) download.style.display = '';
       if (moveToFolder) moveToFolder.style.display = '';
       if (copyToFolder) copyToFolder.style.display = '';
-      
+
       // Show bulk options only if multiple files are selected
       if (bulkMoveSelected) {
         bulkMoveSelected.style.display = hasMultipleFiles ? '' : 'none';
@@ -2012,7 +2012,7 @@
           moveText.textContent = ` Move ${selectedFiles.length} Selected Files`;
         }
       }
-      
+
       if (bulkCopySelected) {
         bulkCopySelected.style.display = hasMultipleFiles ? '' : 'none';
         if (hasMultipleFiles) {
@@ -2360,20 +2360,20 @@
 
     if (checkbox.checked) {
       // Check if item already exists to prevent duplicates
-      const existingIndex = this.selectedItems.findIndex(i => 
+      const existingIndex = this.selectedItems.findIndex(i =>
         i.type === item.type && (
-          (i.id && item.id && i.id === item.id) || 
+          (i.id && item.id && i.id === item.id) ||
           (i.path && item.path && i.path === item.path)
         )
       );
-      
+
       if (existingIndex === -1) {
         this.selectedItems.push(item);
       }
     } else {
       this.selectedItems = this.selectedItems.filter(i =>
         !(i.type === item.type && (
-          (i.id && item.id && i.id === item.id) || 
+          (i.id && item.id && i.id === item.id) ||
           (i.path && item.path && i.path === item.path)
         ))
       );
@@ -2678,7 +2678,7 @@
     // Remove duplicates by using a Map with file ID as key
     const uniqueFiles = [];
     const seenIds = new Set();
-    
+
     this.currentBulkFolderAction.items.forEach(file => {
       if (file.id && !seenIds.has(file.id)) {
         seenIds.add(file.id);
