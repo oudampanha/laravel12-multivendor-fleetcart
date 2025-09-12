@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(php artisan:*)",
+      "Bash(composer validate:*)",
+      "Bash(php:*)",
+      "Bash(find:*)",
+      "Bash(composer install:*)",
+      "Bash(npm install)",
+      "Bash(composer:*)",
+      "Bash(npm run build:*)",
+      "Bash(chmod:*)",
+      "Bash(./create_admin_views.sh:*)",
+      "Bash(curl:*)",
+      "Bash(grep:*)",
+      "Bash(xargs basename:*)",
+      "Bash(comm:*)",
+      "Bash(sed:*)",
+      "Bash(xargs sed:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
