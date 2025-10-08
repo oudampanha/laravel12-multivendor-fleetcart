@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tag extends Model
 {
@@ -21,7 +20,6 @@ class Tag extends Model
     {
         return $this->belongsToMany(Product::class, 'product_tags');
     }
-
 
     public function scopeBySlug($query, string $slug)
     {
@@ -46,7 +44,7 @@ class Tag extends Model
     public static function createFromName(string $name): self
     {
         $slug = \Illuminate\Support\Str::slug($name);
-        
+
         return static::create(['slug' => $slug]);
     }
 

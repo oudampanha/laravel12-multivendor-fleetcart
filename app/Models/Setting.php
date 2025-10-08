@@ -46,11 +46,11 @@ class Setting extends Model
 
     public function getValue(?string $locale = null)
     {
-        if (!$this->is_translatable) {
+        if (! $this->is_translatable) {
             return $this->plain_value;
         }
 
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -66,10 +66,10 @@ class Setting extends Model
 
     public function setValue($value, ?string $locale = null): void
     {
-        if (!$this->is_translatable) {
+        if (! $this->is_translatable) {
             $this->update(['plain_value' => $value]);
         } else {
-            if (!$locale) {
+            if (! $locale) {
                 $locale = app()->getLocale();
             }
 
@@ -94,7 +94,7 @@ class Setting extends Model
         return Cache::remember($cacheKey, 3600, function () use ($key, $default, $locale) {
             $setting = static::byKey($key)->first();
 
-            if (!$setting) {
+            if (! $setting) {
                 return $default;
             }
 
@@ -124,13 +124,13 @@ class Setting extends Model
         if ($setting) {
             // Clear all related caches
             Cache::forget("setting.{$key}");
-            
+
             // Clear translated versions if applicable
             if ($setting->is_translatable) {
                 $locales = Translation::forModel(Setting::class, $setting->id)
                     ->distinct('locale')
                     ->pluck('locale');
-                
+
                 foreach ($locales as $locale) {
                     Cache::forget("setting.{$key}.{$locale}");
                 }
@@ -169,13 +169,13 @@ class Setting extends Model
     public static function clearCache(): void
     {
         Cache::forget('all_settings');
-        
+
         // Clear individual setting caches - this is a simple approach
         // In production, you might want to use cache tags for more efficient clearing
         $keys = static::pluck('key');
         foreach ($keys as $key) {
             Cache::forget("setting.{$key}");
-            
+
             // If you need to clear all locale versions, you'd need to track them
             // This is a simplified version
         }
@@ -183,7 +183,7 @@ class Setting extends Model
 
     public function getAvailableLocales(): array
     {
-        if (!$this->is_translatable) {
+        if (! $this->is_translatable) {
             return [];
         }
 

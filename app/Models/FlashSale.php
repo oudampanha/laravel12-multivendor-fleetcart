@@ -75,29 +75,29 @@ class FlashSale extends Model
     public function getTopSellingProducts(int $limit = 10)
     {
         return $this->products()
-                   ->withCount('orders')
-                   ->orderBy('orders_count', 'desc')
-                   ->limit($limit)
-                   ->get();
+            ->withCount('orders')
+            ->orderBy('orders_count', 'desc')
+            ->limit($limit)
+            ->get();
     }
 
     public function getTotalRevenue(): float
     {
         return $this->products()
-                   ->with('orders')
-                   ->get()
-                   ->sum(function ($product) {
-                       return $product->orders->sum('pivot.qty') * $product->price;
-                   });
+            ->with('orders')
+            ->get()
+            ->sum(function ($product) {
+                return $product->orders->sum('pivot.qty') * $product->price;
+            });
     }
 
     public function getTotalSales(): int
     {
         return $this->products()
-                   ->with('orders')
-                   ->get()
-                   ->sum(function ($product) {
-                       return $product->orders->sum('pivot.qty');
-                   });
+            ->with('orders')
+            ->get()
+            ->sum(function ($product) {
+                return $product->orders->sum('pivot.qty');
+            });
     }
 }

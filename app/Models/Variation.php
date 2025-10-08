@@ -4,13 +4,13 @@ namespace App\Models;
 
 use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Variation extends Model
 {
-    use SoftDeletes, HasTranslations;
+    use HasTranslations, SoftDeletes;
 
     protected $fillable = [
         'uid',

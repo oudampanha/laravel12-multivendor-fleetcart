@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
-use App\Models\TaxRate;
 use App\Models\TaxClass;
+use App\Models\TaxRate;
 use Illuminate\Http\Request;
 
 class TaxRateController extends BaseController
@@ -15,15 +14,18 @@ class TaxRateController extends BaseController
     {
         parent::__construct();
     }
+
     public function index()
     {
         $taxRates = TaxRate::with('taxClass')->paginate(15);
+
         return view('admin.tax-rates.index', compact('taxRates'));
     }
 
     public function create()
     {
         $taxClasses = TaxClass::all();
+
         return view('admin.tax-rates.create', compact('taxClasses'));
     }
 
@@ -36,7 +38,7 @@ class TaxRateController extends BaseController
             'city' => 'required|string|max:255',
             'zip' => 'required|string|max:255',
             'rate' => 'required|numeric|min:0|max:100',
-            'position' => 'required|integer'
+            'position' => 'required|integer',
         ]);
 
         TaxRate::create($request->all());
@@ -48,12 +50,14 @@ class TaxRateController extends BaseController
     public function show(TaxRate $taxRate)
     {
         $taxRate->load('taxClass');
+
         return view('admin.tax-rates.show', compact('taxRate'));
     }
 
     public function edit(TaxRate $taxRate)
     {
         $taxClasses = TaxClass::all();
+
         return view('admin.tax-rates.edit', compact('taxRate', 'taxClasses'));
     }
 
@@ -66,7 +70,7 @@ class TaxRateController extends BaseController
             'city' => 'required|string|max:255',
             'zip' => 'required|string|max:255',
             'rate' => 'required|numeric|min:0|max:100',
-            'position' => 'required|integer'
+            'position' => 'required|integer',
         ]);
 
         $taxRate->update($request->all());

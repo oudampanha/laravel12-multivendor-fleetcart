@@ -46,6 +46,6 @@ class OtpVerification extends Model
     public function scopeValid($query)
     {
         return $query->where('is_used', false)
-                     ->where('expires_at', '>', now());
+            ->where('expires_at', '>', now());
     }
 }

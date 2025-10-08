@@ -53,12 +53,12 @@ class Transaction extends Model
 
     public function getFormattedAmount(): string
     {
-        return number_format($this->getAmount(), 2) . ' ' . $this->getCurrency();
+        return number_format($this->getAmount(), 2).' '.$this->getCurrency();
     }
 
     public function isSuccessful(): bool
     {
-        return !is_null($this->transaction_id);
+        return ! is_null($this->transaction_id);
     }
 
     public static function createForOrder(Order $order, string $transactionId, string $paymentMethod): self

@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\AttributeSet;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
 class AttributeSetController extends BaseController
 {
@@ -71,7 +69,7 @@ class AttributeSetController extends BaseController
         ]);
 
         $attributeSet = AttributeSet::create([]);
-        
+
         // Handle translations
         if ($request->filled('name')) {
             $attributeSet->setTranslation('name', $request->input('name'));
@@ -83,11 +81,12 @@ class AttributeSetController extends BaseController
                 'message' => '🎉 Attribute Set created successfully!',
                 'title' => 'Success',
                 'type' => 'success',
-                'attribute_set' => $attributeSet
+                'attribute_set' => $attributeSet,
             ]);
         }
 
         sweetalert()->success('Attribute Set created successfully!');
+
         return redirect()->route('admin.attribute_sets.index');
     }
 
@@ -102,10 +101,10 @@ class AttributeSetController extends BaseController
             // Load translations for the response
             $attributeSetData = $attributeSet->toArray();
             $attributeSetData['name'] = $attributeSet->getTranslation('name');
-            
+
             return response()->json([
                 'success' => true,
-                'attribute_set' => $attributeSetData
+                'attribute_set' => $attributeSetData,
             ]);
         }
 
@@ -121,10 +120,10 @@ class AttributeSetController extends BaseController
             // Load translations for the response
             $attributeSetData = $attributeSet->toArray();
             $attributeSetData['name'] = $attributeSet->getTranslation('name');
-            
+
             return response()->json([
                 'success' => true,
-                'attribute_set' => $attributeSetData
+                'attribute_set' => $attributeSetData,
             ]);
         }
 
@@ -151,11 +150,12 @@ class AttributeSetController extends BaseController
                 'message' => '✅ Attribute Set updated successfully!',
                 'title' => 'Updated',
                 'type' => 'success',
-                'attribute_set' => $attributeSet
+                'attribute_set' => $attributeSet,
             ]);
         }
 
         sweetalert()->success('Attribute Set updated successfully!');
+
         return redirect()->route('admin.attribute_sets.index');
     }
 
@@ -171,11 +171,12 @@ class AttributeSetController extends BaseController
                     'success' => false,
                     'message' => 'Cannot delete attribute set that has attributes!',
                     'title' => 'Error',
-                    'type' => 'error'
+                    'type' => 'error',
                 ], 422);
             }
 
             sweetalert()->error('Cannot delete attribute set that has attributes!');
+
             return redirect()->route('admin.attribute_sets.index');
         }
 
@@ -186,11 +187,12 @@ class AttributeSetController extends BaseController
                 'success' => true,
                 'message' => '🗑️ Attribute Set deleted successfully!',
                 'title' => 'Deleted',
-                'type' => 'success'
+                'type' => 'success',
             ]);
         }
 
         sweetalert()->success('Attribute Set deleted successfully!');
+
         return redirect()->route('admin.attribute_sets.index');
     }
 
@@ -203,7 +205,7 @@ class AttributeSetController extends BaseController
 
         $attributeSets = AttributeSet::whereHas('translations', function ($q) use ($query) {
             $q->where('field', 'name')
-              ->where('value', 'like', "%{$query}%");
+                ->where('value', 'like', "%{$query}%");
         })->paginate(15);
 
         return view('admin.attribute_sets.index', compact('attributeSets', 'query'));

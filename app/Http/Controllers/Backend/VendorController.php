@@ -2,33 +2,35 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
-use App\Models\Vendor;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 
 class VendorController extends BaseController
 {
     protected string $resource = 'vendor';
-    
+
     protected array $additionalPermissions = ['vendor_management_access'];
 
     public function __construct()
     {
         parent::__construct();
-        
+
         // Apply specific permissions for vendor management methods
         $this->applyMethodPermission('vendor_edit', ['approve', 'suspend']);
     }
+
     public function index()
     {
         $vendors = Vendor::with('user')->paginate(15);
+
         return view('admin.vendors.index', compact('vendors'));
     }
 
     public function create()
     {
         $users = User::whereDoesntHave('vendor')->get();
+
         return view('admin.vendors.create', compact('users'));
     }
 
@@ -46,7 +48,7 @@ class VendorController extends BaseController
             'store_zip' => 'nullable|string',
             'commission_rate' => 'numeric|min:0|max:100',
             'is_active' => 'boolean',
-            'is_verified' => 'boolean'
+            'is_verified' => 'boolean',
         ]);
 
         $vendor = Vendor::create($request->all());
@@ -62,6 +64,7 @@ class VendorController extends BaseController
     public function show(Vendor $vendor)
     {
         $vendor->load(['user', 'products', 'orders']);
+
         return view('admin.vendors.show', compact('vendor'));
     }
 
@@ -73,7 +76,7 @@ class VendorController extends BaseController
     public function update(Request $request, Vendor $vendor)
     {
         $request->validate([
-            'store_slug' => 'required|string|unique:vendors,store_slug,' . $vendor->id,
+            'store_slug' => 'required|string|unique:vendors,store_slug,'.$vendor->id,
             'store_email' => 'nullable|email',
             'store_phone' => 'nullable|string',
             'store_address' => 'nullable|string',
@@ -83,14 +86,14 @@ class VendorController extends BaseController
             'store_zip' => 'nullable|string',
             'commission_rate' => 'numeric|min:0|max:100',
             'is_active' => 'boolean',
-            'is_verified' => 'boolean'
+            'is_verified' => 'boolean',
         ]);
 
         $data = $request->all();
-        
-        if ($request->is_verified && !$vendor->is_verified) {
+
+        if ($request->is_verified && ! $vendor->is_verified) {
             $data['verified_at'] = now();
-        } elseif (!$request->is_verified) {
+        } elseif (! $request->is_verified) {
             $data['verified_at'] = null;
         }
 
@@ -112,7 +115,7 @@ class VendorController extends BaseController
     {
         $vendor->update([
             'is_verified' => true,
-            'verified_at' => now()
+            'verified_at' => now(),
         ]);
 
         return redirect()->back()

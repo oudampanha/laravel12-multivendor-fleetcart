@@ -34,21 +34,21 @@ class LanguageLine extends Model
 
     public function scopeHasTranslationFor($query, string $locale)
     {
-        return $query->whereJsonContains('text->' . $locale, '!=', null);
+        return $query->whereJsonContains('text->'.$locale, '!=', null);
     }
 
     public function scopeMissingTranslationFor($query, string $locale)
     {
         return $query->where(function ($q) use ($locale) {
-            $q->whereJsonMissing('text->' . $locale)
-              ->orWhereJsonContains('text->' . $locale, null)
-              ->orWhereJsonContains('text->' . $locale, '');
+            $q->whereJsonMissing('text->'.$locale)
+                ->orWhereJsonContains('text->'.$locale, null)
+                ->orWhereJsonContains('text->'.$locale, '');
         });
     }
 
     public static function getTranslation(string $group, string $key, ?string $locale = null, $default = null)
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -57,7 +57,7 @@ class LanguageLine extends Model
         return Cache::remember($cacheKey, 3600, function () use ($group, $key, $locale, $default) {
             $languageLine = static::byGroupAndKey($group, $key)->first();
 
-            if (!$languageLine) {
+            if (! $languageLine) {
                 return $default;
             }
 
@@ -87,7 +87,7 @@ class LanguageLine extends Model
 
     public static function getGroupTranslations(string $group, ?string $locale = null): array
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -98,7 +98,7 @@ class LanguageLine extends Model
                 ->get()
                 ->mapWithKeys(function ($languageLine) use ($locale) {
                     return [
-                        $languageLine->key => data_get($languageLine->text, $locale, '')
+                        $languageLine->key => data_get($languageLine->text, $locale, ''),
                     ];
                 })
                 ->toArray();
@@ -107,7 +107,7 @@ class LanguageLine extends Model
 
     public static function getAllTranslations(?string $locale = null): array
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -120,9 +120,9 @@ class LanguageLine extends Model
                     return [
                         $group => $groupLines->mapWithKeys(function ($languageLine) use ($locale) {
                             return [
-                                $languageLine->key => data_get($languageLine->text, $locale, '')
+                                $languageLine->key => data_get($languageLine->text, $locale, ''),
                             ];
-                        })->toArray()
+                        })->toArray(),
                     ];
                 })
                 ->toArray();
@@ -133,20 +133,20 @@ class LanguageLine extends Model
     {
         $languageLine = static::byGroupAndKey($group, $key)->first();
 
-        if (!$languageLine) {
+        if (! $languageLine) {
             return false;
         }
 
         $translation = data_get($languageLine->text, $locale);
-        
-        return !empty($translation);
+
+        return ! empty($translation);
     }
 
     public static function removeTranslation(string $group, string $key, ?string $locale = null): bool
     {
         $languageLine = static::byGroupAndKey($group, $key)->first();
 
-        if (!$languageLine) {
+        if (! $languageLine) {
             return false;
         }
 
@@ -154,7 +154,7 @@ class LanguageLine extends Model
             // Remove specific locale
             $text = $languageLine->text;
             unset($text[$locale]);
-            
+
             if (empty($text)) {
                 // If no translations left, delete the language line
                 $languageLine->delete();
@@ -187,7 +187,7 @@ class LanguageLine extends Model
     {
         return Cache::remember('language_line_locales', 3600, function () {
             $locales = [];
-            
+
             static::all()->each(function ($languageLine) use (&$locales) {
                 $locales = array_merge($locales, array_keys($languageLine->text));
             });
@@ -200,7 +200,7 @@ class LanguageLine extends Model
     {
         $lines = static::byGroup($group)->get();
         $locales = static::getAvailableLocales();
-        
+
         $stats = [
             'total_keys' => $lines->count(),
             'locales' => [],
@@ -209,14 +209,14 @@ class LanguageLine extends Model
 
         foreach ($locales as $locale) {
             $translatedCount = $lines->filter(function ($line) use ($locale) {
-                return !empty(data_get($line->text, $locale));
+                return ! empty(data_get($line->text, $locale));
             })->count();
 
             $stats['locales'][$locale] = [
                 'translated' => $translatedCount,
                 'missing' => $stats['total_keys'] - $translatedCount,
-                'percentage' => $stats['total_keys'] > 0 
-                    ? round(($translatedCount / $stats['total_keys']) * 100, 2) 
+                'percentage' => $stats['total_keys'] > 0
+                    ? round(($translatedCount / $stats['total_keys']) * 100, 2)
                     : 0,
             ];
         }
@@ -231,7 +231,7 @@ class LanguageLine extends Model
             ->groupBy('group')
             ->mapWithKeys(function ($groupLines, $group) {
                 return [
-                    $group => $groupLines->pluck('key')->toArray()
+                    $group => $groupLines->pluck('key')->toArray(),
                 ];
             })
             ->toArray();
@@ -246,7 +246,7 @@ class LanguageLine extends Model
         foreach ($groups as $group) {
             foreach ($locales as $locale) {
                 Cache::forget("language_lines.{$group}.{$locale}");
-                
+
                 // Clear individual key caches
                 $keys = static::byGroup($group)->pluck('key');
                 foreach ($keys as $key) {
@@ -271,7 +271,7 @@ class LanguageLine extends Model
         foreach ($locales as $locale) {
             Cache::forget("language_lines.{$group}.{$locale}");
             Cache::forget("all_language_lines.{$locale}");
-            
+
             // Clear individual key caches
             $keys = static::byGroup($group)->pluck('key');
             foreach ($keys as $key) {
@@ -301,14 +301,14 @@ class LanguageLine extends Model
     public function hasTranslationForLocale(string $locale): bool
     {
         $translation = data_get($this->text, $locale);
-        
-        return !empty($translation);
+
+        return ! empty($translation);
     }
 
     public function getAvailableLocalesForLine(): array
     {
         return array_keys(array_filter($this->text, function ($value) {
-            return !empty($value);
+            return ! empty($value);
         }));
     }
 }

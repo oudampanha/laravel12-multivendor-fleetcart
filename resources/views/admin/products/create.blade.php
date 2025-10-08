@@ -7,7 +7,6 @@
     <div class="col-12">
       <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" id="productForm">
         @csrf
-
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-3">
           <h4 class="mb-0">Create Product</h4>
@@ -41,7 +40,7 @@
                 <div class="form-group mb-3">
                   <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
                   <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
-                    rows="8">{{ old('description') }}</textarea>
+                    rows="8" style="resize: vertical; min-height: 120px;">{{ old('description') }}</textarea>
                   @error('description')
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
@@ -49,7 +48,7 @@
 
                 <!-- Brand -->
                 <div class="form-group mb-3">
-                  <label for="brand_id" class="form-label">Brand</label>
+                  <label for="brand_id" class="form-label d-block mb-2">Brand</label>
                   <select class="form-control @error('brand_id') is-invalid @enderror" id="brand_id" name="brand_id">
                     <option value="">Please Select</option>
                     @foreach ($brands as $brand)
@@ -65,16 +64,9 @@
 
                 <!-- Categories -->
                 <div class="form-group mb-3">
-                  <label for="categories" class="form-label">Categories</label>
-                  <select class="form-control @error('categories') is-invalid @enderror" id="categories"
-                    name="categories[]" multiple>
-                    @foreach ($categories as $category)
-                      <option value="{{ $category->id }}"
-                        {{ in_array($category->id, old('categories', [])) ? 'selected' : '' }}>
-                        {{ $category->name }}
-                      </option>
-                    @endforeach
-                  </select>
+                  <label for="categories" class="form-label d-block mb-2">Categories</label>
+                  <input type="text" class="form-control @error('categories') is-invalid @enderror" id="categories"
+                    name="categories" value="{{ old('categories') }}" placeholder="">
                   @error('categories')
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
@@ -82,7 +74,7 @@
 
                 <!-- Tax Class -->
                 <div class="form-group mb-3">
-                  <label for="tax_class_id" class="form-label">Tax Class</label>
+                  <label for="tax_class_id" class="form-label d-block mb-2">Tax Class</label>
                   <select class="form-control @error('tax_class_id') is-invalid @enderror" id="tax_class_id"
                     name="tax_class_id">
                     <option value="">Please Select</option>
@@ -99,173 +91,500 @@
 
                 <!-- Tags -->
                 <div class="form-group mb-3">
-                  <label for="tags" class="form-label">Tags</label>
+                  <label for="tags" class="form-label d-block mb-2">Tags</label>
                   <input type="text" class="form-control @error('tags') is-invalid @enderror" id="tags"
-                    name="tags" value="{{ old('tags') }}" placeholder="Enter tags separated by commas">
+                    name="tags" value="{{ old('tags') }}" placeholder="">
                   @error('tags')
                     <div class="invalid-feedback">{{ $message }}</div>
                   @enderror
                 </div>
 
-                <!-- Virtual Product Checkbox -->
-                <div class="form-check mb-3">
-                  <input type="checkbox" class="form-check-input" id="is_virtual" name="is_virtual" value="1"
-                    {{ old('is_virtual') ? 'checked' : '' }}>
-                  <label class="form-check-label" for="is_virtual">
-                    The product won't be shipped
-                  </label>
+                <!-- Virtual Product -->
+                <div class="form-group mb-3">
+                  <label class="form-label d-block mb-2">Virtual</label>
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="is_virtual" name="is_virtual" value="1"
+                      {{ old('is_virtual') ? 'checked' : '' }}>
+                    <label class="custom-control-label" for="is_virtual">
+                      The product won't be shipped
+                    </label>
+                  </div>
                 </div>
 
                 <!-- Status -->
-                <div class="form-check mb-3">
-                  <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1"
-                    {{ old('is_active', true) ? 'checked' : '' }}>
-                  <label class="form-check-label" for="is_active">
-                    Enable the product
-                  </label>
+                <div class="form-group mb-3">
+                  <label class="form-label d-block mb-2">Status</label>
+                  <div class="custom-control custom-switch">
+                    <input type="checkbox" class="custom-control-input" id="is_active" name="is_active" value="1"
+                      {{ old('is_active', true) ? 'checked' : '' }}>
+                    <label class="custom-control-label" for="is_active">
+                      Enable the product
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Attributes Section -->
+            <!-- Product Attributes Section -->
             <div class="card mb-4">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Attributes</h5>
-                <button type="button" class="btn btn-sm btn-outline-primary" id="addAttributeBtn">
-                  <i class="fas fa-plus"></i>
+              <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0">Attributes</h5>
+                <button type="button" class="btn btn-link text-dark p-0">
+                  <i class="fas fa-th"></i>
                 </button>
               </div>
-              <div class="card-body">
-                <div id="attributesContainer">
-                  <!-- Attributes will be dynamically added here -->
-                  <div class="row mb-3 attribute-row">
+              <div class="card-body p-3">
+                <div class="mb-3">
+                  <div class="row mb-2">
                     <div class="col-md-5">
-                      <select class="form-control" name="attributes[0][name]">
-                        <option value="">Please Select</option>
-                        <!-- Add attribute options here -->
-                      </select>
+                      <label class="form-label d-block mb-1">Attribute</label>
                     </div>
-                    <div class="col-md-5">
-                      <input type="text" class="form-control" name="attributes[0][value]" placeholder="Values">
+                    <div class="col-md-7">
+                      <label class="form-label d-block mb-1">Values</label>
                     </div>
-                    <div class="col-md-2">
-                      <button type="button" class="btn btn-sm btn-outline-danger remove-attribute">
+                  </div>
+
+                  <div id="attributesContainer">
+                    <!-- Attribute rows -->
+                    <div class="attribute-row d-flex align-items-center mb-2" data-attribute-index="0">
+                      <button type="button" class="btn btn-sm btn-link text-dark p-1 mr-2 drag-handle">
+                        <i class="fas fa-grip-vertical"></i>
+                      </button>
+                      <div class="row flex-grow-1">
+                        <div class="col-md-5">
+                          <select class="form-control" name="attributes[0][attribute_id]">
+                            <option value="">Please Select</option>
+                            @foreach ($attributes as $attribute)
+                              <option value="{{ $attribute->id }}">{{ $attribute->getTranslation('name') ?? $attribute->slug }}</option>
+                            @endforeach
+                          </select>
+                        </div>
+                        <div class="col-md-7">
+                          <input type="text" class="form-control" name="attributes[0][values]" placeholder="">
+                        </div>
+                      </div>
+                      <button type="button" class="btn btn-sm btn-outline-danger ml-2 remove-attribute">
                         <i class="fas fa-trash"></i>
                       </button>
                     </div>
                   </div>
+
+                  <button type="button" class="btn btn-light border" id="addAttribute">
+                    Add Attribute
+                  </button>
                 </div>
-                <button type="button" class="btn btn-sm btn-secondary" id="addAttribute">Add Attribute</button>
               </div>
             </div>
 
-            <!-- Variations Section -->
+            <!-- Product Variations Section -->
             <div class="card mb-4">
-              <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Variations</h5>
-                <div>
-                  <button type="button" class="btn btn-sm btn-outline-primary" id="addVariationBtn">
-                    <i class="fas fa-plus"></i>
+              <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0">Variations</h5>
+                <div class="d-flex align-items-center">
+                  <button type="button" class="btn btn-link text-dark p-0 mr-3" id="toggleAllVariations">
+                    <i class="fas fa-chevron-up"></i>
                   </button>
-                  <button type="button" class="btn btn-sm btn-outline-secondary" id="generateVariationsBtn">
-                    <i class="fas fa-cogs"></i>
+                  <button type="button" class="btn btn-link text-dark p-0">
+                    <i class="fas fa-th"></i>
                   </button>
                 </div>
               </div>
-              <div class="card-body">
-                <div class="alert alert-info">
-                  <i class="fas fa-info-circle"></i> Please add some variations to generate variants.
-                </div>
+              <div class="card-body p-3">
                 <div id="variationsContainer">
                   <!-- Variations will be dynamically added here -->
-                  <div class="row mb-3 variation-row">
-                    <div class="col-md-5">
-                      <input type="text" class="form-control" name="variations[0][name]" placeholder="Name">
+                  <div class="card border mb-3" data-variation-index="0">
+                    <div class="card-header bg-light border-0 py-2" id="headingVariation0">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <button type="button" class="btn btn-link text-dark p-1 mr-2 drag-handle">
+                            <i class="fas fa-grip-vertical"></i>
+                          </button>
+                          <span class="variation-title font-weight-normal">New Variation</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <button type="button" class="btn btn-link text-danger p-1 mr-2 remove-variation">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                          <button type="button" class="btn btn-link text-dark p-1" data-toggle="collapse"
+                            data-target="#collapseVariation0" aria-expanded="true" aria-controls="collapseVariation0">
+                            <i class="fas fa-chevron-up"></i>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-md-2">
-                      <select class="form-control" name="variations[0][type]">
-                        <option value="">Please Select</option>
-                        <option value="text">Text</option>
-                        <option value="color">Color</option>
-                        <option value="image">Image</option>
-                      </select>
-                    </div>
-                    <div class="col-md-3">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Select Options</button>
-                    </div>
-                    <div class="col-md-2">
-                      <button type="button" class="btn btn-sm btn-outline-danger remove-variation">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary move-variation-up">
-                        <i class="fas fa-arrow-up"></i>
-                      </button>
+                    <div id="collapseVariation0" class="collapse show" aria-labelledby="headingVariation0">
+                      <div class="card-body pt-3 pb-2">
+                        <div class="row">
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label d-block mb-2">Name</label>
+                            <input type="text" class="form-control variation-name" name="variations[0][name]"
+                              placeholder="">
+                          </div>
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label d-block mb-2">Type</label>
+                            <select class="form-control variation-type" name="variations[0][type]">
+                              <option value="">Please Select</option>
+                              <option value="text">Text</option>
+                              <option value="color">Color</option>
+                              <option value="image">Image</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <!-- Labels Section (initially hidden) -->
+                        <div class="labels-section" style="display: none;">
+                          <div class="form-group mb-3">
+                            <label class="form-label">Label <span class="text-danger">*</span></label>
+
+                            <!-- Text Type Layout -->
+                            <div class="labels-container labels-text" style="display: none;">
+                              <div class="label-row d-flex align-items-center mb-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary drag-handle mr-2">
+                                  <i class="fas fa-grip-vertical"></i>
+                                </button>
+                                <input type="text" class="form-control label-input flex-grow-1"
+                                  name="variations[0][labels][]" placeholder="Enter text value (e.g., Small)">
+                                <button type="button" class="btn btn-sm btn-outline-danger ml-2 remove-label">
+                                  <i class="fas fa-trash"></i>
+                                </button>
+                              </div>
+                            </div>
+
+                            <!-- Color Type Layout -->
+                            <div class="labels-container labels-color" style="display: none;">
+                              <div class="label-row mb-2">
+                                <div class="d-flex align-items-center">
+                                  <button type="button" class="btn btn-sm btn-outline-secondary drag-handle mr-2">
+                                    <i class="fas fa-grip-vertical"></i>
+                                  </button>
+                                  <div class="color-input-group d-flex align-items-center flex-grow-1">
+                                    <input type="color" class="form-control form-control-color color-picker mr-2"
+                                      value="#000000" style="width: 50px; height: 38px;">
+                                    <input type="text" class="form-control color-name mr-2 flex-grow-1"
+                                      placeholder="Color name (e.g., Red)">
+                                    <input type="text" class="form-control color-hex label-input"
+                                      name="variations[0][labels][]" placeholder="#000000" style="width: 100px;">
+                                  </div>
+                                  <button type="button" class="btn btn-sm btn-outline-danger ml-2 remove-label">
+                                    <i class="fas fa-trash"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <!-- Image Type Layout -->
+                            <div class="labels-container labels-image" style="display: none;">
+                              <div class="label-row mb-2">
+                                <div class="d-flex align-items-center">
+                                  <button type="button" class="btn btn-sm btn-outline-secondary drag-handle mr-2">
+                                    <i class="fas fa-grip-vertical"></i>
+                                  </button>
+                                  <div class="image-input-group d-flex align-items-center flex-grow-1">
+                                    <div class="image-preview mr-2"
+                                      style="width: 50px; height: 38px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                      <i class="fas fa-image text-muted"></i>
+                                    </div>
+                                    <input type="text" class="form-control image-name mr-2 flex-grow-1"
+                                      placeholder="Image name (e.g., Pattern A)">
+                                    <input type="hidden" class="image-id label-input" name="variations[0][labels][]"
+                                      value="">
+                                    <button type="button" class="btn btn-sm btn-outline-primary select-image mr-1">
+                                      <i class="fas fa-image"></i>
+                                    </button>
+                                  </div>
+                                  <button type="button" class="btn btn-sm btn-outline-danger ml-2 remove-label">
+                                    <i class="fas fa-trash"></i>
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <button type="button" class="btn btn-sm btn-secondary add-label-row">Add Row</button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <button type="button" class="btn btn-sm btn-secondary" id="addVariation">Add Variation</button>
-              </div>
-            </div>
 
-            <!-- Variants Section -->
-            <div class="card mb-4">
-              <div class="card-header">
-                <h5 class="card-title mb-0">Variants</h5>
-              </div>
-              <div class="card-body">
-                <div class="alert alert-info">
-                  <i class="fas fa-info-circle"></i> Please add some variations to generate variants.
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <button type="button" class="btn btn-light border" id="addVariation">
+                    Add Variation
+                  </button>
+                  <div class="d-flex align-items-center">
+                    <select class="form-control mr-2" id="variationTemplate" style="width: 200px;">
+                      <option value="">Select Template</option>
+                      <option value="size">Size (S, M, L, XL)</option>
+                      <option value="color">Color (Red, Blue, Green)</option>
+                      <option value="material">Material (Cotton, Polyester)</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" id="insertTemplate">Insert</button>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Options Section -->
+            <!-- Product Variants Section -->
             <div class="card mb-4">
               <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="card-title mb-0">Options</h5>
-                <button type="button" class="btn btn-sm btn-outline-primary" id="addOptionBtn">
-                  <i class="fas fa-plus"></i>
-                </button>
+                <h5 class="card-title mb-0">
+                  <i class="fas fa-code-branch me-2"></i>Variants
+                </h5>
+                <!-- Right Side: Toggle Switch and Chevron -->
+                <div class="d-flex align-items-center gap-3">
+                  <!-- Collapse Toggle Button -->
+                  <button type="button" class="btn btn-link p-0 text-muted border-0 bg-transparent"
+                    aria-expanded="false" aria-controls="variant-collapse" id="toggleAllVariantsAccordion">
+                    <i class="fas fa-chevron-down fs-5"></i>
+                  </button>
+                </div>
               </div>
               <div class="card-body">
-                <div id="optionsContainer">
-                  <!-- Options will be dynamically added here -->
-                  <div class="row mb-3 option-row">
-                    <div class="col-md-5">
-                      <input type="text" class="form-control" name="options[0][name]" placeholder="Name">
-                    </div>
-                    <div class="col-md-2">
-                      <select class="form-control" name="options[0][type]">
-                        <option value="">Please Select</option>
-                        <option value="text">Text</option>
-                        <option value="select">Select</option>
-                        <option value="radio">Radio</option>
-                        <option value="checkbox">Checkbox</option>
-                        <option value="date">Date</option>
-                        <option value="time">Time</option>
-                        <option value="datetime">Date & Time</option>
-                        <option value="file">File</option>
-                      </select>
-                    </div>
-                    <div class="col-md-3">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">Select Options</button>
-                    </div>
-                    <div class="col-md-2">
-                      <button type="button" class="btn btn-sm btn-outline-danger remove-option">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                      <button type="button" class="btn btn-sm btn-outline-secondary move-option-up">
-                        <i class="fas fa-arrow-up"></i>
-                      </button>
-                    </div>
-                  </div>
+                <div id="variantsPlaceholder" class="alert alert-info d-flex align-items-center">
+                  <i class="fas fa-info-circle me-2"></i>
+                  <span>Please add some variations to generate variants.</span>
                 </div>
-                <button type="button" class="btn btn-sm btn-secondary" id="addOption">Add Option</button>
+
+                <!-- Generated Variants -->
+                <div id="generatedVariants" class="variants-container mt-3">
+                  <!-- Generated variants will appear here -->
+                </div>
               </div>
             </div>
 
-          </div>
+            <!-- Product Options Section -->
+            <div class="card mb-4">
+              <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0">Options</h5>
+                <div class="d-flex align-items-center">
+                  <button type="button" class="btn btn-link text-dark p-0 mr-3" id="toggleAllOptions">
+                    <i class="fas fa-chevron-up"></i>
+                  </button>
+                  <button type="button" class="btn btn-link text-dark p-0">
+                    <i class="fas fa-th"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body p-3">
+                <div id="optionsContainer">
+                  <!-- Options will be dynamically added here -->
+                  <div class="card border mb-3" data-option-index="0">
+                    <div class="card-header bg-light border-0 py-2" id="headingOption0">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                          <button type="button" class="btn btn-link text-dark p-1 mr-2 drag-handle">
+                            <i class="fas fa-grip-vertical"></i>
+                          </button>
+                          <span class="option-title font-weight-normal">New Option</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                          <button type="button" class="btn btn-link text-danger p-1 mr-2 remove-option">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                          <button type="button" class="btn btn-link text-dark p-1" data-toggle="collapse"
+                            data-target="#collapseOption0" aria-expanded="true" aria-controls="collapseOption0">
+                            <i class="fas fa-chevron-up"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="collapseOption0" class="collapse show" aria-labelledby="headingOption0">
+                      <div class="card-body pt-3 pb-2">
+                        <div class="row">
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label d-block mb-2">Name</label>
+                            <input type="text" class="form-control option-name" name="options[0][name]"
+                              placeholder="">
+                          </div>
+                          <div class="col-md-4 mb-3">
+                            <label class="form-label d-block mb-2">Type</label>
+                            <select class="form-control option-type" name="options[0][type]">
+                              <option value="">Please Select</option>
+                              <optgroup label="Text">
+                                <option value="text">Text</option>
+                                <option value="textarea">Textarea</option>
+                              </optgroup>
+                              <optgroup label="Select">
+                                <option value="dropdown">Dropdown</option>
+                                <option value="checkbox">Checkbox</option>
+                                <option value="check_custom">Custom Check</option>
+                                <option value="radio">Radio Button</option>
+                                <option value="radio_custom">Custom Radio Button</option>
+                                <option value="multiple_select">Multiple Select</option>
+                              </optgroup>
+                              <optgroup label="Date">
+                                <option value="date">Date</option>
+                                <option value="date_time">Date & Time</option>
+                                <option value="time">Time</option>
+                              </optgroup>
+                            </select>
+                          </div>
+                          <div class="col-md-2 mb-3">
+                            <label class="form-label d-block mb-2">&nbsp;</label>
+                            <div class="form-check">
+                              <input type="checkbox" class="form-check-input" id="option0Required"
+                                name="options[0][required]" value="1">
+                              <label class="form-check-label" for="option0Required">
+                                Required
+                              </label>
+                            </div>
+                          </div>
+                        </div>
 
+                        <!-- Option Values Section for Text types (initially hidden) -->
+                        <div class="option-values-text" style="display: none;">
+                          <div class="row">
+                            <div class="col-md-8 mb-3">
+                              <label class="form-label d-block mb-2">Price</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">$</span>
+                                </div>
+                                <input type="number" step="0.01" class="form-control" name="options[0][price]"
+                                  placeholder="0.00">
+                              </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                              <label class="form-label d-block mb-2">Price Type</label>
+                              <select class="form-control" name="options[0][price_type]">
+                                <option value="fixed">Fixed</option>
+                                <option value="percent">Percent</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Option Values Section for Select types (initially hidden) -->
+                        <div class="option-values-select" style="display: none;">
+                          <div class="mb-2">
+                            <div class="row mb-1">
+                              <div class="col-md-5">
+                                <label class="form-label d-block mb-1">Label <span class="text-danger">*</span></label>
+                              </div>
+                              <div class="col-md-4">
+                                <label class="form-label d-block mb-1">Price</label>
+                              </div>
+                              <div class="col-md-3">
+                                <label class="form-label d-block mb-1">Price Type</label>
+                              </div>
+                            </div>
+                            <div class="option-values-container">
+                              <!-- Option value rows will be added here -->
+                              <div class="option-value-row d-flex align-items-center mb-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary drag-handle mr-2">
+                                  <i class="fas fa-grip-vertical"></i>
+                                </button>
+                                <div class="row flex-grow-1">
+                                  <div class="col-md-5">
+                                    <input type="text" class="form-control" name="options[0][values][0][label]"
+                                      placeholder="">
+                                  </div>
+                                  <div class="col-md-4">
+                                    <div class="input-group">
+                                      <div class="input-group-prepend">
+                                        <span class="input-group-text">$</span>
+                                      </div>
+                                      <input type="number" step="0.01" class="form-control"
+                                        name="options[0][values][0][price]" placeholder="0.00">
+                                    </div>
+                                  </div>
+                                  <div class="col-md-3">
+                                    <select class="form-control" name="options[0][values][0][price_type]">
+                                      <option value="fixed">Fixed</option>
+                                      <option value="percent">Percent</option>
+                                    </select>
+                                  </div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger ml-2 remove-option-value">
+                                  <i class="fas fa-trash"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-secondary add-option-value">Add Row</button>
+                          </div>
+                        </div>
+
+                        <!-- Option Values Section for Date/Time types (initially hidden) -->
+                        <div class="option-values-datetime" style="display: none;">
+                          <div class="row">
+                            <div class="col-md-8 mb-3">
+                              <label class="form-label d-block mb-2">Price</label>
+                              <div class="input-group">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">$</span>
+                                </div>
+                                <input type="number" step="0.01" class="form-control" name="options[0][price]"
+                                  placeholder="0.00">
+                              </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                              <label class="form-label d-block mb-2">Price Type</label>
+                              <select class="form-control" name="options[0][price_type]">
+                                <option value="fixed">Fixed</option>
+                                <option value="percent">Percent</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <button type="button" class="btn btn-light border" id="addOption">
+                    Add Option
+                  </button>
+                  <div class="d-flex align-items-center">
+                    <select class="form-control mr-2" id="OptionTemplate" style="width: 200px;">
+                      <option value="">Select Template</option>
+                      <option value="size">Size (S, M, L, XL)</option>
+                      <option value="color">Color (Red, Blue, Green)</option>
+                      <option value="material">Material (Cotton, Polyester)</option>
+                    </select>
+                    <button type="button" class="btn btn-primary" id="insertOptionTemplate">Insert</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {{-- Product download section --}}
+            <div class="card mb-4">
+              <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <h5 class="mb-0">Downloads</h5>
+                <button type="button" class="btn btn-link text-dark p-0">
+                  <i class="fas fa-th"></i>
+                </button>
+              </div>
+              <div class="card-body p-3">
+                <div class="mb-3">
+                  <label class="form-label d-block mb-2">File</label>
+
+                  <div id="downloadsContainer">
+                    <!-- Download file rows -->
+                    <div class="download-row d-flex align-items-center mb-2" data-download-index="0">
+                      <button type="button" class="btn btn-sm btn-link text-dark p-1 mr-2 drag-handle">
+                        <i class="fas fa-grip-vertical"></i>
+                      </button>
+                      <input type="text" class="form-control flex-grow-1 mr-2" name="downloads[0][file_name]"
+                        placeholder="" readonly>
+                      <input type="hidden" name="downloads[0][file_id]" value="">
+                      <button type="button" class="btn btn-outline-secondary mr-2 choose-file-btn">
+                        Choose
+                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-danger remove-download">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="button" class="btn btn-light border" id="addDownload">
+                    Add File
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
           <!-- Right Column - Sidebar -->
           <div class="col-md-4">
             <!-- Media -->
@@ -367,23 +686,36 @@
 
                 <!-- Special Price Start -->
                 <div class="form-group mb-3">
-                  <label for="special_price_start" class="form-label">Special Price Start</label>
-                  <input type="date" class="form-control @error('special_price_start') is-invalid @enderror"
-                    id="special_price_start" name="special_price_start" value="{{ old('special_price_start') }}">
-                  @error('special_price_start')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                  @enderror
+                  <label for="special_price_start" class="form-label">New From</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa-light fa-calendar-days"></i></span>
+                    </div>
+                    <input type="text"
+                      class="form-control flatpickr-input @error('special_price_start') is-invalid @enderror"
+                      id="special_price_start" name="special_price_start" value="{{ old('special_price_start') }}">
+                    @error('special_price_start')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
                 </div>
 
                 <!-- Special Price End -->
                 <div class="form-group mb-3">
-                  <label for="special_price_end" class="form-label">Special Price End</label>
-                  <input type="date" class="form-control @error('special_price_end') is-invalid @enderror"
-                    id="special_price_end" name="special_price_end" value="{{ old('special_price_end') }}">
-                  @error('special_price_end')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                  @enderror
+                  <label for="special_price_end" class="form-label">New From</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fa-light fa-calendar-days"></i></span>
+                    </div>
+                    <input type="text"
+                      class="form-control flatpickr-input @error('special_price_end') is-invalid @enderror"
+                      id="special_price_end" name="special_price_end" value="{{ old('special_price_end') }}">
+                    @error('special_price_end')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
                 </div>
+
               </div>
             </div>
 
@@ -408,7 +740,8 @@
                   <label for="inventory_management" class="form-label">Inventory Management</label>
                   <select class="form-control @error('manage_stock') is-invalid @enderror" id="inventory_management"
                     name="manage_stock">
-                    <option value="0" {{ old('manage_stock', '1') == '0' ? 'selected' : '' }}>Don't track inventory
+                    <option value="0" {{ old('manage_stock', '1') == '0' ? 'selected' : '' }}>Don't track
+                      inventory
                     </option>
                     <option value="1" {{ old('manage_stock', '1') == '1' ? 'selected' : '' }}>Track inventory
                     </option>
@@ -521,10 +854,10 @@
                   <label for="new_from" class="form-label">New From</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                      <span class="input-group-text"><i class="fa-light fa-calendar-days"></i></span>
                     </div>
-                    <input type="date" class="form-control @error('new_from') is-invalid @enderror" id="new_from"
-                      name="new_from" value="{{ old('new_from') }}">
+                    <input type="text" class="form-control flatpickr-input @error('new_from') is-invalid @enderror"
+                      id="new_from" name="new_from" value="{{ old('new_from') }}">
                     @error('new_from')
                       <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -536,10 +869,10 @@
                   <label for="new_to" class="form-label">New To</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
-                      <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                      <span class="input-group-text"><i class="fa-light fa-calendar-days"></i></span>
                     </div>
-                    <input type="date" class="form-control @error('new_to') is-invalid @enderror" id="new_to"
-                      name="new_to" value="{{ old('new_to') }}">
+                    <input type="text" class="form-control flatpickr-input @error('new_to') is-invalid @enderror"
+                      id="new_to" name="new_to" value="{{ old('new_to') }}">
                     @error('new_to')
                       <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
@@ -598,873 +931,23 @@
             </div>
           </div>
         </div>
+      </form>
     </div>
 
-    </form>
-  </div>
   </div>
 @endsection
 
 @push('styles')
   <link href="{{ asset('assets/backend/lib/select2/css/select2.min.css') }}" rel="stylesheet">
   <link href="{{ asset('assets/backend/lib/summernote/summernote-bs4.min.css') }}" rel="stylesheet">
-  <style>
-    /* Product Media Styles */
-    .product-media-container {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
-    }
-
-    .main-media-wrapper {
-      flex: 1;
-      max-width: 150px;
-    }
-
-    .main-image-holder {
-      position: relative;
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
-      overflow: hidden;
-      background-color: #f8f9fa;
-      aspect-ratio: 1;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .image-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-
-    .main-image-holder:hover .image-overlay {
-      opacity: 1;
-    }
-
-    .overlay-content {
-      text-align: center;
-      color: white;
-      font-size: 12px;
-    }
-
-    .overlay-content i {
-      font-size: 20px;
-      margin-bottom: 5px;
-    }
-
-    .overlay-content span {
-      display: block;
-      font-weight: 500;
-    }
-
-    /* Hide overlay when image is selected */
-    .main-image-holder.has-image .image-overlay {
-      opacity: 0;
-    }
-
-    .main-image-holder.has-image:hover .image-overlay {
-      opacity: 0.8;
-    }
-
-    .main-image-holder.has-image .overlay-content span {
-      display: none;
-    }
-
-    .main-image-holder.has-image .overlay-content i:before {
-      content: '\f021';
-      /* Change to edit icon */
-    }
-
-    .main-image-holder:hover {
-      border-color: #007bff;
-    }
-
-    .main-product-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .remove-main-image {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      width: 24px;
-      height: 24px;
-      border: none;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 50%;
-      color: #dc3545;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .main-image-holder:hover .remove-main-image {
-      opacity: 1;
-    }
-
-    .remove-main-image:hover {
-      background-color: #dc3545;
-      color: white;
-    }
-
-    .media-thumbnails-grid {
-      flex: 2;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      transition: opacity 0.3s ease;
-      max-height: 200px;
-      overflow-y: auto;
-    }
-
-    /* Adjust grid for optimal 8 image display */
-    .media-thumbnails-grid .media-thumbnail-item {
-      aspect-ratio: 1;
-      min-width: 0;
-    }
-
-    /* Hidden state - initially not visible */
-    .media-thumbnails-grid.hidden {
-      display: none;
-    }
-
-    /* Visible state with fade in animation */
-    .media-thumbnails-grid.visible {
-      display: grid;
-      opacity: 1;
-      animation: fadeInGrid 0.3s ease-in-out;
-    }
-
-    @keyframes fadeInGrid {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .media-thumbnail-item {
-      position: relative;
-      cursor: pointer;
-    }
-
-    .thumbnail-holder {
-      position: relative;
-      border: 2px solid #e9ecef;
-      border-radius: 8px;
-      overflow: hidden;
-      background-color: #f8f9fa;
-      aspect-ratio: 1;
-      transition: all 0.2s ease;
-    }
-
-    .media-thumbnail-item:hover .thumbnail-holder {
-      border-color: #007bff;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .thumbnail-image {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .remove-thumbnail {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 20px;
-      height: 20px;
-      border: none;
-      background-color: rgba(255, 255, 255, 0.9);
-      border-radius: 50%;
-      color: #dc3545;
-      font-size: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .media-thumbnail-item:hover .remove-thumbnail {
-      opacity: 1;
-    }
-
-    .remove-thumbnail:hover {
-      background-color: #dc3545;
-      color: white;
-    }
-
-    .add-new-media .thumbnail-holder {
-      border-style: dashed;
-      border-color: #cbd3da;
-      background-color: #f8f9fa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .add-new-media:hover .thumbnail-holder {
-      border-color: #007bff;
-      background-color: #f0f7ff;
-    }
-
-    .add-new-media.disabled .thumbnail-holder {
-      border-color: #e9ecef;
-      background-color: #f8f9fa;
-      opacity: 0.7;
-    }
-
-    .add-new-media.disabled:hover .thumbnail-holder {
-      border-color: #e9ecef;
-      background-color: #f8f9fa;
-    }
-
-    .add-media-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 10px;
-    }
-
-    .add-media-content i {
-      font-size: 18px;
-      margin-bottom: 4px;
-    }
-
-    .add-media-content span {
-      font-size: 11px;
-      font-weight: 500;
-    }
-
-    /* Draggable states */
-    .media-thumbnail-item[data-draggable="true"] {
-      cursor: grab;
-    }
-
-    .media-thumbnail-item[data-draggable="true"]:active {
-      cursor: grabbing;
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .product-media-container {
-        flex-direction: column;
-      }
-
-      .main-media-wrapper {
-        max-width: 100%;
-        margin-bottom: 20px;
-      }
-
-      .media-thumbnails-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-
-    @media (max-width: 480px) {
-      .media-thumbnails-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-  </style>
+  <link href="{{ asset('assets/backend/lib/flatpickr/dist/flatpickr.min.css') }}" rel="stylesheet">
+  @include('admin.products.product_css')
 @endpush
 
 @push('scripts')
   <script src="{{ asset('assets/backend/lib/select2/js/select2.min.js') }}"></script>
   <script src="{{ asset('assets/backend/lib/summernote/summernote-bs4.min.js') }}"></script>
+  <script src="{{ asset('assets/backend/lib/flatpickr/dist/flatpickr.js') }}"></script>
   <script src="{{ asset('assets/backend/js/MediaManager.js') }}"></script>
-  <script>
-    $(document).ready(function() {
-      // Initialize Select2
-      $('#categories, #brand_id, #tax_class_id, #vendor_id').select2({
-        placeholder: 'Please Select',
-        allowClear: true
-      });
-
-      // Initialize Select2 for linked products
-      $('#up_sells, #cross_sells, #related_products').select2({
-        placeholder: 'Search and select products...',
-        allowClear: true,
-        multiple: true,
-        ajax: {
-          url: '{{ route('admin.products.search') }}',
-          dataType: 'json',
-          delay: 250,
-          data: function(params) {
-            return {
-              q: params.term,
-              page: params.page
-            };
-          },
-          processResults: function(data, params) {
-            params.page = params.page || 1;
-            return {
-              results: data.items,
-              pagination: {
-                more: (params.page * 30) < data.total_count
-              }
-            };
-          },
-          cache: true
-        },
-        templateResult: function(product) {
-          if (product.loading) return product.text;
-          return $('<span>' + product.name + ' <small class="text-muted">($' + product.price +
-            ')</small></span>');
-        },
-        templateSelection: function(product) {
-          return product.name || product.text;
-        }
-      });
-
-      // Initialize Summernote for description
-      $('#description').summernote({
-        height: 250,
-        toolbar: [
-          ['style', ['style']],
-          ['font', ['bold', 'underline', 'clear']],
-          ['fontname', ['fontname']],
-          ['color', ['color']],
-          ['para', ['ul', 'ol', 'paragraph']],
-          ['table', ['table']],
-          ['insert', ['link', 'picture', 'video']],
-          ['view', ['fullscreen', 'codeview', 'help']]
-        ]
-      });
-
-      // Auto-generate slug from name
-      $('#name').on('keyup', function() {
-        const name = $(this).val();
-        const slug = name.toLowerCase()
-          .replace(/[^\w ]+/g, '')
-          .replace(/ +/g, '-');
-        $('#slug').val(slug);
-      });
-
-      // Show/hide inventory fields based on management selection
-      $('#inventory_management').on('change', function() {
-        const trackInventory = $(this).val() == '1';
-        $('#stockAvailabilityGroup, #quantityGroup').toggle(trackInventory);
-      });
-
-      // Add/Remove Attributes
-      let attributeIndex = 1;
-      $('#addAttribute').on('click', function() {
-        const attributeHtml = `
-      <div class="row mb-3 attribute-row">
-        <div class="col-md-5">
-          <select class="form-control" name="attributes[${attributeIndex}][name]">
-            <option value="">Please Select</option>
-          </select>
-        </div>
-        <div class="col-md-5">
-          <input type="text" class="form-control" name="attributes[${attributeIndex}][value]" placeholder="Values">
-        </div>
-        <div class="col-md-2">
-          <button type="button" class="btn btn-sm btn-outline-danger remove-attribute">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      </div>
-    `;
-        $('#attributesContainer').append(attributeHtml);
-        attributeIndex++;
-      });
-
-      $(document).on('click', '.remove-attribute', function() {
-        $(this).closest('.attribute-row').remove();
-      });
-
-      // Add/Remove Variations
-      let variationIndex = 1;
-      $('#addVariation').on('click', function() {
-        const variationHtml = `
-      <div class="row mb-3 variation-row">
-        <div class="col-md-5">
-          <input type="text" class="form-control" name="variations[${variationIndex}][name]" placeholder="Name">
-        </div>
-        <div class="col-md-2">
-          <select class="form-control" name="variations[${variationIndex}][type]">
-            <option value="">Please Select</option>
-            <option value="text">Text</option>
-            <option value="color">Color</option>
-            <option value="image">Image</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-sm btn-outline-secondary">Select Options</button>
-        </div>
-        <div class="col-md-2">
-          <button type="button" class="btn btn-sm btn-outline-danger remove-variation">
-            <i class="fas fa-trash"></i>
-          </button>
-          <button type="button" class="btn btn-sm btn-outline-secondary move-variation-up">
-            <i class="fas fa-arrow-up"></i>
-          </button>
-        </div>
-      </div>
-    `;
-        $('#variationsContainer').append(variationHtml);
-        variationIndex++;
-      });
-
-      $(document).on('click', '.remove-variation', function() {
-        $(this).closest('.variation-row').remove();
-      });
-
-      // Add/Remove Options
-      let optionIndex = 1;
-      $('#addOption').on('click', function() {
-        const optionHtml = `
-      <div class="row mb-3 option-row">
-        <div class="col-md-5">
-          <input type="text" class="form-control" name="options[${optionIndex}][name]" placeholder="Name">
-        </div>
-        <div class="col-md-2">
-          <select class="form-control" name="options[${optionIndex}][type]">
-            <option value="">Please Select</option>
-            <option value="text">Text</option>
-            <option value="select">Select</option>
-            <option value="radio">Radio</option>
-            <option value="checkbox">Checkbox</option>
-            <option value="date">Date</option>
-            <option value="time">Time</option>
-            <option value="datetime">Date & Time</option>
-            <option value="file">File</option>
-          </select>
-        </div>
-        <div class="col-md-3">
-          <button type="button" class="btn btn-sm btn-outline-secondary">Select Options</button>
-        </div>
-        <div class="col-md-2">
-          <button type="button" class="btn btn-sm btn-outline-danger remove-option">
-            <i class="fas fa-trash"></i>
-          </button>
-          <button type="button" class="btn btn-sm btn-outline-secondary move-option-up">
-            <i class="fas fa-arrow-up"></i>
-          </button>
-        </div>
-      </div>
-    `;
-        $('#optionsContainer').append(optionHtml);
-        optionIndex++;
-      });
-
-      $(document).on('click', '.remove-option', function() {
-        $(this).closest('.option-row').remove();
-      });
-
-      // Form validation
-      $('#productForm').on('submit', function(e) {
-        let valid = true;
-
-        // Check required fields
-        if (!$('#name').val().trim()) {
-          valid = false;
-          $('#name').addClass('is-invalid');
-        }
-
-        if (!$('#price').val() || parseFloat($('#price').val()) <= 0) {
-          valid = false;
-          $('#price').addClass('is-invalid');
-        }
-
-        if (!valid) {
-          e.preventDefault();
-          alert('Please fill in all required fields.');
-        }
-      });
-
-      // Remove validation errors on input
-      $('.form-control').on('input change', function() {
-        $(this).removeClass('is-invalid');
-      });
-
-      // Media management with MediaManager.js
-      let featuredImageId = null;
-      let galleryImages = [];
-      let currentMediaManager = null;
-      let currentMediaCallback = null;
-      const MAX_GALLERY_IMAGES = 8;
-
-      // Function to create and show media manager
-      function createMediaManager(options) {
-        // Create modal container
-        const modalHtml = `
-          <div class="modal fade" id="mediaManagerModal" tabindex="-1" style="z-index: 9999;">
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Media Manager</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <div id="mediaManagerContainer" style="min-height: 500px;"></div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary" id="selectMediaFiles">Select</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        // Remove existing modal
-        $('#mediaManagerModal').remove();
-
-        // Add modal to page
-        $('body').append(modalHtml);
-
-        // Initialize MediaManager in container mode with ListView as default
-        const mediaManager = new MediaManager({
-          container: document.getElementById('mediaManagerContainer'),
-          multiple: options.multiple || false,
-          defaultView: 'list',
-          currentView: 'list',
-          endpoints: {
-            list: '{{ route('admin.media.list') }}',
-            upload: '{{ route('admin.media.upload') }}',
-            bulkUpload: '{{ route('admin.media.bulk-upload') }}',
-            createFolder: '{{ route('admin.media.create-folder') }}',
-            renameFolder: '{{ route('admin.media.rename-folder') }}',
-            deleteFolder: '{{ route('admin.media.delete-folder') }}',
-            renameFile: '{{ route('admin.media.rename-file') }}',
-            deleteFile: '{{ route('admin.media.delete', ':id') }}',
-            moveToFolder: '{{ route('admin.media.move-to-folder') }}',
-            copyToFolder: '{{ route('admin.media.copy-to-folder') }}',
-            bulkMoveToFolder: '{{ route('admin.media.bulk-move-to-folder') }}',
-            bulkCopyToFolder: '{{ route('admin.media.bulk-copy-to-folder') }}',
-            getFolders: '{{ route('admin.media.folders') }}'
-          },
-          onSelect: options.onSelect || function() {}
-        });
-
-        // Force set to list view after initialization
-        setTimeout(() => {
-          // Set current view to list
-          mediaManager.currentView = 'list';
-
-          // Update view buttons
-          const viewBtns = document.querySelectorAll('#mediaManagerContainer .view-btn');
-          viewBtns.forEach(btn => {
-            if (btn.dataset.view === 'list') {
-              btn.classList.add('active');
-            } else {
-              btn.classList.remove('active');
-            }
-          });
-
-          // Update container classes
-          const container = document.getElementById('mediaManagerContainer');
-          if (container) {
-            container.classList.add('list-view');
-          }
-
-          // Try to call the switchView method if it exists
-          if (typeof mediaManager.switchView === 'function') {
-            mediaManager.switchView('list');
-          }
-
-          // Re-render if method exists
-          if (mediaManager.render) {
-            mediaManager.render();
-          }
-
-          // Also try to trigger a click on the list view button
-          const listBtn = document.querySelector('#mediaManagerContainer .view-btn[data-view="list"]');
-          if (listBtn) {
-            listBtn.click();
-          }
-        }, 300);
-
-        // Show modal
-        $('#mediaManagerModal').modal('show');
-
-        // Handle select button
-        $('#selectMediaFiles').off('click').on('click', function() {
-          const selectedFiles = mediaManager.selectedFiles || [];
-          if (options.onSelect) {
-            options.onSelect(selectedFiles);
-          }
-          $('#mediaManagerModal').modal('hide');
-        });
-
-        return mediaManager;
-      }
-
-      // Handle clicking on main image
-      $('#mainImageHolder').on('click', function(e) {
-        e.preventDefault();
-        createMediaManager({
-          multiple: false,
-          onSelect: function(files) {
-            if (files.length > 0) {
-              const file = files[0];
-              featuredImageId = file.id;
-
-              // Update the main image
-              $('#mainProductImage').attr('src', file.url);
-              $('#mainImageHolder').addClass('has-image');
-              $('#removeMainImage').show();
-              $('#featuredImageInput').val(file.id);
-
-              // Show thumbnail grid after main image is loaded
-              $('#mediaThumbnailsGrid').fadeIn(300);
-            }
-          }
-        });
-      });
-
-      // Handle clicking on add images button
-      $('[data-media-picker-multiple]').on('click', function(e) {
-        e.preventDefault();
-
-        // Check if we've reached the maximum limit
-        if (galleryImages.length >= MAX_GALLERY_IMAGES) {
-          alert(`You can only add up to ${MAX_GALLERY_IMAGES} gallery images.`);
-          return;
-        }
-
-        createMediaManager({
-          multiple: true,
-          onSelect: function(files) {
-            let addedCount = 0;
-            const availableSlots = MAX_GALLERY_IMAGES - galleryImages.length;
-
-            // Add new images to gallery (up to the limit)
-            files.forEach((file, index) => {
-              if (addedCount >= availableSlots) {
-                return; // Stop adding if we reach the limit
-              }
-
-              if (!galleryImages.find(img => img.id === file.id)) {
-                galleryImages.push(file);
-                addThumbnailToGrid(file);
-                addedCount++;
-              }
-            });
-
-            // Show warning if we couldn't add all selected files
-            if (files.length > addedCount && addedCount > 0) {
-              alert(
-                `Only ${addedCount} image(s) were added. Maximum ${MAX_GALLERY_IMAGES} gallery images allowed.`
-              );
-            } else if (files.length > availableSlots) {
-              alert(
-                `Maximum ${MAX_GALLERY_IMAGES} gallery images allowed. Please remove some images first.`);
-            }
-
-            updateGalleryInput();
-            updateAddImageButton();
-          }
-        });
-      });
-
-      // Handle remove main image
-      $('#removeMainImage').on('click', function(e) {
-        e.stopPropagation();
-        if (confirm('Are you sure you want to remove the featured image?')) {
-          $('#mainProductImage').attr('src', "{{ asset('assets/images/placeholder_image.png') }}");
-          $('#mainImageHolder').removeClass('has-image');
-          $(this).hide();
-          featuredImageId = null;
-          $('#featuredImageInput').val('');
-
-          // Hide thumbnail grid when main image is removed
-          $('#mediaThumbnailsGrid').fadeOut(300);
-
-          // Clear gallery images as well
-          galleryImages = [];
-          $('.media-thumbnail-item:not(.add-new-media)').remove();
-          updateGalleryInput();
-          updateAddImageButton();
-        }
-      });
-
-      // Function to add thumbnail to grid
-      function addThumbnailToGrid(file) {
-        const thumbnailHtml = `
-          <div class="media-thumbnail-item" data-file-id="${file.id}" data-draggable="true">
-            <div class="thumbnail-holder">
-              <img src="${file.url}" alt="Product thumbnail" class="thumbnail-image">
-              <button type="button" class="btn remove-thumbnail" title="Remove image">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-          </div>
-        `;
-
-        // Insert before the add-new-media button
-        $('.add-new-media').before(thumbnailHtml);
-      }
-
-      // Handle remove thumbnail
-      $(document).on('click', '.remove-thumbnail', function(e) {
-        e.stopPropagation();
-        const $item = $(this).closest('.media-thumbnail-item');
-        const fileId = $item.data('file-id');
-
-        if (confirm('Are you sure you want to remove this image?')) {
-          // Remove from gallery array
-          galleryImages = galleryImages.filter(img => img.id !== fileId);
-          // Remove from DOM
-          $item.remove();
-          updateGalleryInput();
-          updateAddImageButton();
-        }
-      });
-
-      // Handle thumbnail click to set as main image
-      $(document).on('click', '.media-thumbnail-item:not(.add-new-media)', function(e) {
-        if (!$(e.target).hasClass('remove-thumbnail') && !$(e.target).closest('.remove-thumbnail').length) {
-          const fileId = $(this).data('file-id');
-          const thumbnailSrc = $(this).find('.thumbnail-image').attr('src');
-
-          // Find the file object
-          const file = galleryImages.find(img => img.id === fileId);
-          if (file) {
-            // Set as featured image
-            const currentMainSrc = $('#mainProductImage').attr('src');
-            const currentMainId = featuredImageId;
-
-            // Update main image
-            $('#mainProductImage').attr('src', thumbnailSrc);
-            $('#mainImageHolder').addClass('has-image');
-            $('#removeMainImage').show();
-            featuredImageId = fileId;
-            $('#featuredImageInput').val(fileId);
-
-            // Ensure thumbnail grid remains visible
-            $('#mediaThumbnailsGrid').show();
-
-            // If there was a previous main image that wasn't placeholder, swap it
-            if (currentMainId && !currentMainSrc.includes('placeholder_image.png')) {
-              $(this).find('.thumbnail-image').attr('src', currentMainSrc);
-              // Update the gallery array
-              const currentMainFile = galleryImages.find(img => img.id === currentMainId);
-              if (currentMainFile) {
-                // Remove the new main image from gallery
-                galleryImages = galleryImages.filter(img => img.id !== fileId);
-                // Add the previous main image to gallery if not already there
-                if (!galleryImages.find(img => img.id === currentMainId)) {
-                  galleryImages.push(currentMainFile);
-                }
-              }
-            } else {
-              // Just remove from gallery since it's now the main image
-              galleryImages = galleryImages.filter(img => img.id !== fileId);
-              $(this).remove();
-            }
-
-            updateGalleryInput();
-            updateAddImageButton();
-          }
-        }
-      });
-
-      // Update gallery input with comma-separated IDs
-      function updateGalleryInput() {
-        const imageIds = galleryImages.map(img => img.id).join(',');
-        $('#galleryImagesInput').val(imageIds);
-      }
-
-      // Update add image button state based on current count
-      function updateAddImageButton() {
-        const $addButton = $('.add-new-media');
-        const remainingSlots = MAX_GALLERY_IMAGES - galleryImages.length;
-
-        if (remainingSlots <= 0) {
-          alert(`You have reached the maximum of ${MAX_GALLERY_IMAGES} gallery images.`);
-          // $addButton.addClass('disabled').find('.add-media-content').html(`
-        //   <i class="fas fa-check text-success mb-2"></i>
-        //   <span class="text-success small">Maximum reached</span>
-        //   <span class="text-muted small d-block">${MAX_GALLERY_IMAGES} images</span>
-        // `);
-          $addButton.css('pointer-events', 'none');
-        } else {
-          $addButton.removeClass('disabled').find('.add-media-content').html(`
-            <i class="fas fa-plus text-muted mb-2"></i>
-            <span class="text-muted small">Add Images</span>
-            <span class="text-muted small d-block">${remainingSlots} remaining</span>
-          `);
-          $addButton.css('pointer-events', 'auto');
-        }
-      }
-
-      // Check if thumbnail grid should be visible
-      function checkThumbnailGridVisibility() {
-        const mainImageSrc = $('#mainProductImage').attr('src');
-        const hasMainImage = mainImageSrc && !mainImageSrc.includes('placeholder_image.png');
-
-        if (hasMainImage) {
-          $('#mediaThumbnailsGrid').fadeIn(300);
-        } else {
-          $('#mediaThumbnailsGrid').fadeOut(300);
-        }
-      }
-
-      // Initialize - check if there's already a main image on page load
-      $(document).ready(function() {
-        checkThumbnailGridVisibility();
-        updateAddImageButton();
-      });
-
-      // Make thumbnails sortable (requires jQuery UI)
-      if (typeof $.fn.sortable !== 'undefined') {
-        $('#mediaThumbnailsGrid').sortable({
-          items: '.media-thumbnail-item:not(.add-new-media)',
-          cursor: 'grabbing',
-          tolerance: 'pointer',
-          placeholder: 'thumbnail-placeholder',
-          start: function(e, ui) {
-            ui.placeholder.height(ui.item.height());
-            ui.placeholder.width(ui.item.width());
-          },
-          update: function(e, ui) {
-            // Update gallery array order based on new DOM order
-            const newOrder = [];
-            $('.media-thumbnail-item:not(.add-new-media)').each(function() {
-              const fileId = $(this).data('file-id');
-              const file = galleryImages.find(img => img.id === fileId);
-              if (file) newOrder.push(file);
-            });
-            galleryImages = newOrder;
-            updateGalleryInput();
-          }
-        });
-      }
-    });
-  </script>
+  @include('admin.products.product_js')
 @endpush

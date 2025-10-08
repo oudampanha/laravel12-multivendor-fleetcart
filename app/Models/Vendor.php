@@ -154,6 +154,7 @@ class Vendor extends Model
     public function getSetting(string $key, $default = null)
     {
         $setting = $this->settings()->where('key', $key)->first();
+
         return $setting ? $setting->value : $default;
     }
 

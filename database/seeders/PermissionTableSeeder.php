@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionTableSeeder extends Seeder
 {
@@ -158,7 +157,7 @@ class PermissionTableSeeder extends Seeder
 
             // Content Management
             ['title' => 'content_management_access', 'group' => 'Content Management'],
-            
+
             // Blog Management
             ['title' => 'blog_access', 'group' => 'Blog'],
             ['title' => 'blog_create', 'group' => 'Blog'],

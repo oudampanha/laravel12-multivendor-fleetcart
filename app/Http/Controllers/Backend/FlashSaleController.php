@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\FlashSale;
-use App\Models\Product;
 use Illuminate\Http\Request;
 
 class FlashSaleController extends Controller
@@ -12,6 +11,7 @@ class FlashSaleController extends Controller
     public function index()
     {
         $flashSales = FlashSale::withCount('products')->paginate(15);
+
         return view('admin.flash-sales.index', compact('flashSales'));
     }
 
@@ -31,6 +31,7 @@ class FlashSaleController extends Controller
     public function show(FlashSale $flashSale)
     {
         $flashSale->load('products.product');
+
         return view('admin.flash-sales.show', compact('flashSale'));
     }
 
@@ -62,7 +63,7 @@ class FlashSaleController extends Controller
             'price' => 'required|numeric|min:0',
             'qty' => 'required|integer|min:1',
             'end_date' => 'required|date|after:today',
-            'position' => 'required|integer'
+            'position' => 'required|integer',
         ]);
 
         $flashSale->products()->create($request->all());

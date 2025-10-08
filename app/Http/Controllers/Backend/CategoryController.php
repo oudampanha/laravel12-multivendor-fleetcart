@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\Category;
-use Illuminate\Http\Request;
 use App\Traits\ImageUploadTrait;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
@@ -36,12 +35,12 @@ class CategoryController extends BaseController
      */
     private function getJsTreeData(Request $request)
     {
-        $categories = Category::with(['children' => function($query) {
+        $categories = Category::with(['children' => function ($query) {
             $query->orderBy('position');
         }])
-        ->whereNull('parent_id')
-        ->orderBy('position')
-        ->get();
+            ->whereNull('parent_id')
+            ->orderBy('position')
+            ->get();
 
         $treeData = [];
         foreach ($categories as $category) {
@@ -58,9 +57,9 @@ class CategoryController extends BaseController
     {
         $categoryName = $category->getTranslation('name') ?? 'Untitled';
         $categoryDescription = $category->getTranslation('description') ?? '';
-        
+
         $node = [
-            'id' => 'category_' . $category->id,
+            'id' => 'category_'.$category->id,
             'text' => $categoryName,
             'data' => [
                 'id' => $category->id,
@@ -76,9 +75,9 @@ class CategoryController extends BaseController
                 'description' => $categoryDescription,
             ],
             'state' => [
-                'opened' => true
+                'opened' => true,
             ],
-            'icon' => $category->is_active ? 'jstree-folder' : 'jstree-folder text-muted'
+            'icon' => $category->is_active ? 'jstree-folder' : 'jstree-folder text-muted',
         ];
 
         // Add children if they exist
@@ -114,21 +113,21 @@ class CategoryController extends BaseController
             'is_active' => 'boolean',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_url' => 'nullable|url'
+            'image_url' => 'nullable|url',
         ]);
 
         $data = $request->except(['image', 'image_url', 'old_image', 'name', 'description']);
-        
+
         // Generate slug if not provided
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($request->input('name'));
         }
-        
+
         // Ensure slug is unique
         $originalSlug = $data['slug'];
         $counter = 1;
         while (Category::where('slug', $data['slug'])->exists()) {
-            $data['slug'] = $originalSlug . '-' . $counter;
+            $data['slug'] = $originalSlug.'-'.$counter;
             $counter++;
         }
 
@@ -149,7 +148,7 @@ class CategoryController extends BaseController
         }
 
         // Set position if not provided
-        if (!isset($data['position'])) {
+        if (! isset($data['position'])) {
             $maxPosition = Category::where('parent_id', $data['parent_id'])->max('position');
             $data['position'] = ($maxPosition ?? 0) + 1;
         }
@@ -170,11 +169,12 @@ class CategoryController extends BaseController
                 'message' => '🎉 Category created successfully!',
                 'title' => 'Success',
                 'type' => 'success',
-                'category' => $category
+                'category' => $category,
             ]);
         }
 
         sweetalert()->success('Category created successfully!');
+
         return redirect()->route('admin.categories.index');
     }
 
@@ -190,10 +190,10 @@ class CategoryController extends BaseController
             $categoryData = $category->toArray();
             $categoryData['name'] = $category->getTranslation('name');
             $categoryData['description'] = $category->getTranslation('description');
-            
+
             return response()->json([
                 'success' => true,
-                'category' => $categoryData
+                'category' => $categoryData,
             ]);
         }
 
@@ -212,10 +212,10 @@ class CategoryController extends BaseController
             $categoryData = $category->toArray();
             $categoryData['name'] = $category->getTranslation('name');
             $categoryData['description'] = $category->getTranslation('description');
-            
+
             return response()->json([
                 'success' => true,
-                'category' => $categoryData
+                'category' => $categoryData,
             ]);
         }
 
@@ -233,28 +233,28 @@ class CategoryController extends BaseController
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'slug' => 'nullable|string|unique:categories,slug,' . $category->id,
-            'parent_id' => 'nullable|exists:categories,id|not_in:' . $category->id,
+            'slug' => 'nullable|string|unique:categories,slug,'.$category->id,
+            'parent_id' => 'nullable|exists:categories,id|not_in:'.$category->id,
             'position' => 'nullable|integer|min:0',
             'is_searchable' => 'boolean',
             'is_active' => 'boolean',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_url' => 'nullable|url'
+            'image_url' => 'nullable|url',
         ]);
 
         $data = $request->except(['image', 'image_url', 'old_image', 'name', 'description']);
-        
+
         // Generate slug if not provided
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($request->input('name'));
         }
-        
+
         // Ensure slug is unique (excluding current category)
         $originalSlug = $data['slug'];
         $counter = 1;
         while (Category::where('slug', $data['slug'])->where('id', '!=', $category->id)->exists()) {
-            $data['slug'] = $originalSlug . '-' . $counter;
+            $data['slug'] = $originalSlug.'-'.$counter;
             $counter++;
         }
 
@@ -274,13 +274,13 @@ class CategoryController extends BaseController
             }
 
             if ($relativePath !== $category->image) {
-                if ($category->image && !str_starts_with($category->image, 'http')) {
+                if ($category->image && ! str_starts_with($category->image, 'http')) {
                     $this->deleteImage($category->image);
                 }
                 $data['image'] = $relativePath;
             }
         } elseif ($request->filled('old_image') && empty($request->image_url)) {
-            if ($category->image && !str_starts_with($category->image, 'http')) {
+            if ($category->image && ! str_starts_with($category->image, 'http')) {
                 $this->deleteImage($category->image);
             }
             $data['image'] = null;
@@ -302,11 +302,12 @@ class CategoryController extends BaseController
                 'message' => '✅ Category updated successfully!',
                 'title' => 'Updated',
                 'type' => 'success',
-                'category' => $category
+                'category' => $category,
             ]);
         }
 
         sweetalert()->success('Category updated successfully!');
+
         return redirect()->route('admin.categories.index');
     }
 
@@ -322,11 +323,12 @@ class CategoryController extends BaseController
                     'success' => false,
                     'message' => 'Cannot delete category that has subcategories!',
                     'title' => 'Error',
-                    'type' => 'error'
+                    'type' => 'error',
                 ], 422);
             }
 
             sweetalert()->error('Cannot delete category that has subcategories!');
+
             return redirect()->route('admin.categories.index');
         }
 
@@ -337,16 +339,17 @@ class CategoryController extends BaseController
                     'success' => false,
                     'message' => 'Cannot delete category that has products!',
                     'title' => 'Error',
-                    'type' => 'error'
+                    'type' => 'error',
                 ], 422);
             }
 
             sweetalert()->error('Cannot delete category that has products!');
+
             return redirect()->route('admin.categories.index');
         }
 
         // Delete image if exists
-        if ($category->image && !str_starts_with($category->image, 'http')) {
+        if ($category->image && ! str_starts_with($category->image, 'http')) {
             $this->deleteImage($category->image);
         }
 
@@ -357,11 +360,12 @@ class CategoryController extends BaseController
                 'success' => true,
                 'message' => '🗑️ Category deleted successfully!',
                 'title' => 'Deleted',
-                'type' => 'success'
+                'type' => 'success',
             ]);
         }
 
         sweetalert()->success('Category deleted successfully!');
+
         return redirect()->route('admin.categories.index');
     }
 
@@ -374,14 +378,14 @@ class CategoryController extends BaseController
             'categories' => 'required|array',
             'categories.*.id' => 'required|exists:categories,id',
             'categories.*.position' => 'required|integer|min:0',
-            'categories.*.parent_id' => 'nullable|exists:categories,id'
+            'categories.*.parent_id' => 'nullable|exists:categories,id',
         ]);
 
         foreach ($request->categories as $categoryData) {
             Category::where('id', $categoryData['id'])
                 ->update([
                     'position' => $categoryData['position'],
-                    'parent_id' => $categoryData['parent_id']
+                    'parent_id' => $categoryData['parent_id'],
                 ]);
         }
 
@@ -389,7 +393,7 @@ class CategoryController extends BaseController
             'success' => true,
             'message' => 'Categories order updated successfully!',
             'title' => 'Success',
-            'type' => 'success'
+            'type' => 'success',
         ]);
     }
 
@@ -414,13 +418,13 @@ class CategoryController extends BaseController
      */
     public function tree()
     {
-        $categories = Category::with(['children' => function($query) {
+        $categories = Category::with(['children' => function ($query) {
             $query->orderBy('position')->orderBy('name');
         }])
-        ->whereNull('parent_id')
-        ->orderBy('position')
-        ->orderBy('name')
-        ->get();
+            ->whereNull('parent_id')
+            ->orderBy('position')
+            ->orderBy('name')
+            ->get();
 
         return view('admin.categories.tree', compact('categories'));
     }
@@ -431,9 +435,9 @@ class CategoryController extends BaseController
     public function getParentCategories(Request $request)
     {
         $excludeId = $request->get('exclude_id');
-        
+
         $categories = Category::whereNull('parent_id')
-            ->when($excludeId, function($query, $excludeId) {
+            ->when($excludeId, function ($query, $excludeId) {
                 return $query->where('id', '!=', $excludeId);
             })
             ->orderBy('name')
@@ -441,7 +445,7 @@ class CategoryController extends BaseController
 
         return response()->json([
             'success' => true,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 }

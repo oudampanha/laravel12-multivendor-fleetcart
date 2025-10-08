@@ -17,7 +17,15 @@
       "Bash(xargs basename:*)",
       "Bash(comm:*)",
       "Bash(sed:*)",
-      "Bash(xargs sed:*)"
+      "Bash(xargs sed:*)",
+      "Bash(./vendor/bin/pint)",
+      "Bash(node:*)",
+      "Bash(awk:*)",
+      "Bash(cat:*)",
+      "Bash(tr:*)",
+      "Bash(fold:*)",
+      "Bash(rm:*)",
+      "Read(//c//**)"
     ],
     "deny": [],
     "ask": []

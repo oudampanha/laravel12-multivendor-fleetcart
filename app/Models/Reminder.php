@@ -53,7 +53,7 @@ class Reminder extends Model
     public function scopeValid($query, int $hoursValid = 2)
     {
         return $query->where('created_at', '>=', now()->subHours($hoursValid))
-                    ->where('completed', false);
+            ->where('completed', false);
     }
 
     public static function createForUser(User $user): self
@@ -111,7 +111,7 @@ class Reminder extends Model
 
     public function isPending(): bool
     {
-        return !$this->completed;
+        return ! $this->completed;
     }
 
     public function isExpired(int $hoursValid = 2): bool
@@ -121,7 +121,7 @@ class Reminder extends Model
 
     public function isValid(int $hoursValid = 2): bool
     {
-        return !$this->isCompleted() && !$this->isExpired($hoursValid);
+        return ! $this->isCompleted() && ! $this->isExpired($hoursValid);
     }
 
     public function getExpiresAt(int $hoursValid = 2): \Carbon\Carbon
@@ -132,8 +132,8 @@ class Reminder extends Model
     public function getRemainingTime(int $hoursValid = 2): \Carbon\CarbonInterval
     {
         $expiresAt = $this->getExpiresAt($hoursValid);
-        
-        return now() < $expiresAt 
+
+        return now() < $expiresAt
             ? now()->diffAsCarbonInterval($expiresAt)
             : \Carbon\CarbonInterval::seconds(0);
     }
@@ -184,7 +184,7 @@ class Reminder extends Model
             ->latest()
             ->first();
 
-        if (!$lastReminder) {
+        if (! $lastReminder) {
             return true;
         }
 
@@ -197,13 +197,13 @@ class Reminder extends Model
             ->latest()
             ->first();
 
-        if (!$lastReminder) {
+        if (! $lastReminder) {
             return 0;
         }
 
         $cooldownEnd = $lastReminder->created_at->addMinutes($cooldownMinutes);
-        
-        return now() < $cooldownEnd 
+
+        return now() < $cooldownEnd
             ? now()->diffInSeconds($cooldownEnd)
             : 0;
     }

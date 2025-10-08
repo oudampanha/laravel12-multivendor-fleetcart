@@ -47,7 +47,7 @@ class OrderProductVariation extends Model
 
     public function hasValue(): bool
     {
-        return !empty(trim($this->value));
+        return ! empty(trim($this->value));
     }
 
     public function hasVariationValues(): bool
@@ -66,6 +66,6 @@ class OrderProductVariation extends Model
 
     public function getDisplayValue(): string
     {
-        return $this->type . ': ' . $this->getFormattedValue();
+        return $this->type.': '.$this->getFormattedValue();
     }
 }

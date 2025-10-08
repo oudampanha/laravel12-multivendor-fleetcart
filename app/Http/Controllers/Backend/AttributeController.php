@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\Attribute;
 use App\Models\AttributeSet;
 use App\Models\AttributeValue;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AttributeController extends BaseController
 {
@@ -30,6 +29,7 @@ class AttributeController extends BaseController
         if ($request->ajax()) {
             return $this->getDataTableData($request);
         }
+
         return view('admin.attributes.index');
     }
 
@@ -49,7 +49,7 @@ class AttributeController extends BaseController
             $formattedCategories[] = [
                 'id' => $category->id,
                 'text' => $name,
-                'parent_id' => $category->parent_id
+                'parent_id' => $category->parent_id,
             ];
         }
 
@@ -69,10 +69,10 @@ class AttributeController extends BaseController
             $query->where(function ($q) use ($search) {
                 $q->whereHas('translations', function ($tq) use ($search) {
                     $tq->where('field', 'name')
-                       ->where('value', 'like', "%{$search}%");
+                        ->where('value', 'like', "%{$search}%");
                 })->orWhereHas('attributeSet.translations', function ($tq) use ($search) {
                     $tq->where('field', 'name')
-                       ->where('value', 'like', "%{$search}%");
+                        ->where('value', 'like', "%{$search}%");
                 })->orWhere('slug', 'like', "%{$search}%");
             });
         }
@@ -80,7 +80,7 @@ class AttributeController extends BaseController
         // Handle column-specific filters
         if ($request->has('columns')) {
             foreach ($request->columns as $index => $column) {
-                if (!empty($column['search']['value'])) {
+                if (! empty($column['search']['value'])) {
                     $searchValue = $column['search']['value'];
 
                     switch ($index) {
@@ -103,7 +103,7 @@ class AttributeController extends BaseController
             $orderDirection = $request->order[0]['dir'] ?? 'desc';
 
             // Handle special columns that can't be ordered directly
-            if (!in_array($orderColumn, ['name', 'attribute_set'])) {
+            if (! in_array($orderColumn, ['name', 'attribute_set'])) {
                 $query->orderBy($orderColumn, $orderDirection);
             } else {
                 $query->orderBy('created_at', 'desc'); // Default fallback
@@ -123,32 +123,32 @@ class AttributeController extends BaseController
         $data = [];
         foreach ($attributes as $attribute) {
             $attributeSetName = $attribute->attributeSet ? $attribute->attributeSet->getTranslation('name') : 'N/A';
-            $filterable = $attribute->is_filterable 
+            $filterable = $attribute->is_filterable
                 ? '<span class="badge badge-success">Yes</span>'
                 : '<span class="badge badge-secondary">No</span>';
-            
+
             $actions = '
                 <div class="btn-group">
-                    <button class="btn btn-sm btn-info view-attribute" data-id="' . $attribute->id . '">
+                    <button class="btn btn-sm btn-info view-attribute" data-id="'.$attribute->id.'">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn btn-sm btn-warning edit-attribute" data-id="' . $attribute->id . '">
+                    <button class="btn btn-sm btn-warning edit-attribute" data-id="'.$attribute->id.'">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger delete-attribute" data-id="' . $attribute->id . '">
+                    <button class="btn btn-sm btn-danger delete-attribute" data-id="'.$attribute->id.'">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>';
 
             $data[] = [
                 'id' => $attribute->id,
-                'name' => '<strong>' . ($attribute->getTranslation('name') ?? 'Unnamed Attribute') . '</strong>' 
-                         . '<br><small class="text-muted">' . ($attribute->slug ?? 'No slug') . '</small>',
-                'attribute_set' => '<span class="badge badge-primary">' . $attributeSetName . '</span>',
-                'values_count' => '<span class="badge badge-info">' . $attribute->attributeValues->count() . ' values</span>',
+                'name' => '<strong>'.($attribute->getTranslation('name') ?? 'Unnamed Attribute').'</strong>'
+                         .'<br><small class="text-muted">'.($attribute->slug ?? 'No slug').'</small>',
+                'attribute_set' => '<span class="badge badge-primary">'.$attributeSetName.'</span>',
+                'values_count' => '<span class="badge badge-info">'.$attribute->attributeValues->count().' values</span>',
                 'is_filterable' => $filterable,
                 'created_at' => $attribute->created_at ? $attribute->created_at->format('Y-m-d H:i') : '-',
-                'actions' => $actions
+                'actions' => $actions,
             ];
         }
 
@@ -167,6 +167,7 @@ class AttributeController extends BaseController
     {
         $attributeSets = AttributeSet::all();
         $categories = Category::all();
+
         return view('admin.attributes.create', compact('attributeSets', 'categories'));
     }
 
@@ -183,34 +184,34 @@ class AttributeController extends BaseController
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'values' => 'nullable|array',
-            'values.*' => 'required|string|max:255'
+            'values.*' => 'required|string|max:255',
         ]);
 
         DB::beginTransaction();
 
         try {
             $data = $request->only(['attribute_set_id', 'slug', 'is_filterable']);
-            
+
             // Create the attribute
             $attribute = Attribute::create($data);
-            
+
             // Set the translation
             $attribute->setTranslation('name', $request->name);
-            
+
             // Sync categories (sync empty array if no categories selected)
             $categories = $request->input('categories', []);
             $attribute->categories()->sync($categories);
 
             // Create attribute values if provided
             $values = $request->input('values', []);
-            if (!empty($values)) {
+            if (! empty($values)) {
                 foreach ($values as $index => $value) {
-                    if (!empty(trim($value))) {
+                    if (! empty(trim($value))) {
                         $attributeValue = AttributeValue::create([
                             'attribute_id' => $attribute->id,
-                            'position' => $index + 1
+                            'position' => $index + 1,
                         ]);
-                        
+
                         // Set the translation for the value
                         $attributeValue->setTranslation('value', trim($value));
                     }
@@ -225,28 +226,30 @@ class AttributeController extends BaseController
                     'message' => '🎉 Attribute created successfully!',
                     'title' => 'Success',
                     'type' => 'success',
-                    'attribute' => $attribute->load(['attributeSet', 'attributeValues'])
+                    'attribute' => $attribute->load(['attributeSet', 'attributeValues']),
                 ]);
             }
 
             sweetalert()->success('Attribute created successfully!');
+
             return redirect()->route('admin.attributes.index');
 
         } catch (\Exception $e) {
             DB::rollback();
-            
-            Log::error('Error creating attribute: ' . $e->getMessage());
+
+            Log::error('Error creating attribute: '.$e->getMessage());
 
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => '❌ Error creating attribute: ' . $e->getMessage(),
+                    'message' => '❌ Error creating attribute: '.$e->getMessage(),
                     'title' => 'Error',
-                    'type' => 'error'
+                    'type' => 'error',
                 ]);
             }
 
             sweetalert()->error('Error creating attribute. Please try again.');
+
             return redirect()->back()->withInput();
         }
     }
@@ -263,10 +266,10 @@ class AttributeController extends BaseController
             $attributeData = $attribute->toArray();
             $attributeData['name'] = $attribute->getTranslation('name');
             $attributeData['attribute_set_name'] = $attribute->attributeSet ? $attribute->attributeSet->getTranslation('name') : null;
-            
+
             return response()->json([
                 'success' => true,
-                'attribute' => $attributeData
+                'attribute' => $attributeData,
             ]);
         }
 
@@ -287,23 +290,24 @@ class AttributeController extends BaseController
             $attributeData = $attribute->toArray();
             $attributeData['name'] = $attribute->getTranslation('name');
             $attributeData['category_ids'] = $attribute->categories->pluck('id')->toArray();
-            
+
             // Include attribute values with translations
             $attributeData['attribute_values'] = $attribute->attributeValues->map(function ($value) {
                 return [
                     'id' => $value->id,
                     'value' => $value->getTranslation('value'),
-                    'position' => $value->position
+                    'position' => $value->position,
                 ];
             })->sortBy('position')->values()->toArray();
-            
+
             return response()->json([
                 'success' => true,
                 'attribute' => $attributeData,
                 'attribute_sets' => $attributeSets,
-                'categories' => $categories
+                'categories' => $categories,
             ]);
         }
+
         return view('admin.attributes.edit', compact('attribute', 'attributeSets', 'categories'));
     }
 
@@ -315,25 +319,25 @@ class AttributeController extends BaseController
         $request->validate([
             'name' => 'required|string|max:255',
             'attribute_set_id' => 'required|exists:attribute_sets,id',
-            'slug' => 'nullable|string|unique:attributes,slug,' . $attribute->id,
+            'slug' => 'nullable|string|unique:attributes,slug,'.$attribute->id,
             'is_filterable' => 'boolean',
             'categories' => 'nullable|array',
             'categories.*' => 'exists:categories,id',
             'values' => 'nullable|array',
-            'values.*' => 'required|string|max:255'
+            'values.*' => 'required|string|max:255',
         ]);
 
         DB::beginTransaction();
 
         try {
             $data = $request->only(['attribute_set_id', 'slug', 'is_filterable']);
-            
+
             // Update the attribute
             $attribute->update($data);
-            
+
             // Update the translation
             $attribute->setTranslation('name', $request->name);
-            
+
             // Sync categories (sync empty array if no categories selected)
             $categories = $request->input('categories', []);
             $attribute->categories()->sync($categories);
@@ -344,14 +348,14 @@ class AttributeController extends BaseController
 
             // Create new values if provided
             $values = $request->input('values', []);
-            if (!empty($values)) {
+            if (! empty($values)) {
                 foreach ($values as $index => $value) {
-                    if (!empty(trim($value))) {
+                    if (! empty(trim($value))) {
                         $attributeValue = AttributeValue::create([
                             'attribute_id' => $attribute->id,
-                            'position' => $index + 1
+                            'position' => $index + 1,
                         ]);
-                        
+
                         // Set the translation for the value
                         $attributeValue->setTranslation('value', trim($value));
                     }
@@ -366,28 +370,30 @@ class AttributeController extends BaseController
                     'message' => '✅ Attribute updated successfully!',
                     'title' => 'Updated',
                     'type' => 'success',
-                    'attribute' => $attribute->load(['attributeSet', 'attributeValues'])
+                    'attribute' => $attribute->load(['attributeSet', 'attributeValues']),
                 ]);
             }
 
             sweetalert()->success('Attribute updated successfully!');
+
             return redirect()->route('admin.attributes.index');
 
         } catch (\Exception $e) {
             DB::rollback();
-            
-            Log::error('Error updating attribute: ' . $e->getMessage());
+
+            Log::error('Error updating attribute: '.$e->getMessage());
 
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => '❌ Error updating attribute: ' . $e->getMessage(),
+                    'message' => '❌ Error updating attribute: '.$e->getMessage(),
                     'title' => 'Error',
-                    'type' => 'error'
+                    'type' => 'error',
                 ]);
             }
 
             sweetalert()->error('Error updating attribute. Please try again.');
+
             return redirect()->back()->withInput();
         }
     }
@@ -403,11 +409,12 @@ class AttributeController extends BaseController
                     'success' => false,
                     'message' => '❌ Cannot delete attribute with values.',
                     'title' => 'Error',
-                    'type' => 'error'
+                    'type' => 'error',
                 ]);
             }
-            
+
             sweetalert()->error('Cannot delete attribute with values.');
+
             return redirect()->back();
         }
 
@@ -418,11 +425,12 @@ class AttributeController extends BaseController
                 'success' => true,
                 'message' => '🗑️ Attribute deleted successfully!',
                 'title' => 'Deleted',
-                'type' => 'success'
+                'type' => 'success',
             ]);
         }
 
         sweetalert()->success('Attribute deleted successfully!');
+
         return redirect()->route('admin.attributes.index');
     }
 }

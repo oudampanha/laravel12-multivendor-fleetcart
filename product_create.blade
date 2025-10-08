@@ -1,0 +1,1382 @@
+
+@section('pageTitle', 'Create Product')
+
+@section('content')
+  <div class="row">
+    <div class="col-12">
+      <form action="{{ route('admin.products.store') }}" method="POST" enctype="multipart/form-data" id="productForm">
+        @csrf
+
+        <!-- Page Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">Create Product</h4>
+          <div>
+            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Save & Exit</button>
+          </div>
+        </div>
+
+        <div class="row">
+          <!-- Left Column - Main Content -->
+          <div class="col-md-8">
+
+            <!-- General Tab -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">General</h5>
+              </div>
+              <div class="card-body">
+                <!-- Name -->
+                <div class="form-group mb-3">
+                  <label for="name" class="form-label">Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                    name="name" value="{{ old('name') }}" required>
+                  @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Description -->
+                <div class="form-group mb-3">
+                  <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
+                  <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description"
+                    rows="8">{{ old('description') }}</textarea>
+                  @error('description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Brand -->
+                <div class="form-group mb-3">
+                  <label for="brand_id" class="form-label">Brand</label>
+                  <select class="form-control @error('brand_id') is-invalid @enderror" id="brand_id" name="brand_id">
+                    <option value="">Please Select</option>
+                    @foreach ($brands as $brand)
+                      <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>
+                        {{ $brand->name }}
+                      </option>
+                    @endforeach
+                  </select>
+                  @error('brand_id')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Categories -->
+                <div class="form-group mb-3">
+                  <label for="categories" class="form-label">Categories</label>
+                  <select class="form-control @error('categories') is-invalid @enderror" id="categories"
+                    name="categories[]" multiple>
+                    @foreach ($categories as $category)
+                      <option value="{{ $category->id }}"
+                        {{ in_array($category->id, old('categories', [])) ? 'selected' : '' }}>
+                        {{ $category->name }}
+                      </option>
+                    @endforeach
+                  </select>
+                  @error('categories')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Tax Class -->
+                <div class="form-group mb-3">
+                  <label for="tax_class_id" class="form-label">Tax Class</label>
+                  <select class="form-control @error('tax_class_id') is-invalid @enderror" id="tax_class_id"
+                    name="tax_class_id">
+                    <option value="">Please Select</option>
+                    @foreach ($taxClasses as $taxClass)
+                      <option value="{{ $taxClass->id }}" {{ old('tax_class_id') == $taxClass->id ? 'selected' : '' }}>
+                        {{ $taxClass->name }}
+                      </option>
+                    @endforeach
+                  </select>
+                  @error('tax_class_id')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Tags -->
+                <div class="form-group mb-3">
+                  <label for="tags" class="form-label">Tags</label>
+                  <input type="text" class="form-control @error('tags') is-invalid @enderror" id="tags"
+                    name="tags" value="{{ old('tags') }}" placeholder="Enter tags separated by commas">
+                  @error('tags')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Virtual Product Checkbox -->
+                <div class="form-check mb-3">
+                  <input type="checkbox" class="form-check-input" id="is_virtual" name="is_virtual" value="1"
+                    {{ old('is_virtual') ? 'checked' : '' }}>
+                  <label class="form-check-label" for="is_virtual">
+                    The product won't be shipped
+                  </label>
+                </div>
+
+                <!-- Status -->
+                <div class="form-check mb-3">
+                  <input type="checkbox" class="form-check-input" id="is_active" name="is_active" value="1"
+                    {{ old('is_active', true) ? 'checked' : '' }}>
+                  <label class="form-check-label" for="is_active">
+                    Enable the product
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Attributes Section -->
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Product Attributes</h5>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleAllAttributes">
+                  <i class="fas fa-chevron-up"></i>
+                </button>
+              </div>
+              <div class="card-body">
+                <div id="attributesContainer">
+                  <!-- Attributes will be dynamically added here -->
+                  <div class="row mb-3 attribute-row">
+                    <div class="col-md-5 col-12 mb-2">
+                      <select class="form-control" name="attributes[0][name]">
+                        <option value="">Please Select</option>
+                        <!-- Add attribute options here -->
+                      </select>
+                    </div>
+                    <div class="col-md-5 col-12 mb-2">
+                      <input type="text" class="form-control" name="attributes[0][value]" placeholder="Values">
+                    </div>
+                    <div class="col-md-2 col-12">
+                      <button type="button" class="btn btn-sm btn-outline-danger remove-attribute">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary" id="addAttribute">Add Attribute</button>
+              </div>
+            </div>
+
+            <!-- Product Variations Section -->
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-2 mb-sm-0">Product Variations</h5>
+                <div class="mt-1 mt-sm-0">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleAllVariations">
+                    <i class="fas fa-chevron-up"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="variationsContainer">
+                  <!-- Variations will be dynamically added here -->
+                  <div class="variation-card mb-3" data-variation-index="0">
+                    <div class="variation-card-header d-flex align-items-sm-center flex-row justify-content-between ">
+                      <div class="d-flex align-items-center mb-2 mb-sm-0">
+                        <button type="button" class="btn btn-sm btn-outline-secondary drag-handle me-2">
+                          <i class="fas fa-grip-vertical"></i>
+                        </button>
+                        <span class="variation-title">New Variation</span>
+                      </div>
+                      <div class="d-flex gap-2 ms-sm-auto">
+                        <button type="button" class="btn btn-sm btn-outline-danger remove-variation">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary toggle-variation"
+                          data-target="variationBody0">
+                          <i class="fas fa-chevron-up"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="variation-card-body" id="variationBody0" style="display: block;">
+                      <div class="row">
+                        <div class="col-12 col-md-6 mb-3">
+                          <div class="form-group">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control variation-name" name="variations[0][name]"
+                              placeholder="Enter variation name">
+                          </div>
+                        </div>
+                        <div class="col-12 col-md-6 mb-3">
+                          <div class="form-group">
+                            <label class="form-label">Type</label>
+                            <select class="form-control variation-type" name="variations[0][type]">
+                              <option value="">Please Select</option>
+                              <option value="text">Text</option>
+                              <option value="color">Color</option>
+                              <option value="image">Image</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Labels Section (initially hidden) -->
+                      <div class="labels-section" style="display: none;">
+                        <div class="form-group mb-3">
+                          <label class="form-label">Label <span class="text-danger">*</span></label>
+
+                          <!-- Text Type Layout -->
+                          <div class="labels-container labels-text" style="display: none;">
+                            <div
+                              class="label-row d-flex flex-column flex-sm-row align-items-start align-items-sm-center mb-2 gap-2">
+                              <button type="button"
+                                class="btn btn-sm btn-outline-secondary drag-handle align-self-center align-self-sm-start">
+                                <i class="fas fa-grip-vertical"></i>
+                              </button>
+                              <input type="text" class="form-control label-input flex-grow-1"
+                                name="variations[0][labels][]" placeholder="Enter text value (e.g., Small)">
+                              <button type="button"
+                                class="btn btn-sm btn-outline-danger remove-label align-self-center align-self-sm-start">
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-- Color Type Layout -->
+                          <div class="labels-container labels-color" style="display: none;">
+                            <div class="label-row mb-2">
+                              <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2">
+                                <button type="button"
+                                  class="btn btn-sm btn-outline-secondary drag-handle align-self-center align-self-sm-start">
+                                  <i class="fas fa-grip-vertical"></i>
+                                </button>
+                                <div
+                                  class="color-input-group d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 flex-grow-1">
+                                  <input type="color" class="form-control form-control-color color-picker"
+                                    value="#000000" style="width: 50px; height: 38px;">
+                                  <input type="text" class="form-control color-name flex-grow-1"
+                                    placeholder="Color name (e.g., Red)">
+                                  <input type="text" class="form-control color-hex label-input"
+                                    name="variations[0][labels][]" placeholder="#000000" style="min-width: 100px;">
+                                </div>
+                                <button type="button"
+                                  class="btn btn-sm btn-outline-danger remove-label align-self-center align-self-sm-start">
+                                  <i class="fas fa-trash"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- Image Type Layout -->
+                          <div class="labels-container labels-image" style="display: none;">
+                            <div class="label-row mb-2">
+                              <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2">
+                                <button type="button"
+                                  class="btn btn-sm btn-outline-secondary drag-handle align-self-center align-self-sm-start">
+                                  <i class="fas fa-grip-vertical"></i>
+                                </button>
+                                <div
+                                  class="image-input-group d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-2 flex-grow-1">
+                                  <div class="image-preview"
+                                    style="width: 50px; height: 38px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                    <i class="fas fa-image text-muted"></i>
+                                  </div>
+                                  <input type="text" class="form-control image-name flex-grow-1"
+                                    placeholder="Image name (e.g., Pattern A)">
+                                  <input type="hidden" class="image-id label-input" name="variations[0][labels][]"
+                                    value="">
+                                  <button type="button" class="btn btn-sm btn-outline-primary select-image">
+                                    <i class="fas fa-image"></i>
+                                  </button>
+                                </div>
+                                <button type="button"
+                                  class="btn btn-sm btn-outline-danger remove-label align-self-center align-self-sm-start">
+                                  <i class="fas fa-trash"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+
+                          <button type="button" class="btn btn-sm btn-secondary add-label-row">Add Row</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-3 py-2">
+                  <button type="button" class="btn btn-sm btn-secondary w-100 w-sm-auto mb-2" id="addVariation">Add
+                    Variation</button>
+                  <div
+                    class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 w-100 w-sm-auto">
+                    <select class="form-control w-100" id="variationTemplate" style="min-width: 200px;">
+                      <option value="">Select Template</option>
+                      <option value="size">Size (S, M, L, XL)</option>
+                      <option value="color">Color (Red, Blue, Green)</option>
+                      <option value="material">Material (Cotton, Polyester)</option>
+                    </select>
+                    <button type="button" class="btn btn-outline-primary w-100 w-sm-auto"
+                      id="insertTemplate">Insert</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Variants Section -->
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">
+                  <i class="fas fa-code-branch me-2"></i>Variants
+                </h5>
+                <button type="button" class="btn btn-sm btn-outline-primary" id="bulkEditVariants"
+                  style="display: none;">
+                  <i class="fas fa-edit me-1"></i> Bulk Edit
+                </button>
+              </div>
+              <div class="card-body">
+                <div id="variantsPlaceholder" class="alert alert-info d-flex align-items-center">
+                  <i class="fas fa-info-circle me-2"></i>
+                  <span>Please add some variations to generate variants.</span>
+                </div>
+
+                <!-- Default Variant Selection -->
+                <div class="form-group row" id="defaultVariantSection" style="display: block;">
+                  <label for="default-variant" class="col-sm-3 control-label text-left">Default Variant</label>
+                  <div class="col-sm-5">
+                    <select name="default_variant" id="default-variant" class="form-control custom-select-black">
+                      <option selected="" value="">Please Select</option>
+                    </select>
+                  </div>
+                </div>
+                <!-- Bulk Edit -->
+                <div class="bulk-edit-variants overflow-hidden" id="bulkEditSection" style="display: block;">
+                  <div class="form-group row">
+                    <label for="variation-values-list" class="col-sm-3 control-label text-left">Bulk Edit</label>
+                    <div class="col-sm-5">
+                      <select name="variation_values_list" id="variation-values-list"
+                        class="form-control custom-select-black">
+                        <option value="">Please Select</option>
+                        <option value="all">All Variants</option>
+                        <option value="9cavqcrk5uzj">SM</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="bulk-edit-variants-field-type" class="col-sm-3 control-label text-left">Field
+                      Type</label>
+                    <div class="col-sm-5">
+                      <select name="bulk_edit_variants_field_type" id="bulk-edit-variants-field-type"
+                        class="form-control custom-select-black">
+                        <option value="">Please Select</option>
+                        <option value="is_active">Status</option>
+                        <option value="media">Media</option>
+                        <option value="sku">SKU</option>
+                        <option value="price">Price</option>
+                        <option value="special_price">Special Price</option>
+                        <option value="manage_stock">Inventory Management</option>
+                        <option value="in_stock">Stock Availability</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label for="bulk-edit-variants-price" class="col-sm-3 control-label text-left">Price</label>
+                    <div class="col-sm-5">
+                      <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">$</span>
+                        </div>
+                        <input type="number" name="bulk_edit_variants_price" min="0" step="0.1"
+                          id="bulk-edit-variants-price" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-sm-5 col-sm-offset-3"><button type="button"
+                        class="btn btn-secondary btn-sm">Apply</button>
+                    </div>
+                  </div>
+                </div>
+
+                {{-- from fleetcart --}}
+                <div class="card mb-4">
+                  <div
+                    class="card-header d-flex justify-content-between align-items-center py-1 px-3 bg-light border-bottom">
+                    <!-- Left Side: Variant Name and Badge -->
+                    <div class="d-flex align-items-center gap-2">
+                      <h5 class="card-title mb-0 fw-semibold text-dark">SM</h5>
+                      <span class="badge bg-primary text-white px-2 py-1 rounded">Default</span>
+                    </div>
+
+                    <!-- Right Side: Toggle Switch and Chevron -->
+                    <div class="d-flex align-items-center gap-3">
+                      <!-- Toggle Switch -->
+                      <div class="custom-control custom-switch my-1 mx-2">
+                        <input class="custom-control-input" type="checkbox" id="variantActiveSwitch" checked
+                          style="width: 3rem; height: 1.5rem;">
+                        <label class="custom-control-label visually-hidden" for="variantActiveSwitch"></label>
+                      </div>
+
+                      <!-- Collapse Toggle Button -->
+                      <button type="button" class="btn btn-link p-0 text-muted border-0 bg-transparent"
+                        aria-expanded="false" aria-controls="variant-collapse" onclick="toggleVariantCollapse()">
+                        <i class="fas fa-chevron-down fs-5"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="collapse" id="variant-collapse">
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <div class="product-media-grid">
+                            <div class="media-grid-item media-picker disabled">
+                              <div class="image-holder"><img
+                                  src="https://asia.fleetcart.envaysoft.com/build/assets/placeholder_image-BqsW5LDU-v4.7.6.png"
+                                  class="placeholder-image" alt="Placeholder Image"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-8">
+                          <div class="variant-fields">
+                            <div class="row">
+                              <div class="col-sm-6">
+                                <div class="form-group row"><label for="variants-sku">SKU</label><input type="text"
+                                    name="variants.sku" id="variants-sku" class="form-control"><!---->
+                                </div>
+                              </div>
+                              <div class="col-sm-6">
+                                <div class="form-group row">
+                                  <label for="variants-price">Price <span class="text-red">*</span></label>
+                                  <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="number" name="variants.price" min="0" step="0.1"
+                                      id="variants-price" class="form-control">
+                                  </div><!---->
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-sm-6">
+                                <div class="form-group row">
+                                  <label for="variants-special-price">Special Price</label>
+                                  <div class="input-group">
+                                    <div class="input-group-prepend">
+                                      <span class="input-group-text">$</span>
+                                    </div>
+                                    <input type="number" name="variants.special_price" min="0" step="0.1"
+                                      id="variants-special-price" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-6">
+                                <div class="form-group row">
+                                  <label for="variants-special-price-type">Special Price Type</label>
+                                  <select name="variants.special_price_type" id="variants-special-price-type"
+                                    class="form-control custom-select-black">
+                                    <option value="fixed">Fixed</option>
+                                    <option value="percent">Percent</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group row">
+                                <label for="variants-special-price-start">Special Price Start</label>
+                                <div class="input-group">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar"
+                                        aria-hidden="true"></i></span>
+                                  </div>
+                                  <input type="hidden" data-input="true" name="variants.special_price_start"
+                                    id="variants-special-price-start" class="form-control flatpickr-input"
+                                    readonly="readonly">
+                                  <input class="form-control" tabindex="1" type="date" placeholder="">
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-6">
+                              <div class="form-group row"><label for="variants-special-price-end">Special Price
+                                  End</label>
+                                <div class="input-group">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fa fa-calendar"
+                                        aria-hidden="true"></i></span>
+                                  </div>
+                                  <input type="hidden" data-input="true" name="variants.special_price_end"
+                                    id="variants-special-price-end" class="form-control flatpickr-input"
+                                    readonly="readonly">
+                                  <input class="form-control flatpickr-input flatpickr-mobile" tabindex="1"
+                                    type="date" placeholder="">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-6">
+                              <div class="form-group row"><label for="variants-manage-stock">Inventory
+                                  Management</label><select name="variants.manage_stock" id="variants-manage-stock"
+                                  class="form-control custom-select-black">
+                                  <option value="0">Don't Track Inventory</option>
+                                  <option value="1">Track Inventory</option>
+                                </select><!----></div>
+                            </div><!---->
+                            <div class="col-sm-6">
+                              <div class="form-group row"><label for="variants-in-stock">Stock
+                                  Availability</label><select name="variants.in_stock" id="variants-in-stock"
+                                  class="form-control custom-select-black">
+                                  <option value="0">Out of Stock</option>
+                                  <option value="1">In Stock</option>
+                                </select><!----></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {{-- end from fleetcart --}}
+
+                <!-- Generated Variants -->
+                <div id="generatedVariants" class="variants-container mt-3">
+                  <!-- Generated variants will appear here -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Options Section -->
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Product Options</h5>
+                <div>
+                  <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleAllOptions">
+                    <i class="fas fa-chevron-up"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div id="optionsContainer">
+                  <!-- Options will be dynamically added here -->
+                  <div class="option-card mb-3" data-option-index="0">
+                    <div class="option-card-header d-flex align-items-center">
+                      <button type="button" class="btn btn-sm btn-outline-secondary drag-handle me-2">
+                        <i class="fas fa-grip-vertical"></i>
+                      </button>
+                      <span class="option-title">New Option</span>
+                      <div class="ms-auto">
+                        <button type="button" class="btn btn-sm btn-outline-danger remove-option me-2">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary toggle-option"
+                          data-target="optionBody0">
+                          <i class="fas fa-chevron-up"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="option-card-body" id="optionBody0" style="display: block;">
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control option-name" name="options[0][name]"
+                              placeholder="Enter variation name">
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="form-group mb-3">
+                            <label class="form-label">Type</label>
+                            <select class="form-control option-type" name="options[0][type]">
+                              <option value="">Please Select</option>
+                              <option value="text">Text</option>
+                              <option value="select">Select</option>
+                              <option value="radio">Radio</option>
+                              <option value="checkbox">Checkbox</option>
+                              <option value="date">Date</option>
+                              <option value="time">Time</option>
+                              <option value="datetime">Date & Time</option>
+                              <option value="file">File</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-md-2">
+                          <div class="form-check">
+                            <label class="form-check-label">
+                              <input type="checkbox" class="form-check-input" value=""> Required
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Labels Section (initially hidden) -->
+                      <div class="labels-section" style="display: none;">
+                        <div class="form-group mb-3">
+                          <label class="form-label">Label <span class="text-danger">*</span></label>
+
+                          <!-- Text Type Layout -->
+                          <div class="labels-container labels-text" style="display: none;">
+                            <div class="label-row d-flex align-items-center mb-2">
+                              <button type="button" class="btn btn-sm btn-outline-secondary drag-handle me-2">
+                                <i class="fas fa-grip-vertical"></i>
+                              </button>
+                              <input type="text" class="form-control label-input" name="variations[0][labels][]"
+                                placeholder="Enter text value (e.g., Small)">
+                              <button type="button" class="btn btn-sm btn-outline-danger ms-2 remove-label">
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-- Color Type Layout -->
+                          <div class="labels-container labels-color" style="display: none;">
+                            <div class="label-row d-flex align-items-center mb-2">
+                              <button type="button" class="btn btn-sm btn-outline-secondary drag-handle me-2">
+                                <i class="fas fa-grip-vertical"></i>
+                              </button>
+                              <div class="color-input-group d-flex align-items-center flex-1">
+                                <input type="color" class="form-control form-control-color color-picker me-2"
+                                  value="#000000" style="width: 50px; height: 38px;">
+                                <input type="text" class="form-control color-name me-2"
+                                  placeholder="Color name (e.g., Red)" style="flex: 1;">
+                                <input type="text" class="form-control color-hex label-input"
+                                  name="variations[0][labels][]" placeholder="#000000" style="width: 100px;">
+                              </div>
+                              <button type="button" class="btn btn-sm btn-outline-danger ms-2 remove-label">
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-- Image Type Layout -->
+                          <div class="labels-container labels-image" style="display: none;">
+                            <div class="label-row d-flex align-items-center mb-2">
+                              <button type="button" class="btn btn-sm btn-outline-secondary drag-handle me-2">
+                                <i class="fas fa-grip-vertical"></i>
+                              </button>
+                              <div class="image-input-group d-flex align-items-center flex-1">
+                                <div class="image-preview me-2"
+                                  style="width: 50px; height: 38px; border: 1px solid #ddd; border-radius: 4px; background: #f8f9fa; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                  <i class="fas fa-image text-muted"></i>
+                                </div>
+                                <input type="text" class="form-control image-name me-2"
+                                  placeholder="Image name (e.g., Pattern A)" style="flex: 1;">
+                                <input type="hidden" class="image-id label-input" name="variations[0][labels][]"
+                                  value="">
+                                <button type="button" class="btn btn-sm btn-outline-primary select-image me-1">
+                                  <i class="fas fa-image"></i>
+                                </button>
+                              </div>
+                              <button type="button" class="btn btn-sm btn-outline-danger ms-2 remove-label">
+                                <i class="fas fa-trash"></i>
+                              </button>
+                            </div>
+                          </div>
+
+                          <button type="button" class="btn btn-sm btn-secondary add-label-row">Add Row</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center justify-content-between gap-3 py-2">
+                  <button type="button" class="btn btn-sm btn-secondary w-100 w-sm-auto mb-2" id="addOption">Add
+                    Option</button>
+                  <div
+                    class="d-flex flex-column flex-sm-row align-items-stretch align-items-sm-center gap-2 w-100 w-sm-auto">
+                    <select class="form-control w-100" id="OptionTemplate" style="min-width: 200px;">
+                      <option value="">Select Template</option>
+                      <option value="size">Size (S, M, L, XL)</option>
+                      <option value="color">Color (Red, Blue, Green)</option>
+                      <option value="material">Material (Cotton, Polyester)</option>
+                    </select>
+                    <button type="button" class="btn btn-outline-primary w-100 w-sm-auto"
+                      id="insertTemplate">Insert</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {{-- <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Extra Compact Version</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="extra-compact table table-bordered table-sm">
+                    <thead>
+                      <tr>
+                        <th style="width: 50px">#</th>
+                        <th>Attribute</th>
+                        <th>Values</th>
+                        <th style="width: 80px"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>
+                          <div class="form-group">
+                            <select class="form-control">
+                              <option>Color</option>
+                              <option>Size</option>
+                              <option>Material</option>
+                              <option>Brand</option>
+                            </select>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                            <select class="form-control">
+                              <option>Red</option>
+                              <option>Blue</option>
+                              <option>Green</option>
+                            </select>
+                          </div>
+                        </td>
+                        <td class="text-center">
+                          <button type="button" class="btn btn-outline-danger btn-sm delete-row">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>
+                          <div class="form-group">
+                            <select class="form-control">
+                              <option>Size</option>
+                              <option>Color</option>
+                              <option>Material</option>
+                              <option>Brand</option>
+                            </select>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                            <select class="form-control">
+                              <option>Large</option>
+                              <option>Medium</option>
+                              <option>Small</option>
+                            </select>
+                          </div>
+                        </td>
+                        <td class="text-center">
+                          <button type="button" class="btn btn-outline-danger btn-sm delete-row">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>
+                          <div class="form-group">
+                            <select class="form-control">
+                              <option>Material</option>
+                              <option>Color</option>
+                              <option>Size</option>
+                              <option>Brand</option>
+                            </select>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="form-group">
+                            <select class="form-control">
+                              <option>Cotton</option>
+                              <option>Polyester</option>
+                              <option>Silk</option>
+                            </select>
+                          </div>
+                        </td>
+                        <td class="text-center">
+                          <button type="button" class="btn btn-outline-danger btn-sm delete-row">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div> --}}
+
+            {{-- Product download section --}}
+            <div class="card mb-4">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col">
+                    <h4 class="mb-0 text-dark">Downloads</h4>
+                  </div>
+                  <div class="col-auto">
+                    <i class="fas fa-th text-muted"></i>
+                  </div>
+                </div>
+
+              </div>
+              <div class="card-body">
+                <!-- File Label Row -->
+                <div class="row">
+                  <div class="col-md-12">
+                    <label class="form-label font-weight-bold text-dark">File</label>
+                  </div>
+                </div>
+
+                <!-- File Items Container -->
+                <div id="fileItemsContainer">
+                  <!-- Initial file item -->
+                  <div class="mb-3" data-file-index="0">
+                    <div class="card bg-white border">
+                      <div class="card-body py-3">
+                        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3">
+                          <!-- Drag Handle -->
+                          <div class="d-flex align-items-center justify-content-center align-self-center"
+                            style="min-width: 30px;">
+                            <i class="fas fa-bars text-muted"></i>
+                          </div>
+
+                          <!-- File Name Input -->
+                          <div class="flex-grow-1 w-100 w-sm-auto">
+                            <input type="text" class="form-control bg-transparent file-name" value="" readonly
+                              placeholder="Choose a file...">
+                          </div>
+
+                          <!-- Action Buttons -->
+                          <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-sm-auto">
+                            <input type="file" class="d-none file-input" id="fileInput0"
+                              onchange="handleFileSelect(0)">
+                            <button type="button" class="btn btn-light border w-100 w-sm-auto"
+                              onclick="document.getElementById('fileInput0').click()">
+                              <i class="fas fa-folder-open me-1"></i>Choose File
+                            </button>
+                            <button type="button" class="btn btn-outline-danger w-100 w-sm-auto"
+                              onclick="removeFileItem(0)">
+                              <i class="fas fa-trash me-1"></i>Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Add File Button Row -->
+                <div class="row">
+                  <div class="col">
+                    <button type="button" class="add-file-btn d-flex align-items-center" onclick="addNewFileItem()">
+                      <i class="fas fa-plus mr-2"></i>
+                      Add File
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <!-- Right Column - Sidebar -->
+          <div class="col-md-4">
+            <!-- Media -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Media</h5>
+              </div>
+              <div class="card-body">
+                <div class="product-media-container">
+                  <!-- Main Featured Image -->
+                  <div class="main-media-wrapper">
+                    <div class="main-image-holder" id="mainImageHolder" data-media-picker>
+                      <img src="{{ asset('assets/images/placeholder_image.png') }}" alt="Featured product image"
+                        class="main-product-image" id="mainProductImage">
+                      <div class="image-overlay">
+                        <div class="overlay-content">
+                          <i class="fas fa-camera mb-2"></i>
+                          <span>Click to select image</span>
+                        </div>
+                      </div>
+                      <button type="button" class="btn remove-main-image" id="removeMainImage" title="Remove image"
+                        style="display: none;">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Thumbnail Grid - Hidden initially, shown after main image is loaded -->
+                  <div class="media-thumbnails-grid" id="mediaThumbnailsGrid" style="display: none;">
+                    <!-- Add New Image Placeholder -->
+                    <div class="media-thumbnail-item add-new-media" data-media-picker-multiple>
+                      <div class="thumbnail-holder add-media-placeholder">
+                        <div class="add-media-content">
+                          <i class="fas fa-plus text-muted mb-2"></i>
+                          <span class="text-muted small">Add Images</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Hidden inputs to store selected media IDs -->
+                <input type="hidden" name="featured_image" id="featuredImageInput" value="">
+                <input type="hidden" name="gallery_images" id="galleryImagesInput" value="">
+              </div>
+            </div>
+
+            <!-- Pricing -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Pricing</h5>
+              </div>
+              <div class="card-body">
+                <!-- Price -->
+                <div class="form-group mb-3">
+                  <label for="price" class="form-label">Price <span class="text-danger">*</span></label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">$</span>
+                    </div>
+                    <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror"
+                      id="price" name="price" value="{{ old('price') }}" required>
+                    @error('price')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
+                </div>
+
+                <!-- Special Price -->
+                <div class="form-group mb-3">
+                  <label for="special_price" class="form-label">Special Price</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">$</span>
+                    </div>
+                    <input type="number" step="0.01"
+                      class="form-control @error('special_price') is-invalid @enderror" id="special_price"
+                      name="special_price" value="{{ old('special_price') }}">
+                    @error('special_price')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
+                </div>
+
+                <!-- Special Price Type -->
+                <div class="form-group mb-3">
+                  <label for="special_price_type" class="form-label">Special Price Type</label>
+                  <select class="form-control @error('special_price_type') is-invalid @enderror" id="special_price_type"
+                    name="special_price_type">
+                    <option value="fixed" {{ old('special_price_type', 'fixed') == 'fixed' ? 'selected' : '' }}>Fixed
+                    </option>
+                    <option value="percent" {{ old('special_price_type') == 'percent' ? 'selected' : '' }}>Percent
+                    </option>
+                  </select>
+                  @error('special_price_type')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Special Price Start -->
+                <div class="form-group mb-3">
+                  <label for="special_price_start" class="form-label">Special Price Start</label>
+                  <input type="date" class="form-control @error('special_price_start') is-invalid @enderror"
+                    id="special_price_start" name="special_price_start" value="{{ old('special_price_start') }}">
+                  @error('special_price_start')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Special Price End -->
+                <div class="form-group mb-3">
+                  <label for="special_price_end" class="form-label">Special Price End</label>
+                  <input type="date" class="form-control @error('special_price_end') is-invalid @enderror"
+                    id="special_price_end" name="special_price_end" value="{{ old('special_price_end') }}">
+                  @error('special_price_end')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+              </div>
+            </div>
+
+            <!-- Inventory -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Inventory</h5>
+              </div>
+              <div class="card-body">
+                <!-- SKU -->
+                <div class="form-group mb-3">
+                  <label for="sku" class="form-label">SKU</label>
+                  <input type="text" class="form-control @error('sku') is-invalid @enderror" id="sku"
+                    name="sku" value="{{ old('sku') }}">
+                  @error('sku')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Inventory Management -->
+                <div class="form-group mb-3">
+                  <label for="inventory_management" class="form-label">Inventory Management</label>
+                  <select class="form-control @error('manage_stock') is-invalid @enderror" id="inventory_management"
+                    name="manage_stock">
+                    <option value="0" {{ old('manage_stock', '1') == '0' ? 'selected' : '' }}>Don't track
+                      inventory
+                    </option>
+                    <option value="1" {{ old('manage_stock', '1') == '1' ? 'selected' : '' }}>Track inventory
+                    </option>
+                  </select>
+                  @error('manage_stock')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Stock Availability -->
+                <div class="form-group mb-3" id="stockAvailabilityGroup">
+                  <label for="stock_availability" class="form-label">Stock Availability</label>
+                  <select class="form-control @error('in_stock') is-invalid @enderror" id="stock_availability"
+                    name="in_stock">
+                    <option value="1" {{ old('in_stock', '1') == '1' ? 'selected' : '' }}>In Stock</option>
+                    <option value="0" {{ old('in_stock') == '0' ? 'selected' : '' }}>Out of Stock</option>
+                  </select>
+                  @error('in_stock')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Quantity -->
+                <div class="form-group mb-3" id="quantityGroup">
+                  <label for="qty" class="form-label">Quantity</label>
+                  <input type="number" class="form-control @error('qty') is-invalid @enderror" id="qty"
+                    name="qty" value="{{ old('qty', 0) }}" min="0">
+                  @error('qty')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+              </div>
+            </div>
+
+            <!-- SEO -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">SEO</h5>
+              </div>
+              <div class="card-body">
+                <!-- URL -->
+                <div class="form-group mb-3">
+                  <label for="slug" class="form-label">URL</label>
+                  <input type="text" class="form-control @error('slug') is-invalid @enderror" id="slug"
+                    name="slug" value="{{ old('slug') }}" placeholder="Auto-generated from name">
+                  @error('slug')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Meta Title -->
+                <div class="form-group mb-3">
+                  <label for="meta_title" class="form-label">Meta Title</label>
+                  <input type="text" class="form-control @error('meta_title') is-invalid @enderror" id="meta_title"
+                    name="meta_title" value="{{ old('meta_title') }}">
+                  @error('meta_title')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Meta Description -->
+                <div class="form-group mb-3">
+                  <label for="meta_description" class="form-label">Meta Description</label>
+                  <textarea class="form-control @error('meta_description') is-invalid @enderror" id="meta_description"
+                    name="meta_description" rows="3">{{ old('meta_description') }}</textarea>
+                  @error('meta_description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+              </div>
+            </div>
+
+            <!-- Additional -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Additional</h5>
+              </div>
+              <div class="card-body">
+                <!-- Vendor -->
+                @if (auth()->user()->hasRole('admin'))
+                  <div class="form-group mb-3">
+                    <label for="vendor_id" class="form-label">Vendor</label>
+                    <select class="form-control @error('vendor_id') is-invalid @enderror" id="vendor_id"
+                      name="vendor_id">
+                      <option value="">Admin Product</option>
+                      @foreach ($vendors as $vendor)
+                        <option value="{{ $vendor->id }}" {{ old('vendor_id') == $vendor->id ? 'selected' : '' }}>
+                          {{ $vendor->store_name }}
+                        </option>
+                      @endforeach
+                    </select>
+                    @error('vendor_id')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
+                @endif
+
+                <!-- Short Description -->
+                <div class="form-group mb-3">
+                  <label for="short_description" class="form-label">Short Description</label>
+                  <textarea class="form-control @error('short_description') is-invalid @enderror" id="short_description"
+                    name="short_description" rows="3">{{ old('short_description') }}</textarea>
+                  @error('short_description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- New From -->
+                <div class="form-group mb-3">
+                  <label for="new_from" class="form-label">New From</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                    </div>
+                    <input type="date" class="form-control @error('new_from') is-invalid @enderror" id="new_from"
+                      name="new_from" value="{{ old('new_from') }}">
+                    @error('new_from')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
+                </div>
+
+                <!-- New To -->
+                <div class="form-group mb-3">
+                  <label for="new_to" class="form-label">New To</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                    </div>
+                    <input type="date" class="form-control @error('new_to') is-invalid @enderror" id="new_to"
+                      name="new_to" value="{{ old('new_to') }}">
+                    @error('new_to')
+                      <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Linked Products -->
+            <div class="card mb-4">
+              <div class="card-header">
+                <h5 class="card-title mb-0">Linked Products</h5>
+              </div>
+              <div class="card-body">
+                <!-- Up-Sells -->
+                <div class="form-group mb-3">
+                  <label for="up_sells" class="form-label">Up-Sells</label>
+                  <select multiple="multiple" name="up_sells[]" id="up_sells"
+                    class="form-control @error('up_sells') is-invalid @enderror">
+                    <option value="">Search and select products...</option>
+                  </select>
+                  <small class="form-text text-muted">Products to suggest for upgrade or higher value items</small>
+                  @error('up_sells')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Cross-Sells -->
+                <div class="form-group mb-3">
+                  <label for="cross_sells" class="form-label">Cross-Sells</label>
+                  <select multiple="multiple" name="cross_sells[]" id="cross_sells"
+                    class="form-control @error('cross_sells') is-invalid @enderror">
+                    <option value="">Search and select products...</option>
+                  </select>
+                  <small class="form-text text-muted">Complementary products to suggest alongside this item</small>
+                  @error('cross_sells')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+
+                <!-- Related Products -->
+                <div class="form-group mb-3">
+                  <label for="related_products" class="form-label">Related Products</label>
+                  <select multiple="multiple" name="related_products[]" id="related_products"
+                    class="form-control @error('related_products') is-invalid @enderror">
+                    <option value="">Search and select products...</option>
+                  </select>
+                  <small class="form-text text-muted">Similar or alternative products customers might be interested
+                    in</small>
+                  @error('related_products')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                  @enderror
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+@endsection
+
+@push('styles')
+  <link href="{{ asset('assets/backend/lib/select2/css/select2.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('assets/backend/lib/summernote/summernote-bs4.min.css') }}" rel="stylesheet">
+  <style>
+    .hidden {
+      display: none !important;
+    }
+
+    .btn-remove {
+      background: none;
+      border: none;
+      color: #dc3545;
+      padding: 0.375rem;
+    }
+
+    .btn-remove:hover {
+      color: #c82333;
+    }
+
+    .add-file-btn {
+      background: none;
+      border: none;
+      color: #007bff;
+      padding: 0.5rem 0;
+    }
+
+    .add-file-btn:hover {
+      color: #0056b3;
+      text-decoration: underline;
+    }
+
+    /* Smooth collapsing animation */
+    .collapsing {
+      position: relative;
+      height: 0;
+      overflow: hidden;
+      transition: height 0.35s ease;
+    }
+
+    .collapse:not(.show) {
+      display: none;
+    }
+
+    .collapse.show {
+      display: block;
+    }
+  </style>
+  @include('admin.products.product_css')
+@endpush
+
+@push('scripts')
+  <script src="{{ asset('assets/backend/lib/select2/js/select2.min.js') }}"></script>
+  <script src="{{ asset('assets/backend/lib/summernote/summernote-bs4.min.js') }}"></script>
+  <script src="{{ asset('assets/backend/js/MediaManager.js') }}"></script>
+  @include('admin.products.product_js')
+  <script>
+    let fileCounter = 1;
+
+    function handleFileSelect(index) {
+      const fileInput = document.getElementById(`fileInput${index}`);
+      const fileItem = document.querySelector(`[data-file-index="${index}"]`);
+      const fileNameInput = fileItem.querySelector('.file-name');
+
+      if (fileInput.files && fileInput.files[0]) {
+        const fileName = fileInput.files[0].name;
+        fileNameInput.value = fileName;
+      }
+    }
+
+    function removeFileItem(index) {
+      const fileItem = document.querySelector(`[data-file-index="${index}"]`);
+      if (fileItem) {
+        fileItem.remove();
+      }
+    }
+
+    function addNewFileItem() {
+      const container = document.getElementById('fileItemsContainer');
+      const newFileRow = document.createElement('div');
+      newFileRow.className = 'mb-3';
+      newFileRow.setAttribute('data-file-index', fileCounter);
+
+      newFileRow.innerHTML = `
+                <div class="card bg-white border">
+                    <div class="card-body py-3">
+                        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3">
+                            <!-- Drag Handle -->
+                            <div class="d-flex align-items-center justify-content-center align-self-center" style="min-width: 30px;">
+                                <i class="fas fa-bars text-muted"></i>
+                            </div>
+
+                            <!-- File Name Input -->
+                            <div class="flex-grow-1 w-100 w-sm-auto">
+                                <input type="text" class="form-control bg-transparent file-name" value="" readonly placeholder="Choose a file...">
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="d-flex flex-column flex-sm-row gap-2 w-100 w-sm-auto">
+                                <input type="file" class="d-none file-input" id="fileInput${fileCounter}" onchange="handleFileSelect(${fileCounter})">
+                                <button type="button" class="btn btn-light border w-100 w-sm-auto" onclick="document.getElementById('fileInput${fileCounter}').click()">
+                                    <i class="fas fa-folder-open me-1"></i>Choose File
+                                </button>
+                                <button type="button" class="btn btn-outline-danger w-100 w-sm-auto" onclick="removeFileItem(${fileCounter})">
+                                    <i class="fas fa-trash me-1"></i>Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+      container.appendChild(newFileRow);
+      fileCounter++;
+    }
+
+    // Manual toggle function for variant collapse with smooth animation
+    function toggleVariantCollapse() {
+      const collapseElement = document.getElementById('variant-collapse');
+      const chevronIcon = document.querySelector('[aria-controls="variant-collapse"] i');
+      const button = document.querySelector('[aria-controls="variant-collapse"]');
+
+      if (collapseElement && chevronIcon && button) {
+        const isCollapsed = !collapseElement.classList.contains('show');
+
+        if (isCollapsed) {
+          // Show the element with smooth animation
+          collapseElement.style.display = '';
+          collapseElement.classList.add('collapsing');
+          collapseElement.classList.remove('collapse');
+
+          // Set height to 0 first
+          collapseElement.style.height = '0px';
+
+          // Force reflow
+          collapseElement.offsetHeight;
+
+          // Set to scroll height for smooth transition
+          collapseElement.style.height = collapseElement.scrollHeight + 'px';
+
+          // After transition, clean up classes
+          setTimeout(() => {
+            collapseElement.classList.remove('collapsing');
+            collapseElement.classList.add('collapse', 'show');
+            collapseElement.style.height = '';
+          }, 350);
+
+          chevronIcon.classList.remove('fa-chevron-down');
+          chevronIcon.classList.add('fa-chevron-up');
+          button.setAttribute('aria-expanded', 'true');
+        } else {
+          // Hide the element with smooth animation
+          collapseElement.style.height = collapseElement.offsetHeight + 'px';
+
+          // Force reflow
+          collapseElement.offsetHeight;
+
+          collapseElement.classList.add('collapsing');
+          collapseElement.classList.remove('collapse', 'show');
+          collapseElement.style.height = '0px';
+
+          // After transition, clean up
+          setTimeout(() => {
+            collapseElement.classList.remove('collapsing');
+            collapseElement.classList.add('collapse');
+            collapseElement.style.height = '';
+          }, 350);
+
+          chevronIcon.classList.remove('fa-chevron-up');
+          chevronIcon.classList.add('fa-chevron-down');
+          button.setAttribute('aria-expanded', 'false');
+        }
+      }
+    }
+  </script>
+@endpush

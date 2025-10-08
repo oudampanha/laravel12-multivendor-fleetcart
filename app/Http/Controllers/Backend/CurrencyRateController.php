@@ -11,6 +11,7 @@ class CurrencyRateController extends Controller
     public function index()
     {
         $currencyRates = CurrencyRate::orderBy('currency')->paginate(15);
+
         return view('admin.currency-rates.index', compact('currencyRates'));
     }
 
@@ -23,7 +24,7 @@ class CurrencyRateController extends Controller
     {
         $request->validate([
             'currency' => 'required|string|size:3|unique:currency_rates,currency',
-            'rate' => 'required|numeric|min:0'
+            'rate' => 'required|numeric|min:0',
         ]);
 
         CurrencyRate::create($request->all());
@@ -45,8 +46,8 @@ class CurrencyRateController extends Controller
     public function update(Request $request, CurrencyRate $currencyRate)
     {
         $request->validate([
-            'currency' => 'required|string|size:3|unique:currency_rates,currency,' . $currencyRate->id,
-            'rate' => 'required|numeric|min:0'
+            'currency' => 'required|string|size:3|unique:currency_rates,currency,'.$currencyRate->id,
+            'rate' => 'required|numeric|min:0',
         ]);
 
         $currencyRate->update($request->all());

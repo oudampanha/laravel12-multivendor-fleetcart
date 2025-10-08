@@ -12,6 +12,7 @@ class SliderController extends Controller
     public function index()
     {
         $sliders = Slider::withCount('slides')->paginate(15);
+
         return view('admin.sliders.index', compact('sliders'));
     }
 
@@ -28,7 +29,7 @@ class SliderController extends Controller
             'autoplay_speed' => 'nullable|integer|min:1000',
             'fade' => 'boolean',
             'dots' => 'boolean',
-            'arrows' => 'boolean'
+            'arrows' => 'boolean',
         ]);
 
         Slider::create($request->all());
@@ -40,6 +41,7 @@ class SliderController extends Controller
     public function show(Slider $slider)
     {
         $slider->load('slides');
+
         return view('admin.sliders.show', compact('slider'));
     }
 
@@ -56,7 +58,7 @@ class SliderController extends Controller
             'autoplay_speed' => 'nullable|integer|min:1000',
             'fade' => 'boolean',
             'dots' => 'boolean',
-            'arrows' => 'boolean'
+            'arrows' => 'boolean',
         ]);
 
         $slider->update($request->all());
@@ -84,7 +86,7 @@ class SliderController extends Controller
             'options' => 'nullable|string',
             'call_to_action_url' => 'nullable|url',
             'open_in_new_window' => 'boolean',
-            'position' => 'nullable|integer'
+            'position' => 'nullable|integer',
         ]);
 
         $slider->slides()->create($request->all());
@@ -104,7 +106,7 @@ class SliderController extends Controller
             'options' => 'nullable|string',
             'call_to_action_url' => 'nullable|url',
             'open_in_new_window' => 'boolean',
-            'position' => 'nullable|integer'
+            'position' => 'nullable|integer',
         ]);
 
         $slide->update($request->all());

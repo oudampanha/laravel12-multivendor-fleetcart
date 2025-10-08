@@ -47,10 +47,10 @@ class TaxRate extends Model
 
     public function scopeForLocation($query, $country = null, $state = null, $city = null, $zip = null)
     {
-        return $query->when($country, fn($q) => $q->where('country', $country))
-                    ->when($state, fn($q) => $q->where('state', $state))
-                    ->when($city, fn($q) => $q->where('city', $city))
-                    ->when($zip, fn($q) => $q->where('zip', $zip));
+        return $query->when($country, fn ($q) => $q->where('country', $country))
+            ->when($state, fn ($q) => $q->where('state', $state))
+            ->when($city, fn ($q) => $q->where('city', $city))
+            ->when($zip, fn ($q) => $q->where('zip', $zip));
     }
 
     public function scopeOrdered($query)

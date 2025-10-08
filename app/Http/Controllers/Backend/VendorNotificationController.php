@@ -2,28 +2,29 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\VendorNotification;
 use App\Models\Vendor;
-use App\Http\Controllers\Backend\BaseController;
+use App\Models\VendorNotification;
 use Illuminate\Http\Request;
 
 class VendorNotificationController extends BaseController
 {
     protected string $resource = 'vendor_notification';
-    
+
     protected array $additionalPermissions = ['vendor_notification_management_access'];
 
     public function index()
     {
         $vendorNotifications = VendorNotification::with('vendor')
-                                               ->orderBy('created_at', 'desc')
-                                               ->paginate(15);
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
         return view('admin.vendor_notifications.index', compact('vendorNotifications'));
     }
 
     public function create()
     {
         $vendors = Vendor::all();
+
         return view('admin.vendor_notifications.create', compact('vendors'));
     }
 
@@ -36,7 +37,7 @@ class VendorNotificationController extends BaseController
             'message' => 'required|string',
             'data' => 'nullable|array',
             'is_read' => 'boolean',
-            'read_at' => 'nullable|date'
+            'read_at' => 'nullable|date',
         ]);
 
         VendorNotification::create($validated);
@@ -47,12 +48,14 @@ class VendorNotificationController extends BaseController
     public function show(VendorNotification $vendorNotification)
     {
         $vendorNotification->load('vendor');
+
         return view('admin.vendor_notifications.show', compact('vendorNotification'));
     }
 
     public function edit(VendorNotification $vendorNotification)
     {
         $vendors = Vendor::all();
+
         return view('admin.vendor_notifications.edit', compact('vendorNotification', 'vendors'));
     }
 
@@ -65,7 +68,7 @@ class VendorNotificationController extends BaseController
             'message' => 'required|string',
             'data' => 'nullable|array',
             'is_read' => 'boolean',
-            'read_at' => 'nullable|date'
+            'read_at' => 'nullable|date',
         ]);
 
         $vendorNotification->update($validated);
@@ -84,7 +87,7 @@ class VendorNotificationController extends BaseController
     {
         $vendorNotification->update([
             'is_read' => true,
-            'read_at' => now()
+            'read_at' => now(),
         ]);
 
         return redirect()->route('admin.vendor_notifications.index')->with('success', 'Vendor Notification marked as read.');
@@ -94,7 +97,7 @@ class VendorNotificationController extends BaseController
     {
         $vendorNotification->update([
             'is_read' => false,
-            'read_at' => null
+            'read_at' => null,
         ]);
 
         return redirect()->route('admin.vendor_notifications.index')->with('success', 'Vendor Notification marked as unread.');

@@ -2,49 +2,49 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\WishList;
-use App\Models\User;
 use App\Models\Product;
-use App\Http\Controllers\Backend\BaseController;
+use App\Models\User;
+use App\Models\WishList;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class WishListController extends BaseController
 {
     protected string $resource = 'wish_list';
-    
+
     protected array $additionalPermissions = ['customer_management_access'];
 
     public function index(Request $request)
     {
         $query = WishList::with(['customer', 'product', 'product.vendor']);
-        
+
         // Filter by customer if provided
         if ($request->filled('customer_id')) {
             $query->where('customer_id', $request->customer_id);
         }
-        
+
         // Filter by product if provided
         if ($request->filled('product_id')) {
             $query->where('product_id', $request->product_id);
         }
-        
+
         // Search by customer name or product name
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->whereHas('customer', function ($customerQ) use ($search) {
                     $customerQ->where('first_name', 'like', "%{$search}%")
-                             ->orWhere('last_name', 'like', "%{$search}%")
-                             ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('last_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
                 })
-                ->orWhereHas('product', function ($productQ) use ($search) {
-                    $productQ->where('name', 'like', "%{$search}%");
-                });
+                    ->orWhereHas('product', function ($productQ) use ($search) {
+                        $productQ->where('name', 'like', "%{$search}%");
+                    });
             });
         }
-        
+
         $wishLists = $query->orderBy('created_at', 'desc')->paginate(15);
+
         return view('admin.wish-lists.index', compact('wishLists'));
     }
 
@@ -57,7 +57,7 @@ class WishListController extends BaseController
             ->where('customer_id', $customer->id)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-            
+
         return view('admin.wish-lists.by-customer', compact('wishLists', 'customer'));
     }
 
@@ -70,22 +70,22 @@ class WishListController extends BaseController
             ->where('product_id', $product->id)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-            
+
         return view('admin.wish-lists.by-product', compact('wishLists', 'product'));
     }
 
     public function destroy(User $customer, Product $product)
     {
         $wishList = WishList::where('customer_id', $customer->id)
-                           ->where('product_id', $product->id)
-                           ->first();
-                           
-        if (!$wishList) {
+            ->where('product_id', $product->id)
+            ->first();
+
+        if (! $wishList) {
             return redirect()->back()->with('error', 'Wish list item not found.');
         }
-        
+
         $wishList->delete();
-        
+
         return redirect()->route('admin.wish-lists.index')
             ->with('success', 'Wish list item removed successfully.');
     }
@@ -97,9 +97,9 @@ class WishListController extends BaseController
     {
         $limit = $request->get('limit', 20);
         $period = $request->get('period', 'all_time');
-        
+
         $query = Product::with(['vendor', 'brand'])
-            ->withCount(['wishLists as wish_count' => function($query) use ($period) {
+            ->withCount(['wishLists as wish_count' => function ($query) use ($period) {
                 if ($period !== 'all_time') {
                     $days = $this->getPeriodDays($period);
                     $query->where('created_at', '>=', now()->subDays($days));
@@ -108,9 +108,9 @@ class WishListController extends BaseController
             ->having('wish_count', '>', 0)
             ->orderBy('wish_count', 'desc')
             ->limit($limit);
-            
+
         $popularProducts = $query->get();
-        
+
         return view('admin.wish-lists.popular-products', compact('popularProducts', 'limit', 'period'));
     }
 
@@ -128,7 +128,7 @@ class WishListController extends BaseController
             'wish_lists_this_month' => WishList::where('created_at', '>=', now()->startOfMonth())->count(),
             'avg_items_per_customer' => round(WishList::count() / max(WishList::distinct('customer_id')->count(), 1), 2),
         ];
-        
+
         // Get top categories in wish lists
         $topCategories = DB::table('wish_lists')
             ->join('products', 'wish_lists.product_id', '=', 'products.id')
@@ -139,7 +139,7 @@ class WishListController extends BaseController
             ->orderBy('wish_count', 'desc')
             ->limit(10)
             ->get();
-            
+
         return view('admin.wish-lists.statistics', compact('stats', 'topCategories'));
     }
 
@@ -150,9 +150,9 @@ class WishListController extends BaseController
     {
         $limit = $request->get('limit', 20);
         $period = $request->get('period', 'all_time');
-        
+
         $query = User::whereDoesntHave('vendor')
-            ->withCount(['wishLists as wish_count' => function($query) use ($period) {
+            ->withCount(['wishLists as wish_count' => function ($query) use ($period) {
                 if ($period !== 'all_time') {
                     $days = $this->getPeriodDays($period);
                     $query->where('created_at', '>=', now()->subDays($days));
@@ -161,9 +161,9 @@ class WishListController extends BaseController
             ->having('wish_count', '>', 0)
             ->orderBy('wish_count', 'desc')
             ->limit($limit);
-            
+
         $topCustomers = $query->get();
-        
+
         return view('admin.wish-lists.top-customers', compact('topCustomers', 'limit', 'period'));
     }
 
@@ -176,9 +176,9 @@ class WishListController extends BaseController
             'wish_list_ids' => 'required|array',
             'wish_list_ids.*' => 'exists:wish_lists,id',
         ]);
-        
+
         $deleted = WishList::whereIn('id', $request->wish_list_ids)->delete();
-        
+
         return redirect()->route('admin.wish-lists.index')
             ->with('success', "Removed {$deleted} wish list items successfully.");
     }
@@ -190,7 +190,7 @@ class WishListController extends BaseController
     {
         $count = WishList::where('customer_id', $customer->id)->count();
         WishList::where('customer_id', $customer->id)->delete();
-        
+
         return redirect()->route('admin.wish-lists.index')
             ->with('success', "Cleared {$count} wish list items for customer: {$customer->full_name}.");
     }
@@ -202,7 +202,7 @@ class WishListController extends BaseController
     {
         $count = WishList::where('product_id', $product->id)->count();
         WishList::where('product_id', $product->id)->delete();
-        
+
         return redirect()->route('admin.wish-lists.index')
             ->with('success', "Cleared {$count} wish list items for product: {$product->name}.");
     }
@@ -214,21 +214,21 @@ class WishListController extends BaseController
     {
         $period = $request->get('period', 'daily');
         $days = $request->get('days', 30);
-        
-        $dateFormat = match($period) {
+
+        $dateFormat = match ($period) {
             'hourly' => '%Y-%m-%d %H:00:00',
             'daily' => '%Y-%m-%d',
             'weekly' => '%Y-%u',
             'monthly' => '%Y-%m',
             default => '%Y-%m-%d'
         };
-        
+
         $trends = WishList::selectRaw("DATE_FORMAT(created_at, '{$dateFormat}') as period, COUNT(*) as count")
             ->where('created_at', '>=', now()->subDays($days))
             ->groupBy('period')
             ->orderBy('period')
             ->get();
-            
+
         return view('admin.wish-lists.trends', compact('trends', 'period', 'days'));
     }
 
@@ -241,23 +241,23 @@ class WishListController extends BaseController
             'product_ids' => 'required|array',
             'product_ids.*' => 'exists:products,id',
         ]);
-        
+
         $notificationsSent = 0;
-        
+
         foreach ($request->product_ids as $productId) {
             $customers = WishList::where('product_id', $productId)
                 ->with('customer')
                 ->get()
                 ->pluck('customer')
                 ->unique('id');
-                
+
             foreach ($customers as $customer) {
                 // Here you would send actual notifications
                 // For now, we'll just count them
                 $notificationsSent++;
             }
         }
-        
+
         return redirect()->back()
             ->with('success', "Sent {$notificationsSent} sale notifications to customers.");
     }
@@ -267,7 +267,7 @@ class WishListController extends BaseController
      */
     private function getPeriodDays($period)
     {
-        return match($period) {
+        return match ($period) {
             'today' => 1,
             'week' => 7,
             'month' => 30,

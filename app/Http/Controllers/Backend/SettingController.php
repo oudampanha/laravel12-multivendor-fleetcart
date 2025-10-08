@@ -2,31 +2,32 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\Setting;
-use App\Models\VendorSetting;
 use App\Models\Vendor;
+use App\Models\VendorSetting;
 use Illuminate\Http\Request;
 
 class SettingController extends BaseController
 {
     protected string $resource = 'setting';
-    
+
     protected array $additionalPermissions = ['system_settings_access'];
 
     public function __construct()
     {
         parent::__construct();
-        
+
         // Apply specific permissions for vendor settings
         $this->applyMethodPermission('vendor_setting_access', ['vendorSettings']);
         $this->applyMethodPermission('vendor_setting_create', ['createVendorSetting', 'storeVendorSetting']);
         $this->applyMethodPermission('vendor_setting_edit', ['editVendorSetting', 'updateVendorSetting']);
         $this->applyMethodPermission('vendor_setting_delete', ['destroyVendorSetting']);
     }
+
     public function index()
     {
         $settings = Setting::paginate(15);
+
         return view('admin.settings.index', compact('settings'));
     }
 
@@ -40,7 +41,7 @@ class SettingController extends BaseController
         $request->validate([
             'key' => 'required|string|unique:settings,key',
             'is_translatable' => 'boolean',
-            'plain_value' => 'nullable|string'
+            'plain_value' => 'nullable|string',
         ]);
 
         Setting::create($request->all());
@@ -62,9 +63,9 @@ class SettingController extends BaseController
     public function update(Request $request, Setting $setting)
     {
         $request->validate([
-            'key' => 'required|string|unique:settings,key,' . $setting->id,
+            'key' => 'required|string|unique:settings,key,'.$setting->id,
             'is_translatable' => 'boolean',
-            'plain_value' => 'nullable|string'
+            'plain_value' => 'nullable|string',
         ]);
 
         $setting->update($request->all());
@@ -84,12 +85,14 @@ class SettingController extends BaseController
     public function vendorSettings()
     {
         $vendorSettings = VendorSetting::with('vendor')->paginate(15);
+
         return view('admin.vendor-settings.index', compact('vendorSettings'));
     }
 
     public function createVendorSetting()
     {
         $vendors = Vendor::where('is_active', true)->get();
+
         return view('admin.vendor-settings.create', compact('vendors'));
     }
 
@@ -98,7 +101,7 @@ class SettingController extends BaseController
         $request->validate([
             'vendor_id' => 'required|exists:vendors,id',
             'key' => 'required|string',
-            'value' => 'nullable|string'
+            'value' => 'nullable|string',
         ]);
 
         VendorSetting::updateOrCreate(
@@ -113,6 +116,7 @@ class SettingController extends BaseController
     public function editVendorSetting(VendorSetting $vendorSetting)
     {
         $vendors = Vendor::where('is_active', true)->get();
+
         return view('admin.vendor-settings.edit', compact('vendorSetting', 'vendors'));
     }
 
@@ -121,7 +125,7 @@ class SettingController extends BaseController
         $request->validate([
             'vendor_id' => 'required|exists:vendors,id',
             'key' => 'required|string',
-            'value' => 'nullable|string'
+            'value' => 'nullable|string',
         ]);
 
         $vendorSetting->update($request->all());

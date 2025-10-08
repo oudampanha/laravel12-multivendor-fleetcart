@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use App\Models\User;
 use App\Http\Middleware\PermissionMiddleware;
+use App\Models\User;
 
 trait HasPermissions
 {
@@ -12,11 +12,12 @@ trait HasPermissions
      */
     public function hasPermission(string $permission): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->hasPermission(auth()->user(), $permission);
     }
 
@@ -25,11 +26,12 @@ trait HasPermissions
      */
     public function hasAllPermissions(array $permissions): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->hasAllPermissions(auth()->user(), $permissions);
     }
 
@@ -38,11 +40,12 @@ trait HasPermissions
      */
     public function hasAnyPermission(array $permissions): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->hasAnyPermission(auth()->user(), $permissions);
     }
 
@@ -51,11 +54,12 @@ trait HasPermissions
      */
     public function canAccessResource(string $resource, string $action = 'access'): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->canAccessResource(auth()->user(), $resource, $action);
     }
 
@@ -64,11 +68,12 @@ trait HasPermissions
      */
     public function canCRUD(string $resource, string $action): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->canCRUD(auth()->user(), $resource, $action);
     }
 
@@ -77,11 +82,12 @@ trait HasPermissions
      */
     public function getUserPermissions(): array
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return [];
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->getUserPermissions(auth()->user());
     }
 
@@ -90,11 +96,12 @@ trait HasPermissions
      */
     public function getAccessibleResources(): array
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return [];
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->getAccessibleResources(auth()->user());
     }
 
@@ -103,11 +110,12 @@ trait HasPermissions
      */
     public function canManageUsers(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->canManageUsers(auth()->user());
     }
 
@@ -116,11 +124,12 @@ trait HasPermissions
      */
     public function canAccessDashboard(): bool
     {
-        if (!auth()->check()) {
+        if (! auth()->check()) {
             return false;
         }
 
-        $middleware = new PermissionMiddleware();
+        $middleware = new PermissionMiddleware;
+
         return $middleware->canAccessDashboard(auth()->user());
     }
 
@@ -129,7 +138,7 @@ trait HasPermissions
      */
     public function authorizePermission(string $permission, string $message = 'You do not have permission to perform this action.'): void
     {
-        if (!$this->hasPermission($permission)) {
+        if (! $this->hasPermission($permission)) {
             abort(403, $message);
         }
     }
@@ -139,7 +148,7 @@ trait HasPermissions
      */
     public function authorizeAnyPermission(array $permissions, string $message = 'You do not have permission to perform this action.'): void
     {
-        if (!$this->hasAnyPermission($permissions)) {
+        if (! $this->hasAnyPermission($permissions)) {
             abort(403, $message);
         }
     }
@@ -149,7 +158,7 @@ trait HasPermissions
      */
     public function authorizeAllPermissions(array $permissions, string $message = 'You do not have permission to perform this action.'): void
     {
-        if (!$this->hasAllPermissions($permissions)) {
+        if (! $this->hasAllPermissions($permissions)) {
             abort(403, $message);
         }
     }
@@ -157,9 +166,9 @@ trait HasPermissions
     /**
      * Abort if user cannot access resource
      */
-    public function authorizeResource(string $resource, string $action = 'access', string $message = null): void
+    public function authorizeResource(string $resource, string $action = 'access', ?string $message = null): void
     {
-        if (!$this->canAccessResource($resource, $action)) {
+        if (! $this->canAccessResource($resource, $action)) {
             $message = $message ?: "You do not have permission to {$action} {$resource}.";
             abort(403, $message);
         }

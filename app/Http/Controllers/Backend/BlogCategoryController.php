@@ -11,6 +11,7 @@ class BlogCategoryController extends Controller
     public function index()
     {
         $blogCategories = BlogCategory::withCount('posts')->paginate(15);
+
         return view('admin.blog-categories.index', compact('blogCategories'));
     }
 
@@ -22,7 +23,7 @@ class BlogCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'slug' => 'required|string|unique:blog_categories,slug'
+            'slug' => 'required|string|unique:blog_categories,slug',
         ]);
 
         BlogCategory::create($request->all());
@@ -34,6 +35,7 @@ class BlogCategoryController extends Controller
     public function show(BlogCategory $blogCategory)
     {
         $blogCategory->load('posts');
+
         return view('admin.blog-categories.show', compact('blogCategory'));
     }
 
@@ -45,7 +47,7 @@ class BlogCategoryController extends Controller
     public function update(Request $request, BlogCategory $blogCategory)
     {
         $request->validate([
-            'slug' => 'required|string|unique:blog_categories,slug,' . $blogCategory->id
+            'slug' => 'required|string|unique:blog_categories,slug,'.$blogCategory->id,
         ]);
 
         $blogCategory->update($request->all());

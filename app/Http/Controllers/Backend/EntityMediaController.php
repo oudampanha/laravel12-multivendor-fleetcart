@@ -4,31 +4,29 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\EntityMedia;
 use App\Models\Media;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class EntityMediaController extends BaseController
 {
     protected string $resource = 'entity_media';
-    
+
     protected array $additionalPermissions = ['media_management_access'];
 
     public function index(string $entityType, int $entityId)
     {
         // Validate entity type
         $allowedEntityTypes = ['products', 'categories', 'brands', 'users', 'vendors', 'blog_posts', 'pages'];
-        
-        if (!in_array($entityType, $allowedEntityTypes)) {
+
+        if (! in_array($entityType, $allowedEntityTypes)) {
             abort(404, 'Invalid entity type');
         }
-        
+
         $entityMedia = EntityMedia::with('media')
             ->where('entity_type', $entityType)
             ->where('entity_id', $entityId)
             ->orderBy('sort_order')
             ->paginate(15);
-            
+
         return view('admin.entity-media.index', compact('entityMedia', 'entityType', 'entityId'));
     }
 
@@ -39,25 +37,25 @@ class EntityMediaController extends BaseController
             'zone' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer|min:0',
         ]);
-        
+
         // Check if the media is already attached to this entity
         $exists = EntityMedia::where('entity_type', $entityType)
-                            ->where('entity_id', $entityId)
-                            ->where('media_id', $request->media_id)
-                            ->exists();
-                            
+            ->where('entity_id', $entityId)
+            ->where('media_id', $request->media_id)
+            ->exists();
+
         if ($exists) {
             return redirect()->back()->with('error', 'Media is already attached to this entity.');
         }
-        
+
         // Get the next sort order if not provided
         $sortOrder = $request->sort_order;
         if (is_null($sortOrder)) {
             $sortOrder = EntityMedia::where('entity_type', $entityType)
-                                  ->where('entity_id', $entityId)
-                                  ->max('sort_order') + 1;
+                ->where('entity_id', $entityId)
+                ->max('sort_order') + 1;
         }
-        
+
         EntityMedia::create([
             'entity_type' => $entityType,
             'entity_id' => $entityId,
@@ -65,7 +63,7 @@ class EntityMediaController extends BaseController
             'zone' => $request->zone,
             'sort_order' => $sortOrder,
         ]);
-        
+
         return redirect()->route('admin.entity-media.index', [$entityType, $entityId])
             ->with('success', 'Media attached successfully.');
     }
@@ -74,9 +72,9 @@ class EntityMediaController extends BaseController
     {
         $entityType = $entityMedia->entity_type;
         $entityId = $entityMedia->entity_id;
-        
+
         $entityMedia->delete();
-        
+
         return redirect()->route('admin.entity-media.index', [$entityType, $entityId])
             ->with('success', 'Media detached successfully.');
     }
@@ -91,12 +89,12 @@ class EntityMediaController extends BaseController
             'items.*.id' => 'required|exists:entity_media,id',
             'items.*.sort_order' => 'required|integer|min:0',
         ]);
-        
+
         foreach ($request->items as $item) {
             EntityMedia::where('id', $item['id'])
-                      ->update(['sort_order' => $item['sort_order']]);
+                ->update(['sort_order' => $item['sort_order']]);
         }
-        
+
         return response()->json(['success' => true, 'message' => 'Media order updated successfully.']);
     }
 
@@ -108,9 +106,9 @@ class EntityMediaController extends BaseController
         $request->validate([
             'zone' => 'nullable|string|max:255',
         ]);
-        
+
         $entityMedia->update(['zone' => $request->zone]);
-        
+
         return redirect()->back()->with('success', 'Media zone updated successfully.');
     }
 
@@ -125,7 +123,7 @@ class EntityMediaController extends BaseController
             ->where('zone', $zone)
             ->orderBy('sort_order')
             ->get();
-            
+
         return response()->json($entityMedia);
     }
 
@@ -139,20 +137,20 @@ class EntityMediaController extends BaseController
             'media_ids.*' => 'exists:media,id',
             'zone' => 'nullable|string|max:255',
         ]);
-        
+
         $attachedCount = 0;
         $sortOrder = EntityMedia::where('entity_type', $entityType)
-                               ->where('entity_id', $entityId)
-                               ->max('sort_order') + 1;
-        
+            ->where('entity_id', $entityId)
+            ->max('sort_order') + 1;
+
         foreach ($request->media_ids as $mediaId) {
             // Check if already exists
             $exists = EntityMedia::where('entity_type', $entityType)
-                                ->where('entity_id', $entityId)
-                                ->where('media_id', $mediaId)
-                                ->exists();
-                                
-            if (!$exists) {
+                ->where('entity_id', $entityId)
+                ->where('media_id', $mediaId)
+                ->exists();
+
+            if (! $exists) {
                 EntityMedia::create([
                     'entity_type' => $entityType,
                     'entity_id' => $entityId,
@@ -163,7 +161,7 @@ class EntityMediaController extends BaseController
                 $attachedCount++;
             }
         }
-        
+
         return redirect()->route('admin.entity-media.index', [$entityType, $entityId])
             ->with('success', "Attached {$attachedCount} media files successfully.");
     }
@@ -174,13 +172,13 @@ class EntityMediaController extends BaseController
     public function clearAll(string $entityType, int $entityId)
     {
         $count = EntityMedia::where('entity_type', $entityType)
-                           ->where('entity_id', $entityId)
-                           ->count();
-                           
+            ->where('entity_id', $entityId)
+            ->count();
+
         EntityMedia::where('entity_type', $entityType)
-                  ->where('entity_id', $entityId)
-                  ->delete();
-        
+            ->where('entity_id', $entityId)
+            ->delete();
+
         return redirect()->route('admin.entity-media.index', [$entityType, $entityId])
             ->with('success', "Removed {$count} media files successfully.");
     }

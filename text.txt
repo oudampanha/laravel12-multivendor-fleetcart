@@ -1,0 +1,30 @@
+            <div class="card mb-4">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="card-title mb-0">Product Attributes</h5>
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="toggleAllAttributes">
+                  <i class="fas fa-chevron-up"></i>
+                </button>
+              </div>
+              <div class="card-body">
+                <div id="attributesContainer">
+                  <!-- Attributes will be dynamically added here -->
+                  <div class="row mb-3 attribute-row">
+                    <div class="col-md-5 col-12 mb-2">
+                      <select class="form-control" name="attributes[0][name]">
+                        <option value="">Please Select</option>
+                        <!-- Add attribute options here -->
+                      </select>
+                    </div>
+                    <div class="col-md-5 col-12 mb-2">
+                      <input type="text" class="form-control" name="attributes[0][value]" placeholder="Values">
+                    </div>
+                    <div class="col-md-2 col-12">
+                      <button type="button" class="btn btn-sm btn-outline-danger remove-attribute">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-sm btn-secondary" id="addAttribute">Add Attribute</button>
+              </div>
+            </div>

@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\OrderProduct;
 use App\Models\Order;
+use App\Models\OrderProduct;
 use App\Models\Product;
-use App\Models\Vendor;
 use App\Models\ProductVariant;
-use App\Http\Controllers\Backend\BaseController;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 
 class OrderProductController extends BaseController
 {
     protected string $resource = 'order_product';
-    
+
     protected array $additionalPermissions = ['order_product_management_access'];
 
     public function index()
     {
         $orderProducts = OrderProduct::with(['order', 'product', 'vendor', 'productVariant'])
-                                   ->orderBy('created_at', 'desc')
-                                   ->paginate(15);
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
         return view('admin.order_products.index', compact('orderProducts'));
     }
 
@@ -30,6 +30,7 @@ class OrderProductController extends BaseController
         $products = Product::all();
         $vendors = Vendor::all();
         $productVariants = ProductVariant::all();
+
         return view('admin.order_products.create', compact('orders', 'products', 'vendors', 'productVariants'));
     }
 
@@ -44,7 +45,7 @@ class OrderProductController extends BaseController
             'qty' => 'required|integer|min:1',
             'line_total' => 'required|decimal:0,4',
             'vendor_commission' => 'decimal:0,4',
-            'vendor_status' => 'required|in:pending,processing,shipped,delivered,canceled,refunded'
+            'vendor_status' => 'required|in:pending,processing,shipped,delivered,canceled,refunded',
         ]);
 
         OrderProduct::create($validated);
@@ -55,6 +56,7 @@ class OrderProductController extends BaseController
     public function show(OrderProduct $orderProduct)
     {
         $orderProduct->load(['order', 'product', 'vendor', 'productVariant']);
+
         return view('admin.order_products.show', compact('orderProduct'));
     }
 
@@ -64,6 +66,7 @@ class OrderProductController extends BaseController
         $products = Product::all();
         $vendors = Vendor::all();
         $productVariants = ProductVariant::all();
+
         return view('admin.order_products.edit', compact('orderProduct', 'orders', 'products', 'vendors', 'productVariants'));
     }
 
@@ -78,7 +81,7 @@ class OrderProductController extends BaseController
             'qty' => 'required|integer|min:1',
             'line_total' => 'required|decimal:0,4',
             'vendor_commission' => 'decimal:0,4',
-            'vendor_status' => 'required|in:pending,processing,shipped,delivered,canceled,refunded'
+            'vendor_status' => 'required|in:pending,processing,shipped,delivered,canceled,refunded',
         ]);
 
         $orderProduct->update($validated);

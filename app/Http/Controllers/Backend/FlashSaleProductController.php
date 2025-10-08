@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\FlashSaleProduct;
 use App\Models\FlashSale;
+use App\Models\FlashSaleProduct;
 use App\Models\Product;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 
 class FlashSaleProductController extends BaseController
 {
     protected string $resource = 'flash_sale_product';
-    
+
     protected array $additionalPermissions = ['flash_sale_product_management_access'];
 
     public function index()
     {
         $flashSaleProducts = FlashSaleProduct::with(['flashSale', 'product'])
-                                           ->orderBy('position', 'asc')
-                                           ->paginate(15);
+            ->orderBy('position', 'asc')
+            ->paginate(15);
+
         return view('admin.flash_sale_products.index', compact('flashSaleProducts'));
     }
 
@@ -26,6 +26,7 @@ class FlashSaleProductController extends BaseController
     {
         $flashSales = FlashSale::all();
         $products = Product::all();
+
         return view('admin.flash_sale_products.create', compact('flashSales', 'products'));
     }
 
@@ -37,7 +38,7 @@ class FlashSaleProductController extends BaseController
             'end_date' => 'required|date',
             'price' => 'required|decimal:0,4',
             'qty' => 'required|integer|min:0',
-            'position' => 'required|integer|min:0'
+            'position' => 'required|integer|min:0',
         ]);
 
         FlashSaleProduct::create($validated);
@@ -48,6 +49,7 @@ class FlashSaleProductController extends BaseController
     public function show(FlashSaleProduct $flashSaleProduct)
     {
         $flashSaleProduct->load(['flashSale', 'product']);
+
         return view('admin.flash_sale_products.show', compact('flashSaleProduct'));
     }
 
@@ -55,6 +57,7 @@ class FlashSaleProductController extends BaseController
     {
         $flashSales = FlashSale::all();
         $products = Product::all();
+
         return view('admin.flash_sale_products.edit', compact('flashSaleProduct', 'flashSales', 'products'));
     }
 
@@ -66,7 +69,7 @@ class FlashSaleProductController extends BaseController
             'end_date' => 'required|date',
             'price' => 'required|decimal:0,4',
             'qty' => 'required|integer|min:0',
-            'position' => 'required|integer|min:0'
+            'position' => 'required|integer|min:0',
         ]);
 
         $flashSaleProduct->update($validated);

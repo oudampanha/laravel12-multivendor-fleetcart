@@ -178,8 +178,9 @@ class OrderProduct extends Model
 
     public function calculateCommission(): void
     {
-        if (!$this->vendor) {
+        if (! $this->vendor) {
             $this->vendor_commission = 0;
+
             return;
         }
 
@@ -232,11 +233,12 @@ class OrderProduct extends Model
     {
         $validStatuses = ['pending', 'processing', 'shipped', 'delivered', 'canceled', 'refunded'];
 
-        if (!in_array($status, $validStatuses)) {
+        if (! in_array($status, $validStatuses)) {
             return false;
         }
 
         $this->vendor_status = $status;
+
         return $this->save();
     }
 }

@@ -48,7 +48,7 @@ class Cart extends Model
     public function addItem(array $item): void
     {
         $items = $this->getItems();
-        
+
         // Check if item with same product and options already exists
         $existingItem = $items->first(function ($cartItem) use ($item) {
             return $cartItem['product_id'] === $item['product_id'] &&
@@ -209,7 +209,7 @@ class Cart extends Model
 
     public function hasCoupon(): bool
     {
-        return !empty($this->data['coupon']);
+        return ! empty($this->data['coupon']);
     }
 
     public function getItemsByVendor(): Collection

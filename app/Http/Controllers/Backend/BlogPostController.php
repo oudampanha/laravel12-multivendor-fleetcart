@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\BlogPost;
 use App\Models\BlogCategory;
+use App\Models\BlogPost;
 use App\Models\BlogTag;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -16,6 +16,7 @@ class BlogPostController extends Controller
         $blogPosts = BlogPost::with(['user', 'category'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+
         return view('admin.blog-posts.index', compact('blogPosts'));
     }
 
@@ -24,7 +25,7 @@ class BlogPostController extends Controller
         $categories = BlogCategory::all();
         $tags = BlogTag::all();
         $users = User::all();
-        
+
         return view('admin.blog-posts.create', compact('categories', 'tags', 'users'));
     }
 
@@ -34,7 +35,7 @@ class BlogPostController extends Controller
             'user_id' => 'required|exists:users,id',
             'blog_category_id' => 'nullable|exists:blog_categories,id',
             'slug' => 'required|string|unique:blog_posts,slug',
-            'publish_status' => 'required|string|in:draft,published,archived'
+            'publish_status' => 'required|string|in:draft,published,archived',
         ]);
 
         $blogPost = BlogPost::create($request->all());
@@ -50,6 +51,7 @@ class BlogPostController extends Controller
     public function show(BlogPost $blogPost)
     {
         $blogPost->load(['user', 'category', 'tags']);
+
         return view('admin.blog-posts.show', compact('blogPost'));
     }
 
@@ -58,7 +60,7 @@ class BlogPostController extends Controller
         $categories = BlogCategory::all();
         $tags = BlogTag::all();
         $users = User::all();
-        
+
         return view('admin.blog-posts.edit', compact('blogPost', 'categories', 'tags', 'users'));
     }
 
@@ -67,8 +69,8 @@ class BlogPostController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'blog_category_id' => 'nullable|exists:blog_categories,id',
-            'slug' => 'required|string|unique:blog_posts,slug,' . $blogPost->id,
-            'publish_status' => 'required|string|in:draft,published,archived'
+            'slug' => 'required|string|unique:blog_posts,slug,'.$blogPost->id,
+            'publish_status' => 'required|string|in:draft,published,archived',
         ]);
 
         $blogPost->update($request->all());

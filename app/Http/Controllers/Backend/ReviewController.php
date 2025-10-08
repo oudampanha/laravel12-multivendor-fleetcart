@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\Review;
 use App\Models\VendorReview;
 use Illuminate\Http\Request;
@@ -14,24 +13,27 @@ class ReviewController extends BaseController
     public function __construct()
     {
         parent::__construct();
-        
+
         // Apply specific permissions for review management methods
         $this->applyMethodPermission('review_edit', ['approve', 'unapprove', 'approveVendorReview', 'unapproveVendorReview']);
         $this->applyMethodPermission('review_access', ['vendorReviews', 'showVendorReview']);
         $this->applyMethodPermission('review_edit', ['editVendorReview', 'updateVendorReview']);
         $this->applyMethodPermission('review_delete', ['destroyVendorReview']);
     }
+
     public function index()
     {
         $reviews = Review::with(['product', 'reviewer'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+
         return view('admin.reviews.index', compact('reviews'));
     }
 
     public function show(Review $review)
     {
         $review->load(['product', 'reviewer']);
+
         return view('admin.reviews.show', compact('review'));
     }
 
@@ -46,7 +48,7 @@ class ReviewController extends BaseController
             'rating' => 'required|integer|min:1|max:5',
             'reviewer_name' => 'required|string|max:255',
             'comment' => 'required|string',
-            'is_approved' => 'boolean'
+            'is_approved' => 'boolean',
         ]);
 
         $review->update($request->all());
@@ -84,12 +86,14 @@ class ReviewController extends BaseController
         $vendorReviews = VendorReview::with(['vendor', 'customer', 'order'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+
         return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function showVendorReview(VendorReview $vendorReview)
     {
         $vendorReview->load(['vendor', 'customer', 'order']);
+
         return view('admin.vendor-reviews.show', compact('vendorReview'));
     }
 
@@ -104,7 +108,7 @@ class ReviewController extends BaseController
             'rating' => 'required|integer|min:1|max:5',
             'reviewer_name' => 'required|string|max:255',
             'comment' => 'required|string',
-            'is_approved' => 'boolean'
+            'is_approved' => 'boolean',
         ]);
 
         $vendorReview->update($request->all());

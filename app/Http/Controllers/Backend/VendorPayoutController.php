@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
-use App\Models\VendorPayout;
 use App\Models\Vendor;
+use App\Models\VendorPayout;
 use Illuminate\Http\Request;
 
 class VendorPayoutController extends BaseController
 {
     protected string $resource = 'vendor_payout';
-    
+
     protected array $additionalPermissions = ['vendor_management_access'];
 
     public function __construct()
     {
         parent::__construct();
-        
+
         // Apply specific permissions for payout management methods
         $this->applyMethodPermission('vendor_payout_edit', ['approve', 'complete']);
     }
+
     public function index()
     {
         $payouts = VendorPayout::with('vendor')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+
         return view('admin.vendor-payouts.index', compact('payouts'));
     }
 
@@ -33,6 +34,7 @@ class VendorPayoutController extends BaseController
         $vendors = Vendor::where('is_active', true)
             ->where('balance', '>', 0)
             ->get();
+
         return view('admin.vendor-payouts.create', compact('vendors'));
     }
 
@@ -42,11 +44,11 @@ class VendorPayoutController extends BaseController
             'vendor_id' => 'required|exists:vendors,id',
             'amount' => 'required|numeric|min:0.01',
             'method' => 'required|in:bank_transfer,paypal,stripe,manual',
-            'note' => 'nullable|string'
+            'note' => 'nullable|string',
         ]);
 
         $vendor = Vendor::find($request->vendor_id);
-        
+
         if ($request->amount > $vendor->balance) {
             return redirect()->back()
                 ->with('error', 'Payout amount cannot exceed vendor balance.')
@@ -62,6 +64,7 @@ class VendorPayoutController extends BaseController
     public function show(VendorPayout $vendorPayout)
     {
         $vendorPayout->load('vendor');
+
         return view('admin.vendor-payouts.show', compact('vendorPayout'));
     }
 
@@ -87,11 +90,11 @@ class VendorPayoutController extends BaseController
             'method' => 'required|in:bank_transfer,paypal,stripe,manual',
             'status' => 'required|in:pending,processing,completed,failed,canceled',
             'reference_number' => 'nullable|string',
-            'note' => 'nullable|string'
+            'note' => 'nullable|string',
         ]);
 
         $data = $request->all();
-        
+
         if ($request->status === 'completed' && $vendorPayout->status !== 'completed') {
             $data['paid_at'] = now();
         }
@@ -123,7 +126,7 @@ class VendorPayoutController extends BaseController
         }
 
         $vendorPayout->update([
-            'status' => 'processing'
+            'status' => 'processing',
         ]);
 
         return redirect()->back()
@@ -132,7 +135,7 @@ class VendorPayoutController extends BaseController
 
     public function complete(VendorPayout $vendorPayout)
     {
-        if (!in_array($vendorPayout->status, ['pending', 'processing'])) {
+        if (! in_array($vendorPayout->status, ['pending', 'processing'])) {
             return redirect()->back()
                 ->with('error', 'Only pending or processing payouts can be completed.');
         }
@@ -142,7 +145,7 @@ class VendorPayoutController extends BaseController
 
         $vendorPayout->update([
             'status' => 'completed',
-            'paid_at' => now()
+            'paid_at' => now(),
         ]);
 
         return redirect()->back()

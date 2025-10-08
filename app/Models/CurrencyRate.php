@@ -30,7 +30,7 @@ class CurrencyRate extends Model
     {
         return Cache::remember("currency_rate.{$currency}", 3600, function () use ($currency) {
             $currencyRate = static::byCurrency($currency)->first();
-            
+
             return $currencyRate ? (float) $currencyRate->rate : 1.0;
         });
     }
@@ -46,7 +46,7 @@ class CurrencyRate extends Model
 
         // Convert to base currency first, then to target currency
         $baseAmount = $amount / $fromRate;
-        
+
         return $baseAmount * $toRate;
     }
 
@@ -88,19 +88,19 @@ class CurrencyRate extends Model
 
     public static function formatAmount(float $amount, string $currency, ?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
         $formatter = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
-        
+
         return $formatter->formatCurrency($amount, $currency);
     }
 
     public static function convertAndFormat(float $amount, string $fromCurrency, string $toCurrency, ?string $locale = null): string
     {
         $convertedAmount = static::convert($amount, $fromCurrency, $toCurrency);
-        
+
         return static::formatAmount($convertedAmount, $toCurrency, $locale);
     }
 
@@ -108,7 +108,7 @@ class CurrencyRate extends Model
     {
         Cache::forget('all_currency_rates');
         Cache::forget('supported_currencies');
-        
+
         $currencies = static::pluck('currency');
         foreach ($currencies as $currency) {
             Cache::forget("currency_rate.{$currency}");

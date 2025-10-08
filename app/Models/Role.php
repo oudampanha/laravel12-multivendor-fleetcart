@@ -8,38 +8,38 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Role extends Model
 {
-  use HasFactory;
+    use HasFactory;
 
-  protected $fillable = [
-    'title',
-    'status',
-  ];
-
-  protected function casts(): array
-  {
-    return [
-      'status' => 'boolean',
+    protected $fillable = [
+        'title',
+        'status',
     ];
-  }
 
-  /**
-   * Get the users that have this role.
-   */
-  public function users(): BelongsToMany
-  {
-    return $this->belongsToMany(User::class, 'role_user')->withTimestamps();
-  }
+    protected function casts(): array
+    {
+        return [
+            'status' => 'boolean',
+        ];
+    }
 
-  public function permissions(): BelongsToMany
-  {
-    return $this->belongsToMany(Permission::class, 'permission_role')->withTimestamps();
-  }
+    /**
+     * Get the users that have this role.
+     */
+    public function users(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'role_user')->withTimestamps();
+    }
 
-  /**
-   * Scope a query to only include active roles.
-   */
-  public function scopeActive($query)
-  {
-    return $query->where('status', true);
-  }
+    public function permissions(): BelongsToMany
+    {
+        return $this->belongsToMany(Permission::class, 'permission_role')->withTimestamps();
+    }
+
+    /**
+     * Scope a query to only include active roles.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('status', true);
+    }
 }

@@ -11,7 +11,7 @@ class AttributeSet extends Model
     use HasTranslations;
 
     protected $fillable = [];
-    
+
     protected array $translatable = ['name'];
 
     public function attributes(): HasMany

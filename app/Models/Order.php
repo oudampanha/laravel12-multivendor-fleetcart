@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
@@ -157,48 +157,48 @@ class Order extends Model
 
     public function getCustomerNameAttribute(): string
     {
-        return $this->customer_first_name . ' ' . $this->customer_last_name;
+        return $this->customer_first_name.' '.$this->customer_last_name;
     }
 
     public function getBillingNameAttribute(): string
     {
-        return $this->billing_first_name . ' ' . $this->billing_last_name;
+        return $this->billing_first_name.' '.$this->billing_last_name;
     }
 
     public function getShippingNameAttribute(): string
     {
-        return $this->shipping_first_name . ' ' . $this->shipping_last_name;
+        return $this->shipping_first_name.' '.$this->shipping_last_name;
     }
 
     public function getBillingAddressAttribute(): string
     {
         $address = $this->billing_address_1;
-        
+
         if ($this->billing_address_2) {
-            $address .= ', ' . $this->billing_address_2;
+            $address .= ', '.$this->billing_address_2;
         }
-        
-        $address .= ', ' . $this->billing_city;
-        $address .= ', ' . $this->billing_state;
-        $address .= ' ' . $this->billing_zip;
-        $address .= ', ' . $this->billing_country;
-        
+
+        $address .= ', '.$this->billing_city;
+        $address .= ', '.$this->billing_state;
+        $address .= ' '.$this->billing_zip;
+        $address .= ', '.$this->billing_country;
+
         return $address;
     }
 
     public function getShippingAddressAttribute(): string
     {
         $address = $this->shipping_address_1;
-        
+
         if ($this->shipping_address_2) {
-            $address .= ', ' . $this->shipping_address_2;
+            $address .= ', '.$this->shipping_address_2;
         }
-        
-        $address .= ', ' . $this->shipping_city;
-        $address .= ', ' . $this->shipping_state;
-        $address .= ' ' . $this->shipping_zip;
-        $address .= ', ' . $this->shipping_country;
-        
+
+        $address .= ', '.$this->shipping_city;
+        $address .= ', '.$this->shipping_state;
+        $address .= ' '.$this->shipping_zip;
+        $address .= ', '.$this->shipping_country;
+
         return $address;
     }
 
@@ -219,7 +219,7 @@ class Order extends Model
 
     public function hasCoupon(): bool
     {
-        return !is_null($this->coupon_id);
+        return ! is_null($this->coupon_id);
     }
 
     public function hasShipping(): bool
@@ -291,26 +291,26 @@ class Order extends Model
 
     public static function generateOrderNumber(): string
     {
-        return 'ORD-' . strtoupper(uniqid());
+        return 'ORD-'.strtoupper(uniqid());
     }
 
     public function getFormattedTotal(): string
     {
-        return number_format($this->total, 2) . ' ' . $this->currency;
+        return number_format($this->total, 2).' '.$this->currency;
     }
 
     public function getFormattedSubTotal(): string
     {
-        return number_format($this->sub_total, 2) . ' ' . $this->currency;
+        return number_format($this->sub_total, 2).' '.$this->currency;
     }
 
     public function getFormattedDiscount(): string
     {
-        return number_format($this->discount, 2) . ' ' . $this->currency;
+        return number_format($this->discount, 2).' '.$this->currency;
     }
 
     public function getFormattedShippingCost(): string
     {
-        return number_format($this->shipping_cost, 2) . ' ' . $this->currency;
+        return number_format($this->shipping_cost, 2).' '.$this->currency;
     }
 }

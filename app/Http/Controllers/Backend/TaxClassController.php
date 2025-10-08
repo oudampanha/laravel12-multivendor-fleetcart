@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\TaxClass;
 use Illuminate\Http\Request;
 
@@ -14,9 +13,11 @@ class TaxClassController extends BaseController
     {
         parent::__construct();
     }
+
     public function index()
     {
         $taxClasses = TaxClass::with('taxRates')->paginate(15);
+
         return view('admin.tax-classes.index', compact('taxClasses'));
     }
 
@@ -28,7 +29,7 @@ class TaxClassController extends BaseController
     public function store(Request $request)
     {
         $request->validate([
-            'based_on' => 'required|string|in:billing_address,shipping_address,store_address'
+            'based_on' => 'required|string|in:billing_address,shipping_address,store_address',
         ]);
 
         TaxClass::create($request->all());
@@ -40,6 +41,7 @@ class TaxClassController extends BaseController
     public function show(TaxClass $taxClass)
     {
         $taxClass->load('taxRates');
+
         return view('admin.tax-classes.show', compact('taxClass'));
     }
 
@@ -51,7 +53,7 @@ class TaxClassController extends BaseController
     public function update(Request $request, TaxClass $taxClass)
     {
         $request->validate([
-            'based_on' => 'required|string|in:billing_address,shipping_address,store_address'
+            'based_on' => 'required|string|in:billing_address,shipping_address,store_address',
         ]);
 
         $taxClass->update($request->all());

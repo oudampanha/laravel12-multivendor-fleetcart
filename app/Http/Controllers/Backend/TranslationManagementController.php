@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\Translation;
 use App\Services\TranslationService;
 use Illuminate\Http\Request;
@@ -16,7 +15,7 @@ class TranslationManagementController extends BaseController
     {
         parent::__construct();
         $this->translationService = $translationService;
-        
+
         // Apply permissions for translation management
         $this->applyMethodPermission('translation_access', ['index', 'show']);
         $this->applyMethodPermission('translation_create', ['create', 'store']);
@@ -45,12 +44,12 @@ class TranslationManagementController extends BaseController
 
         // Filter by field
         if ($request->filled('field')) {
-            $query->where('field', 'like', '%' . $request->field . '%');
+            $query->where('field', 'like', '%'.$request->field.'%');
         }
 
         // Search in values
         if ($request->filled('search')) {
-            $query->where('value', 'like', '%' . $request->search . '%');
+            $query->where('value', 'like', '%'.$request->search.'%');
         }
 
         $translations = $query->with('translatable')
@@ -84,7 +83,7 @@ class TranslationManagementController extends BaseController
     public function create()
     {
         $supportedLocales = $this->translationService->getSupportedLocales();
-        
+
         // Get translatable models (you might want to define this in config)
         $translatableModels = [
             'App\\Models\\Product' => 'Products',
@@ -124,7 +123,7 @@ class TranslationManagementController extends BaseController
             $request->value
         );
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             return redirect()->back()
                 ->withErrors($errors)
                 ->withInput();
@@ -148,7 +147,7 @@ class TranslationManagementController extends BaseController
     public function show(Translation $translation)
     {
         $translation->load('translatable');
-        
+
         // Get related translations (same model and field, different locales)
         $relatedTranslations = Translation::where('translatable_type', $translation->translatable_type)
             ->where('translatable_id', $translation->translatable_id)
@@ -165,6 +164,7 @@ class TranslationManagementController extends BaseController
     public function edit(Translation $translation)
     {
         $supportedLocales = $this->translationService->getSupportedLocales();
+
         return view('admin.translations.edit', compact('translation', 'supportedLocales'));
     }
 
@@ -192,7 +192,7 @@ class TranslationManagementController extends BaseController
             $request->value
         );
 
-        if (!empty($errors)) {
+        if (! empty($errors)) {
             return redirect()->back()
                 ->withErrors($errors)
                 ->withInput();
@@ -278,17 +278,17 @@ class TranslationManagementController extends BaseController
         $modelType = $request->get('type');
         $locale = $request->get('locale');
 
-        if (!$modelType || !$locale) {
+        if (! $modelType || ! $locale) {
             return redirect()->back()
                 ->with('error', 'Model type and locale are required for export.');
         }
 
         $translations = $this->translationService->exportTranslations($modelType, $locale);
 
-        $filename = 'translations_' . str_replace('\\', '_', $modelType) . '_' . $locale . '_' . date('Y-m-d_H-i-s') . '.json';
+        $filename = 'translations_'.str_replace('\\', '_', $modelType).'_'.$locale.'_'.date('Y-m-d_H-i-s').'.json';
 
         return response()->json($translations)
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+            ->header('Content-Disposition', 'attachment; filename="'.$filename.'"');
     }
 
     /**
@@ -297,7 +297,7 @@ class TranslationManagementController extends BaseController
     public function import()
     {
         $supportedLocales = $this->translationService->getSupportedLocales();
-        
+
         $translatableModels = [
             'App\\Models\\Product' => 'Products',
             'App\\Models\\Category' => 'Categories',
@@ -346,7 +346,7 @@ class TranslationManagementController extends BaseController
 
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Import failed: ' . $e->getMessage());
+                ->with('error', 'Import failed: '.$e->getMessage());
         }
     }
 

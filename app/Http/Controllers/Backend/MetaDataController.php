@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\MetaData;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 
 class MetaDataController extends BaseController
 {
     protected string $resource = 'meta_data';
-    
+
     protected array $additionalPermissions = ['meta_data_management_access'];
 
     public function index()
     {
         $metaData = MetaData::orderBy('created_at', 'desc')->paginate(15);
+
         return view('admin.meta_data.index', compact('metaData'));
     }
 
@@ -27,7 +27,7 @@ class MetaDataController extends BaseController
     {
         $validated = $request->validate([
             'entity_type' => 'required|string',
-            'entity_id' => 'required|integer'
+            'entity_id' => 'required|integer',
         ]);
 
         MetaData::create($validated);
@@ -49,7 +49,7 @@ class MetaDataController extends BaseController
     {
         $validated = $request->validate([
             'entity_type' => 'required|string',
-            'entity_id' => 'required|integer'
+            'entity_id' => 'required|integer',
         ]);
 
         $metaData->update($validated);

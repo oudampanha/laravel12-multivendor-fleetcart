@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use App\Traits\HasTranslations;
 
 class OptionValue extends Model
 {
     use HasTranslations;
+
     protected $fillable = [
         'option_id',
         'price',
@@ -60,7 +61,7 @@ class OptionValue extends Model
 
     public function hasPrice(): bool
     {
-        return !is_null($this->price) && $this->price > 0;
+        return ! is_null($this->price) && $this->price > 0;
     }
 
     public function isPercentage(): bool
@@ -75,7 +76,7 @@ class OptionValue extends Model
 
     public function getCalculatedPrice(float $basePrice = 0): float
     {
-        if (!$this->hasPrice()) {
+        if (! $this->hasPrice()) {
             return 0;
         }
 

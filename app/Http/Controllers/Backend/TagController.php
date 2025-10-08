@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
@@ -25,6 +24,7 @@ class TagController extends BaseController
         if ($request->ajax()) {
             return $this->getDataTableData($request);
         }
+
         return view('admin.tags.index');
     }
 
@@ -49,7 +49,7 @@ class TagController extends BaseController
         // Handle column-specific filters
         if ($request->has('columns')) {
             foreach ($request->columns as $index => $column) {
-                if (!empty($column['search']['value'])) {
+                if (! empty($column['search']['value'])) {
                     $searchValue = $column['search']['value'];
 
                     switch ($index) {
@@ -95,13 +95,13 @@ class TagController extends BaseController
         foreach ($tags as $tag) {
             $actions = '
                 <div class="btn-group">
-                    <button class="btn btn-sm btn-info view-tag" data-id="' . $tag->id . '">
+                    <button class="btn btn-sm btn-info view-tag" data-id="'.$tag->id.'">
                         <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn btn-sm btn-warning edit-tag" data-id="' . $tag->id . '">
+                    <button class="btn btn-sm btn-warning edit-tag" data-id="'.$tag->id.'">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="btn btn-sm btn-danger delete-tag" data-id="' . $tag->id . '">
+                    <button class="btn btn-sm btn-danger delete-tag" data-id="'.$tag->id.'">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>';
@@ -110,8 +110,8 @@ class TagController extends BaseController
 
             $data[] = [
                 'id' => $tag->id,
-                'name' => '<strong>' . $tagName . '</strong>',
-                'slug' => '<span class="badge badge-secondary">' . $tag->slug . '</span>',
+                'name' => '<strong>'.$tagName.'</strong>',
+                'slug' => '<span class="badge badge-secondary">'.$tag->slug.'</span>',
                 'products_count' => $tag->products_count ?? 0,
                 'created_at' => $tag->created_at ? $tag->created_at->format('Y-m-d H:i') : '-',
                 'actions' => $actions,
@@ -139,17 +139,17 @@ class TagController extends BaseController
         $request->validate([
             'name' => 'required|array',
             'name.*' => 'required|string|max:255',
-            'slug' => 'required|string|unique:tags,slug|max:255'
+            'slug' => 'required|string|unique:tags,slug|max:255',
         ]);
 
         $tag = Tag::create([
-            'slug' => $request->slug
+            'slug' => $request->slug,
         ]);
 
         // Handle translations
         if ($request->has('name')) {
             foreach ($request->name as $locale => $name) {
-                if (!empty($name)) {
+                if (! empty($name)) {
                     $tag->setTranslation('name', $name, $locale);
                 }
             }
@@ -161,11 +161,12 @@ class TagController extends BaseController
                 'message' => '🎉 Tag created successfully!',
                 'title' => 'Success',
                 'type' => 'success',
-                'tag' => $tag
+                'tag' => $tag,
             ]);
         }
 
         sweetalert()->success('Tag created successfully!');
+
         return redirect()->route('admin.tags.index');
     }
 
@@ -179,7 +180,7 @@ class TagController extends BaseController
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'tag' => $tag
+                'tag' => $tag,
             ]);
         }
 
@@ -197,9 +198,10 @@ class TagController extends BaseController
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'tag' => $tag
+                'tag' => $tag,
             ]);
         }
+
         return view('admin.tags.edit', compact('tag'));
     }
 
@@ -211,17 +213,17 @@ class TagController extends BaseController
         $request->validate([
             'name' => 'required|array',
             'name.*' => 'required|string|max:255',
-            'slug' => 'required|string|unique:tags,slug,' . $tag->id . '|max:255'
+            'slug' => 'required|string|unique:tags,slug,'.$tag->id.'|max:255',
         ]);
 
         $tag->update([
-            'slug' => $request->slug
+            'slug' => $request->slug,
         ]);
 
         // Handle translations
         if ($request->has('name')) {
             foreach ($request->name as $locale => $name) {
-                if (!empty($name)) {
+                if (! empty($name)) {
                     $tag->setTranslation('name', $name, $locale);
                 }
             }
@@ -233,11 +235,12 @@ class TagController extends BaseController
                 'message' => '✅ Tag updated successfully!',
                 'title' => 'Updated',
                 'type' => 'success',
-                'tag' => $tag
+                'tag' => $tag,
             ]);
         }
 
         sweetalert()->success('Tag updated successfully!');
+
         return redirect()->route('admin.tags.index');
     }
 
@@ -253,11 +256,12 @@ class TagController extends BaseController
                 'success' => true,
                 'message' => '🗑️ Tag deleted successfully!',
                 'title' => 'Deleted',
-                'type' => 'success'
+                'type' => 'success',
             ]);
         }
 
         sweetalert()->success('Tag deleted successfully!');
+
         return redirect()->route('admin.tags.index');
     }
 }

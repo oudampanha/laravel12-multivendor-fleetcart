@@ -119,8 +119,8 @@ class Address extends Model
     public function getAddressLines(): array
     {
         $lines = [$this->address_1];
-        
-        if (!empty($this->address_2)) {
+
+        if (! empty($this->address_2)) {
             $lines[] = $this->address_2;
         }
 
@@ -130,7 +130,7 @@ class Address extends Model
     public function getCityStateZip(): string
     {
         $parts = array_filter([$this->city, $this->state, $this->zip]);
-        
+
         return implode(', ', $parts);
     }
 
@@ -171,14 +171,14 @@ class Address extends Model
         $prefix = $type === 'shipping' ? 'shipping_' : 'billing_';
 
         return [
-            'first_name' => $orderData[$prefix . 'first_name'],
-            'last_name' => $orderData[$prefix . 'last_name'],
-            'address_1' => $orderData[$prefix . 'address_1'],
-            'address_2' => $orderData[$prefix . 'address_2'] ?? null,
-            'city' => $orderData[$prefix . 'city'],
-            'state' => $orderData[$prefix . 'state'],
-            'zip' => $orderData[$prefix . 'zip'],
-            'country' => $orderData[$prefix . 'country'],
+            'first_name' => $orderData[$prefix.'first_name'],
+            'last_name' => $orderData[$prefix.'last_name'],
+            'address_1' => $orderData[$prefix.'address_1'],
+            'address_2' => $orderData[$prefix.'address_2'] ?? null,
+            'city' => $orderData[$prefix.'city'],
+            'state' => $orderData[$prefix.'state'],
+            'zip' => $orderData[$prefix.'zip'],
+            'country' => $orderData[$prefix.'country'],
         ];
     }
 }

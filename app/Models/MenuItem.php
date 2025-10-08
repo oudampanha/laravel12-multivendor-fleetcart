@@ -103,7 +103,7 @@ class MenuItem extends Model
 
     public function getTitle(?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 

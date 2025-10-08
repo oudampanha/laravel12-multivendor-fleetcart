@@ -4,7 +4,7 @@
 $controllersDir = 'app/Http/Controllers/Backend/';
 $controllers = [
     'AttributeController.php' => 'attribute',
-    'AttributeSetController.php' => 'attribute_set', 
+    'AttributeSetController.php' => 'attribute_set',
     'BlogCategoryController.php' => 'blog_category',
     'BlogPostController.php' => 'blog_post',
     'BlogTagController.php' => 'blog_tag',
@@ -29,7 +29,7 @@ $updated = [
     'BaseController.php' => 'base controller',
     'UserController.php' => 'user management',
     'RoleController.php' => 'role management',
-    'PermissionController.php' => 'permission management', 
+    'PermissionController.php' => 'permission management',
     'VendorController.php' => 'vendor management',
     'ProductController.php' => 'product management',
     'CategoryController.php' => 'category management',

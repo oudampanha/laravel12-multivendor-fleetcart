@@ -47,7 +47,7 @@ class VendorWithdrawal extends Model
     /**
      * Mark the withdrawal as completed.
      */
-    public function markAsCompleted(string $adminNote = null): void
+    public function markAsCompleted(?string $adminNote = null): void
     {
         $this->update([
             'status' => 'completed',

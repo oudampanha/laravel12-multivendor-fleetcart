@@ -43,7 +43,7 @@ class OrderProductOption extends Model
 
     public function hasValue(): bool
     {
-        return !empty(trim($this->value));
+        return ! empty(trim($this->value));
     }
 
     public function hasOptionValues(): bool

@@ -46,7 +46,7 @@ class SliderSlide extends Model
 
     public function getTitle(?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -60,7 +60,7 @@ class SliderSlide extends Model
 
     public function getSubtitle(?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -74,7 +74,7 @@ class SliderSlide extends Model
 
     public function getDescription(?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -88,7 +88,7 @@ class SliderSlide extends Model
 
     public function getCallToActionText(?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -107,7 +107,7 @@ class SliderSlide extends Model
 
     public function hasCallToAction(): bool
     {
-        return !empty($this->call_to_action_url);
+        return ! empty($this->call_to_action_url);
     }
 
     public function opensInNewWindow(): bool
@@ -138,7 +138,7 @@ class SliderSlide extends Model
     public function getImageUrl(): ?string
     {
         $media = $this->media()->first();
-        
+
         return $media ? $media->file_url : null;
     }
 

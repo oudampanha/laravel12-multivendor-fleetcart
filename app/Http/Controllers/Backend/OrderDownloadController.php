@@ -2,29 +2,29 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\OrderDownload;
 use App\Models\Order;
-use App\Models\Media;
-use App\Http\Controllers\Backend\BaseController;
+use App\Models\OrderDownload;
 use Illuminate\Http\Request;
 
 class OrderDownloadController extends BaseController
 {
     protected string $resource = 'order_download';
-    
+
     protected array $additionalPermissions = ['order_download_management_access'];
 
     public function index()
     {
         $orderDownloads = OrderDownload::with(['order'])
-                                      ->orderBy('created_at', 'desc')
-                                      ->paginate(15);
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
         return view('admin.order_downloads.index', compact('orderDownloads'));
     }
 
     public function create()
     {
         $orders = Order::all();
+
         return view('admin.order_downloads.create', compact('orders'));
     }
 
@@ -32,7 +32,7 @@ class OrderDownloadController extends BaseController
     {
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
-            'file_id' => 'required|integer'
+            'file_id' => 'required|integer',
         ]);
 
         OrderDownload::create($validated);
@@ -43,12 +43,14 @@ class OrderDownloadController extends BaseController
     public function show(OrderDownload $orderDownload)
     {
         $orderDownload->load(['order']);
+
         return view('admin.order_downloads.show', compact('orderDownload'));
     }
 
     public function edit(OrderDownload $orderDownload)
     {
         $orders = Order::all();
+
         return view('admin.order_downloads.edit', compact('orderDownload', 'orders'));
     }
 
@@ -56,7 +58,7 @@ class OrderDownloadController extends BaseController
     {
         $validated = $request->validate([
             'order_id' => 'required|exists:orders,id',
-            'file_id' => 'required|integer'
+            'file_id' => 'required|integer',
         ]);
 
         $orderDownload->update($validated);

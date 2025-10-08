@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\AttributeValue;
 use App\Models\Attribute;
-use App\Http\Controllers\Backend\BaseController;
+use App\Models\AttributeValue;
 use Illuminate\Http\Request;
 
 class AttributeValueController extends BaseController
 {
     protected string $resource = 'attribute_value';
-    
+
     protected array $additionalPermissions = ['attribute_value_management_access'];
 
     public function index()
     {
         $attributeValues = AttributeValue::with('attribute')->orderBy('position', 'asc')->paginate(15);
+
         return view('admin.attribute_values.index', compact('attributeValues'));
     }
 
     public function create()
     {
         $attributes = Attribute::all();
+
         return view('admin.attribute_values.create', compact('attributes'));
     }
 
@@ -29,7 +30,7 @@ class AttributeValueController extends BaseController
     {
         $validated = $request->validate([
             'attribute_id' => 'required|exists:attributes,id',
-            'position' => 'required|integer|min:0'
+            'position' => 'required|integer|min:0',
         ]);
 
         AttributeValue::create($validated);
@@ -40,12 +41,14 @@ class AttributeValueController extends BaseController
     public function show(AttributeValue $attributeValue)
     {
         $attributeValue->load('attribute');
+
         return view('admin.attribute_values.show', compact('attributeValue'));
     }
 
     public function edit(AttributeValue $attributeValue)
     {
         $attributes = Attribute::all();
+
         return view('admin.attribute_values.edit', compact('attributeValue', 'attributes'));
     }
 
@@ -53,7 +56,7 @@ class AttributeValueController extends BaseController
     {
         $validated = $request->validate([
             'attribute_id' => 'required|exists:attributes,id',
-            'position' => 'required|integer|min:0'
+            'position' => 'required|integer|min:0',
         ]);
 
         $attributeValue->update($validated);

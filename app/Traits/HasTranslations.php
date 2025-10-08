@@ -67,6 +67,7 @@ trait HasTranslations
     public function setTranslatableFields(array $fields): self
     {
         $this->translatable = $fields;
+
         return $this;
     }
 
@@ -92,6 +93,7 @@ trait HasTranslations
     public function setCurrentLocale(string $locale): self
     {
         $this->currentLocale = $locale;
+
         return $this;
     }
 
@@ -100,12 +102,12 @@ trait HasTranslations
      */
     public function getTranslation(string $field, ?string $locale = null): ?string
     {
-        if (!$this->isTranslatable($field)) {
+        if (! $this->isTranslatable($field)) {
             return $this->getAttribute($field);
         }
 
         $locale = $locale ?? $this->getCurrentLocale();
-        
+
         // Check cache first
         $cacheKey = $this->getTranslationCacheKey($field, $locale);
         if (Cache::has($cacheKey)) {
@@ -136,8 +138,9 @@ trait HasTranslations
      */
     public function setTranslation(string $field, string $value, ?string $locale = null): self
     {
-        if (!$this->isTranslatable($field)) {
+        if (! $this->isTranslatable($field)) {
             $this->setAttribute($field, $value);
+
             return $this;
         }
 
@@ -179,7 +182,7 @@ trait HasTranslations
         $locale = $locale ?? $this->getCurrentLocale();
 
         foreach ($translations as $field => $value) {
-            if ($this->isTranslatable($field) && !empty($value)) {
+            if ($this->isTranslatable($field) && ! empty($value)) {
                 $this->setTranslation($field, $value, $locale);
             }
         }
@@ -228,7 +231,7 @@ trait HasTranslations
     public function deleteAllTranslations(): bool
     {
         $deleted = $this->translations()->delete() > 0;
-        
+
         if ($deleted) {
             $this->clearTranslationCache();
         }
@@ -306,7 +309,7 @@ trait HasTranslations
         $locales = $this->getAvailableLocales();
 
         // Include the default locale if not in available locales
-        if (!in_array($this->defaultLocale, $locales)) {
+        if (! in_array($this->defaultLocale, $locales)) {
             $locales[] = $this->defaultLocale;
         }
 
@@ -323,7 +326,7 @@ trait HasTranslations
      */
     public function copyTranslationsFrom($sourceModel, ?array $fields = null): self
     {
-        if (!method_exists($sourceModel, 'getTranslations')) {
+        if (! method_exists($sourceModel, 'getTranslations')) {
             return $this;
         }
 
@@ -332,7 +335,7 @@ trait HasTranslations
 
         foreach ($locales as $locale) {
             $translations = $sourceModel->getTranslations($locale);
-            
+
             foreach ($fields as $field) {
                 if (isset($translations[$field]) && $this->isTranslatable($field)) {
                     $this->setTranslation($field, $translations[$field], $locale);
@@ -348,7 +351,7 @@ trait HasTranslations
      */
     protected function getTranslationCacheKey(string $field, string $locale): string
     {
-        return $this->translationCachePrefix . $this->getMorphClass() . ':' . $this->getKey() . ':' . $field . ':' . $locale;
+        return $this->translationCachePrefix.$this->getMorphClass().':'.$this->getKey().':'.$field.':'.$locale;
     }
 
     /**
@@ -365,7 +368,7 @@ trait HasTranslations
      */
     protected function clearTranslationCache(): void
     {
-        $pattern = $this->translationCachePrefix . $this->getMorphClass() . ':' . $this->getKey() . ':*';
+        $pattern = $this->translationCachePrefix.$this->getMorphClass().':'.$this->getKey().':*';
         // Note: This is a simplified approach. In production, you might want to use Redis with pattern matching
         foreach ($this->getTranslatableFields() as $field) {
             foreach ($this->getAvailableLocales() as $locale) {
@@ -399,6 +402,7 @@ trait HasTranslations
         foreach ($this->getTranslatableFields() as $field) {
             $attributes[$field] = $this->getTranslation($field);
         }
+
         return $attributes;
     }
 
@@ -409,14 +413,14 @@ trait HasTranslations
     {
         $status = [];
         $locales = $this->getAvailableLocales();
-        
+
         foreach ($this->getTranslatableFields() as $field) {
             $status[$field] = [];
             foreach ($locales as $locale) {
                 $status[$field][$locale] = $this->hasTranslation($field, $locale);
             }
         }
-        
+
         return $status;
     }
 
@@ -427,18 +431,18 @@ trait HasTranslations
     {
         $locale = $locale ?? $this->getCurrentLocale();
         $translatableFields = $this->getTranslatableFields();
-        
+
         if (empty($translatableFields)) {
             return 100.0;
         }
-        
+
         $translatedCount = 0;
         foreach ($translatableFields as $field) {
             if ($this->hasTranslation($field, $locale)) {
                 $translatedCount++;
             }
         }
-        
+
         return (float) (($translatedCount / count($translatableFields)) * 100);
     }
 }

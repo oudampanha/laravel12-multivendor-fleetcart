@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use App\Models\Vendor;
-use App\Models\Review;
-use App\Models\Transaction;
-use App\Models\Cart;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ReportController extends BaseController
 {
     protected string $resource = 'report';
-    
+
     protected array $additionalPermissions = ['report_access'];
 
     /**
@@ -27,16 +23,16 @@ class ReportController extends BaseController
         $period = $request->get('period', 'monthly');
         $startDate = $request->get('start_date', now()->subMonth()->format('Y-m-d'));
         $endDate = $request->get('end_date', now()->format('Y-m-d'));
-        
+
         $salesData = $this->getSalesData($period, $startDate, $endDate);
-        
+
         return view('admin.reports.sales', compact('salesData', 'period', 'startDate', 'endDate'));
     }
 
     public function dailySales(Request $request)
     {
         $date = $request->get('date', now()->format('Y-m-d'));
-        
+
         $salesData = Order::whereDate('created_at', $date)
             ->selectRaw('
                 COUNT(*) as total_orders,
@@ -46,13 +42,13 @@ class ReportController extends BaseController
                 SUM(tax_amount) as total_tax
             ')
             ->first();
-            
+
         $hourlyBreakdown = Order::whereDate('created_at', $date)
             ->selectRaw('HOUR(created_at) as hour, COUNT(*) as orders, SUM(total) as revenue')
             ->groupBy('hour')
             ->orderBy('hour')
             ->get();
-        
+
         return view('admin.reports.daily-sales', compact('salesData', 'hourlyBreakdown', 'date'));
     }
 
@@ -60,7 +56,7 @@ class ReportController extends BaseController
     {
         $year = $request->get('year', now()->year);
         $month = $request->get('month', now()->month);
-        
+
         $salesData = Order::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->selectRaw('
@@ -71,21 +67,21 @@ class ReportController extends BaseController
                 SUM(tax_amount) as total_tax
             ')
             ->first();
-            
+
         $dailyBreakdown = Order::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->selectRaw('DAY(created_at) as day, COUNT(*) as orders, SUM(total) as revenue')
             ->groupBy('day')
             ->orderBy('day')
             ->get();
-        
+
         return view('admin.reports.monthly-sales', compact('salesData', 'dailyBreakdown', 'year', 'month'));
     }
 
     public function yearlySales(Request $request)
     {
         $year = $request->get('year', now()->year);
-        
+
         $salesData = Order::whereYear('created_at', $year)
             ->selectRaw('
                 COUNT(*) as total_orders,
@@ -95,13 +91,13 @@ class ReportController extends BaseController
                 SUM(tax_amount) as total_tax
             ')
             ->first();
-            
+
         $monthlyBreakdown = Order::whereYear('created_at', $year)
             ->selectRaw('MONTH(created_at) as month, COUNT(*) as orders, SUM(total) as revenue')
             ->groupBy('month')
             ->orderBy('month')
             ->get();
-        
+
         return view('admin.reports.yearly-sales', compact('salesData', 'monthlyBreakdown', 'year'));
     }
 
@@ -118,7 +114,7 @@ class ReportController extends BaseController
             'products_with_images' => Product::whereHas('media')->count(),
             'products_without_images' => Product::whereDoesntHave('media')->count(),
         ];
-        
+
         return view('admin.reports.products', compact('stats'));
     }
 
@@ -126,12 +122,12 @@ class ReportController extends BaseController
     {
         $limit = $request->get('limit', 20);
         $period = $request->get('period', 'all_time');
-        
+
         $query = Product::with(['vendor', 'brand'])
-            ->withCount(['orderProducts as total_sold' => function($query) use ($period) {
+            ->withCount(['orderProducts as total_sold' => function ($query) use ($period) {
                 if ($period !== 'all_time') {
                     $days = $this->getPeriodDays($period);
-                    $query->whereHas('order', function($q) use ($days) {
+                    $query->whereHas('order', function ($q) use ($days) {
                         $q->where('created_at', '>=', now()->subDays($days));
                     });
                 }
@@ -139,9 +135,9 @@ class ReportController extends BaseController
             ->having('total_sold', '>', 0)
             ->orderBy('total_sold', 'desc')
             ->limit($limit);
-            
+
         $products = $query->get();
-        
+
         return view('admin.reports.best-selling-products', compact('products', 'limit', 'period'));
     }
 
@@ -158,7 +154,7 @@ class ReportController extends BaseController
             'customers_with_orders' => User::whereDoesntHave('vendor')->whereHas('orders')->count(),
             'customers_without_orders' => User::whereDoesntHave('vendor')->whereDoesntHave('orders')->count(),
         ];
-        
+
         return view('admin.reports.customers', compact('stats'));
     }
 
@@ -166,9 +162,9 @@ class ReportController extends BaseController
     {
         $limit = $request->get('limit', 20);
         $period = $request->get('period', 'all_time');
-        
+
         $query = User::whereDoesntHave('vendor')
-            ->withSum(['orders as total_spent' => function($query) use ($period) {
+            ->withSum(['orders as total_spent' => function ($query) use ($period) {
                 if ($period !== 'all_time') {
                     $days = $this->getPeriodDays($period);
                     $query->where('created_at', '>=', now()->subDays($days));
@@ -177,9 +173,9 @@ class ReportController extends BaseController
             ->having('total_spent', '>', 0)
             ->orderBy('total_spent', 'desc')
             ->limit($limit);
-            
+
         $customers = $query->get();
-        
+
         return view('admin.reports.top-spenders', compact('customers', 'limit', 'period'));
     }
 
@@ -195,7 +191,7 @@ class ReportController extends BaseController
             'vendors_with_products' => Vendor::whereHas('products')->count(),
             'vendors_with_orders' => Vendor::whereHas('vendorOrders')->count(),
         ];
-        
+
         return view('admin.reports.vendors', compact('stats'));
     }
 
@@ -203,9 +199,9 @@ class ReportController extends BaseController
     {
         $limit = $request->get('limit', 20);
         $period = $request->get('period', 'all_time');
-        
+
         $query = Vendor::with('user')
-            ->withSum(['vendorOrders as total_earnings' => function($query) use ($period) {
+            ->withSum(['vendorOrders as total_earnings' => function ($query) use ($period) {
                 if ($period !== 'all_time') {
                     $days = $this->getPeriodDays($period);
                     $query->where('created_at', '>=', now()->subDays($days));
@@ -214,9 +210,9 @@ class ReportController extends BaseController
             ->having('total_earnings', '>', 0)
             ->orderBy('total_earnings', 'desc')
             ->limit($limit);
-            
+
         $vendors = $query->get();
-        
+
         return view('admin.reports.top-earning-vendors', compact('vendors', 'limit', 'period'));
     }
 
@@ -236,7 +232,7 @@ class ReportController extends BaseController
             'orders_this_week' => Order::where('created_at', '>=', now()->startOfWeek())->count(),
             'orders_this_month' => Order::where('created_at', '>=', now()->startOfMonth())->count(),
         ];
-        
+
         return view('admin.reports.orders', compact('stats'));
     }
 
@@ -247,13 +243,13 @@ class ReportController extends BaseController
             ->where('updated_at', '<', now()->subDays(1))
             ->orderBy('updated_at', 'desc')
             ->paginate(15);
-            
+
         $stats = [
             'total_abandoned' => Cart::where('is_active', true)->where('updated_at', '<', now()->subDays(1))->count(),
             'abandoned_value' => Cart::where('is_active', true)->where('updated_at', '<', now()->subDays(1))->sum('total'),
             'recovery_rate' => $this->calculateCartRecoveryRate(),
         ];
-        
+
         return view('admin.reports.abandoned-carts', compact('abandonedCarts', 'stats'));
     }
 
@@ -263,7 +259,7 @@ class ReportController extends BaseController
     private function getSalesData($period, $startDate, $endDate)
     {
         $query = Order::whereBetween('created_at', [$startDate, $endDate]);
-        
+
         return $query->selectRaw('
             COUNT(*) as total_orders,
             SUM(total) as total_revenue,
@@ -275,7 +271,7 @@ class ReportController extends BaseController
 
     private function getPeriodDays($period)
     {
-        return match($period) {
+        return match ($period) {
             'today' => 1,
             'week' => 7,
             'month' => 30,
@@ -290,14 +286,14 @@ class ReportController extends BaseController
         $totalAbandoned = Cart::where('is_active', true)
             ->where('updated_at', '<', now()->subDays(1))
             ->count();
-            
+
         if ($totalAbandoned === 0) {
             return 0;
         }
-        
+
         // This is a simplified calculation - in practice you'd track actual recoveries
         $recovered = Order::where('created_at', '>=', now()->subDays(30))->count() * 0.1; // Estimated 10% recovery
-        
+
         return round(($recovered / $totalAbandoned) * 100, 2);
     }
 }

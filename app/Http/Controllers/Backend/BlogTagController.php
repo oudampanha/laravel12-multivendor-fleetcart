@@ -11,6 +11,7 @@ class BlogTagController extends Controller
     public function index()
     {
         $blogTags = BlogTag::withCount('posts')->paginate(15);
+
         return view('admin.blog-tags.index', compact('blogTags'));
     }
 
@@ -22,7 +23,7 @@ class BlogTagController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'slug' => 'required|string|unique:blog_tags,slug'
+            'slug' => 'required|string|unique:blog_tags,slug',
         ]);
 
         BlogTag::create($request->all());
@@ -34,6 +35,7 @@ class BlogTagController extends Controller
     public function show(BlogTag $blogTag)
     {
         $blogTag->load('posts');
+
         return view('admin.blog-tags.show', compact('blogTag'));
     }
 
@@ -45,7 +47,7 @@ class BlogTagController extends Controller
     public function update(Request $request, BlogTag $blogTag)
     {
         $request->validate([
-            'slug' => 'required|string|unique:blog_tags,slug,' . $blogTag->id
+            'slug' => 'required|string|unique:blog_tags,slug,'.$blogTag->id,
         ]);
 
         $blogTag->update($request->all());

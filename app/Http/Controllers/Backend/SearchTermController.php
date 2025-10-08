@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\SearchTerm;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 
 class SearchTermController extends BaseController
 {
     protected string $resource = 'search_term';
-    
+
     protected array $additionalPermissions = ['search_term_management_access'];
 
     public function index()
     {
         $searchTerms = SearchTerm::orderBy('hits', 'desc')->paginate(15);
+
         return view('admin.search_terms.index', compact('searchTerms'));
     }
 
@@ -28,7 +28,7 @@ class SearchTermController extends BaseController
         $validated = $request->validate([
             'term' => 'required|string|unique:search_terms,term',
             'results' => 'required|integer|min:0',
-            'hits' => 'integer|min:0'
+            'hits' => 'integer|min:0',
         ]);
 
         SearchTerm::create($validated);
@@ -49,9 +49,9 @@ class SearchTermController extends BaseController
     public function update(Request $request, SearchTerm $searchTerm)
     {
         $validated = $request->validate([
-            'term' => 'required|string|unique:search_terms,term,' . $searchTerm->id,
+            'term' => 'required|string|unique:search_terms,term,'.$searchTerm->id,
             'results' => 'required|integer|min:0',
-            'hits' => 'integer|min:0'
+            'hits' => 'integer|min:0',
         ]);
 
         $searchTerm->update($validated);

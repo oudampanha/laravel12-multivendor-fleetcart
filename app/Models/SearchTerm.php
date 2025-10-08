@@ -48,7 +48,7 @@ class SearchTerm extends Model
         $normalizedTerm = static::normalizeTerm($term);
 
         if (empty($normalizedTerm)) {
-            return new static();
+            return new static;
         }
 
         $searchTerm = static::firstOrCreate(
@@ -58,7 +58,7 @@ class SearchTerm extends Model
 
         // Increment hits and update results
         $searchTerm->increment('hits');
-        
+
         if ($results > 0) {
             $searchTerm->update(['results' => $results]);
         }
@@ -148,7 +148,7 @@ class SearchTerm extends Model
     public static function getTopTermsByPeriod(string $period = 'month', int $limit = 10): \Illuminate\Database\Eloquent\Collection
     {
         $dateColumn = 'updated_at';
-        
+
         switch ($period) {
             case 'day':
                 $date = now()->startOfDay();
@@ -177,10 +177,10 @@ class SearchTerm extends Model
     {
         // Remove extra whitespace and convert to lowercase
         $normalized = trim(strtolower($term));
-        
+
         // Remove special characters except spaces, hyphens, and apostrophes
         $normalized = preg_replace('/[^\w\s\-\']/u', '', $normalized);
-        
+
         // Replace multiple spaces with single space
         $normalized = preg_replace('/\s+/', ' ', $normalized);
 

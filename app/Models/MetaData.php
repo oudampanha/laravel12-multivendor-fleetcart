@@ -29,12 +29,12 @@ class MetaData extends Model
     public function scopeForEntity($query, string $entityType, int $entityId)
     {
         return $query->where('entity_type', $entityType)
-                    ->where('entity_id', $entityId);
+            ->where('entity_id', $entityId);
     }
 
     public function getTitle(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -48,7 +48,7 @@ class MetaData extends Model
 
     public function getDescription(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -62,7 +62,7 @@ class MetaData extends Model
 
     public function getKeywords(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -76,7 +76,7 @@ class MetaData extends Model
 
     public function getOgTitle(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -90,7 +90,7 @@ class MetaData extends Model
 
     public function getOgDescription(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -104,7 +104,7 @@ class MetaData extends Model
 
     public function getOgImage(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -118,7 +118,7 @@ class MetaData extends Model
 
     public function getTwitterTitle(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -132,7 +132,7 @@ class MetaData extends Model
 
     public function getTwitterDescription(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -146,7 +146,7 @@ class MetaData extends Model
 
     public function getTwitterImage(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -160,7 +160,7 @@ class MetaData extends Model
 
     public function setTitle(string $value, ?string $locale = null): void
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -175,7 +175,7 @@ class MetaData extends Model
 
     public function setDescription(string $value, ?string $locale = null): void
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -190,7 +190,7 @@ class MetaData extends Model
 
     public function setKeywords(string $value, ?string $locale = null): void
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -205,7 +205,7 @@ class MetaData extends Model
 
     public function getAllMetaData(?string $locale = null): array
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -224,17 +224,17 @@ class MetaData extends Model
 
     public function setAllMetaData(array $data, ?string $locale = null): void
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
         $fields = [
-            'title', 'description', 'keywords', 'og_title', 'og_description', 
-            'og_image', 'twitter_title', 'twitter_description', 'twitter_image'
+            'title', 'description', 'keywords', 'og_title', 'og_description',
+            'og_image', 'twitter_title', 'twitter_description', 'twitter_image',
         ];
 
         foreach ($fields as $field) {
-            if (isset($data[$field]) && !empty($data[$field])) {
+            if (isset($data[$field]) && ! empty($data[$field])) {
                 Translation::setTranslation(
                     MetaData::class,
                     $this->id,
@@ -269,30 +269,30 @@ class MetaData extends Model
 
     public function hasTitle(?string $locale = null): bool
     {
-        return !empty($this->getTitle($locale));
+        return ! empty($this->getTitle($locale));
     }
 
     public function hasDescription(?string $locale = null): bool
     {
-        return !empty($this->getDescription($locale));
+        return ! empty($this->getDescription($locale));
     }
 
     public function hasKeywords(?string $locale = null): bool
     {
-        return !empty($this->getKeywords($locale));
+        return ! empty($this->getKeywords($locale));
     }
 
     public function hasOpenGraphData(?string $locale = null): bool
     {
-        return !empty($this->getOgTitle($locale)) || 
-               !empty($this->getOgDescription($locale)) || 
-               !empty($this->getOgImage($locale));
+        return ! empty($this->getOgTitle($locale)) ||
+               ! empty($this->getOgDescription($locale)) ||
+               ! empty($this->getOgImage($locale));
     }
 
     public function hasTwitterData(?string $locale = null): bool
     {
-        return !empty($this->getTwitterTitle($locale)) || 
-               !empty($this->getTwitterDescription($locale)) || 
-               !empty($this->getTwitterImage($locale));
+        return ! empty($this->getTwitterTitle($locale)) ||
+               ! empty($this->getTwitterDescription($locale)) ||
+               ! empty($this->getTwitterImage($locale));
     }
 }

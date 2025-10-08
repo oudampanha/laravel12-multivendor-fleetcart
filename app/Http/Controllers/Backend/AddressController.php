@@ -4,26 +4,27 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Address;
 use App\Models\User;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 
 class AddressController extends BaseController
 {
     protected string $resource = 'address';
-    
+
     protected array $additionalPermissions = ['address_management_access'];
 
     public function index()
     {
         $addresses = Address::with('customer')
-                           ->orderBy('created_at', 'desc')
-                           ->paginate(15);
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
         return view('admin.addresses.index', compact('addresses'));
     }
 
     public function create()
     {
         $customers = User::all();
+
         return view('admin.addresses.create', compact('customers'));
     }
 
@@ -38,7 +39,7 @@ class AddressController extends BaseController
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'zip' => 'required|string|max:255',
-            'country' => 'required|string|max:255'
+            'country' => 'required|string|max:255',
         ]);
 
         Address::create($validated);
@@ -49,12 +50,14 @@ class AddressController extends BaseController
     public function show(Address $address)
     {
         $address->load('customer');
+
         return view('admin.addresses.show', compact('address'));
     }
 
     public function edit(Address $address)
     {
         $customers = User::all();
+
         return view('admin.addresses.edit', compact('address', 'customers'));
     }
 
@@ -69,7 +72,7 @@ class AddressController extends BaseController
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:255',
             'zip' => 'required|string|max:255',
-            'country' => 'required|string|max:255'
+            'country' => 'required|string|max:255',
         ]);
 
         $address->update($validated);

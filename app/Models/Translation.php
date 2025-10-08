@@ -23,7 +23,7 @@ class Translation extends Model
     public function scopeForModel($query, string $model, int $id)
     {
         return $query->where('translatable_type', $model)
-                    ->where('translatable_id', $id);
+            ->where('translatable_id', $id);
     }
 
     public function scopeForLocale($query, string $locale)
@@ -39,15 +39,15 @@ class Translation extends Model
     public function scopeByKey($query, string $model, int $id, string $locale, string $field)
     {
         return $query->where('translatable_type', $model)
-                    ->where('translatable_id', $id)
-                    ->where('locale', $locale)
-                    ->where('field', $field);
+            ->where('translatable_id', $id)
+            ->where('locale', $locale)
+            ->where('field', $field);
     }
 
     public static function getTranslation(string $model, int $id, string $locale, string $field): ?string
     {
         $translation = static::byKey($model, $id, $locale, $field)->first();
-        
+
         return $translation ? $translation->value : null;
     }
 
@@ -67,15 +67,15 @@ class Translation extends Model
     public static function getTranslations(string $model, int $id, string $locale): array
     {
         return static::forModel($model, $id)
-                    ->forLocale($locale)
-                    ->pluck('value', 'field')
-                    ->toArray();
+            ->forLocale($locale)
+            ->pluck('value', 'field')
+            ->toArray();
     }
 
     public static function setTranslations(string $model, int $id, string $locale, array $translations): void
     {
         foreach ($translations as $field => $value) {
-            if (!empty($value)) {
+            if (! empty($value)) {
                 static::setTranslation($model, $id, $locale, $field, $value);
             }
         }
@@ -89,9 +89,9 @@ class Translation extends Model
     public static function getAvailableLocales(string $model, int $id): array
     {
         return static::forModel($model, $id)
-                    ->distinct('locale')
-                    ->pluck('locale')
-                    ->toArray();
+            ->distinct('locale')
+            ->pluck('locale')
+            ->toArray();
     }
 
     public static function hasTranslation(string $model, int $id, string $locale, string $field): bool
@@ -101,6 +101,6 @@ class Translation extends Model
 
     public function hasValue(): bool
     {
-        return !empty(trim($this->value));
+        return ! empty(trim($this->value));
     }
 }

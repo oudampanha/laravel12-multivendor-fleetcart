@@ -33,12 +33,12 @@ class TaxClass extends Model
     public function calculateTax($amount, $country = null, $state = null, $city = null, $zip = null)
     {
         $totalTax = 0;
-        
+
         $rates = $this->taxRates()
-            ->when($country, fn($query) => $query->where('country', $country))
-            ->when($state, fn($query) => $query->where('state', $state))
-            ->when($city, fn($query) => $query->where('city', $city))
-            ->when($zip, fn($query) => $query->where('zip', $zip))
+            ->when($country, fn ($query) => $query->where('country', $country))
+            ->when($state, fn ($query) => $query->where('state', $state))
+            ->when($city, fn ($query) => $query->where('city', $city))
+            ->when($zip, fn ($query) => $query->where('zip', $zip))
             ->orderBy('position')
             ->get();
 

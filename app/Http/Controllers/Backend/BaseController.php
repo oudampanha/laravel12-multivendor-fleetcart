@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Backend;
 
-use Illuminate\Routing\Controller;
 use App\Traits\HasPermissions;
+use Illuminate\Routing\Controller;
 
 abstract class BaseController extends Controller
 {
@@ -23,17 +23,17 @@ abstract class BaseController extends Controller
     {
         // Ensure user is authenticated
         $this->middleware('auth');
-        
+
         // Ensure user has dashboard access
         $this->middleware('permission:dashboard_access');
-        
+
         // Apply resource-based permissions if resource is defined
         if (isset($this->resource)) {
             $this->applyResourcePermissions();
         }
 
         // Apply additional permissions if defined
-        if (!empty($this->additionalPermissions)) {
+        if (! empty($this->additionalPermissions)) {
             foreach ($this->additionalPermissions as $permission) {
                 $this->middleware("permission:{$permission}");
             }
@@ -53,7 +53,7 @@ abstract class BaseController extends Controller
         $this->middleware("permission:{$this->resource}_create")
             ->only(['create', 'store']);
 
-        // Edit permission for edit and update methods  
+        // Edit permission for edit and update methods
         $this->middleware("permission:{$this->resource}_edit")
             ->only(['edit', 'update']);
 

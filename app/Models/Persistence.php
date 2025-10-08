@@ -60,7 +60,7 @@ class Persistence extends Model
     {
         $persistence = static::findValidByCode($code);
 
-        if (!$persistence) {
+        if (! $persistence) {
             return null;
         }
 
@@ -72,7 +72,7 @@ class Persistence extends Model
 
     public static function loginUser(User $user, bool $remember = true): ?string
     {
-        if (!$remember) {
+        if (! $remember) {
             return null;
         }
 
@@ -115,7 +115,7 @@ class Persistence extends Model
 
     public function isValid(int $daysValid = 30): bool
     {
-        return !$this->isExpired($daysValid);
+        return ! $this->isExpired($daysValid);
     }
 
     public function getExpiresAt(int $daysValid = 30): \Carbon\Carbon
@@ -126,8 +126,8 @@ class Persistence extends Model
     public function getRemainingTime(int $daysValid = 30): \Carbon\CarbonInterval
     {
         $expiresAt = $this->getExpiresAt($daysValid);
-        
-        return now() < $expiresAt 
+
+        return now() < $expiresAt
             ? now()->diffAsCarbonInterval($expiresAt)
             : \Carbon\CarbonInterval::seconds(0);
     }

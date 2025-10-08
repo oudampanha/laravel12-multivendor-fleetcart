@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Address;
 use App\Models\DefaultAddress;
 use App\Models\User;
-use App\Models\Address;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 
 class DefaultAddressController extends BaseController
 {
     protected string $resource = 'default_address';
-    
+
     protected array $additionalPermissions = ['customer_management_access'];
 
     public function index(Request $request)
     {
         $query = DefaultAddress::with(['customer', 'address']);
-        
+
         // Filter by customer if provided
         if ($request->filled('customer_id')) {
             $query->where('customer_id', $request->customer_id);
         }
-        
+
         // Filter by address type if provided
         if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
-        
+
         $defaultAddresses = $query->orderBy('created_at', 'desc')->paginate(15);
+
         return view('admin.default-addresses.index', compact('defaultAddresses'));
     }
 
@@ -38,17 +38,17 @@ class DefaultAddressController extends BaseController
             'address_id' => 'required|exists:addresses,id',
             'type' => 'required|in:billing,shipping',
         ]);
-        
+
         // Verify the address belongs to the customer
         $address = Address::where('id', $request->address_id)
-                         ->where('customer_id', $customer->id)
-                         ->firstOrFail();
-        
+            ->where('customer_id', $customer->id)
+            ->firstOrFail();
+
         // Check if a default address of this type already exists for the customer
         $existingDefault = DefaultAddress::where('customer_id', $customer->id)
-                                       ->where('type', $request->type)
-                                       ->first();
-        
+            ->where('type', $request->type)
+            ->first();
+
         if ($existingDefault) {
             // Update existing default address
             $existingDefault->update(['address_id' => $address->id]);
@@ -62,7 +62,7 @@ class DefaultAddressController extends BaseController
             ]);
             $message = 'Default address created successfully.';
         }
-        
+
         return redirect()->route('admin.default-addresses.index')
             ->with('success', $message);
     }
@@ -70,6 +70,7 @@ class DefaultAddressController extends BaseController
     public function destroy(DefaultAddress $defaultAddress)
     {
         $defaultAddress->delete();
+
         return redirect()->route('admin.default-addresses.index')
             ->with('success', 'Default address removed successfully.');
     }
@@ -83,7 +84,7 @@ class DefaultAddressController extends BaseController
             ->where('customer_id', $customer->id)
             ->orderBy('type')
             ->get();
-            
+
         return view('admin.default-addresses.by-customer', compact('defaultAddresses', 'customer'));
     }
 
@@ -95,12 +96,12 @@ class DefaultAddressController extends BaseController
         $request->validate([
             'address_id' => 'required|exists:addresses,id',
         ]);
-        
+
         // Verify the address belongs to the customer
         $address = Address::where('id', $request->address_id)
-                         ->where('customer_id', $customer->id)
-                         ->firstOrFail();
-        
+            ->where('customer_id', $customer->id)
+            ->firstOrFail();
+
         DefaultAddress::updateOrCreate(
             [
                 'customer_id' => $customer->id,
@@ -110,7 +111,7 @@ class DefaultAddressController extends BaseController
                 'address_id' => $address->id,
             ]
         );
-        
+
         return redirect()->back()
             ->with('success', 'Default billing address set successfully.');
     }
@@ -123,12 +124,12 @@ class DefaultAddressController extends BaseController
         $request->validate([
             'address_id' => 'required|exists:addresses,id',
         ]);
-        
+
         // Verify the address belongs to the customer
         $address = Address::where('id', $request->address_id)
-                         ->where('customer_id', $customer->id)
-                         ->firstOrFail();
-        
+            ->where('customer_id', $customer->id)
+            ->firstOrFail();
+
         DefaultAddress::updateOrCreate(
             [
                 'customer_id' => $customer->id,
@@ -138,7 +139,7 @@ class DefaultAddressController extends BaseController
                 'address_id' => $address->id,
             ]
         );
-        
+
         return redirect()->back()
             ->with('success', 'Default shipping address set successfully.');
     }
@@ -150,7 +151,7 @@ class DefaultAddressController extends BaseController
     {
         $count = DefaultAddress::where('customer_id', $customer->id)->count();
         DefaultAddress::where('customer_id', $customer->id)->delete();
-        
+
         return redirect()->route('admin.default-addresses.index')
             ->with('success', "Cleared {$count} default addresses for customer.");
     }

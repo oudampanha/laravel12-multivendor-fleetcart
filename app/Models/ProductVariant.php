@@ -110,7 +110,7 @@ class ProductVariant extends Model
         }
 
         $now = now();
-        
+
         if ($this->special_price_start && $this->special_price_start > $now) {
             return false;
         }
@@ -124,7 +124,7 @@ class ProductVariant extends Model
 
     public function getSpecialPrice()
     {
-        if (!$this->hasSpecialPrice()) {
+        if (! $this->hasSpecialPrice()) {
             return $this->price ?? $this->product->price;
         }
 
@@ -139,7 +139,7 @@ class ProductVariant extends Model
 
     public function isInStock(): bool
     {
-        if (!$this->manage_stock && !$this->product->manage_stock) {
+        if (! $this->manage_stock && ! $this->product->manage_stock) {
             return $this->in_stock ?? $this->product->in_stock;
         }
 

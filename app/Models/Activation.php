@@ -53,7 +53,7 @@ class Activation extends Model
     public function scopeValid($query, int $hoursValid = 24)
     {
         return $query->where('created_at', '>=', now()->subHours($hoursValid))
-                    ->where('completed', false);
+            ->where('completed', false);
     }
 
     public static function createForUser(User $user): self
@@ -80,12 +80,12 @@ class Activation extends Model
             ->valid()
             ->first();
 
-        if (!$activation) {
+        if (! $activation) {
             return false;
         }
 
         $activation->complete();
-        
+
         return true;
     }
 
@@ -97,12 +97,12 @@ class Activation extends Model
             ->valid()
             ->first();
 
-        if (!$activation) {
+        if (! $activation) {
             return false;
         }
 
         $activation->complete();
-        
+
         return true;
     }
 
@@ -114,7 +114,7 @@ class Activation extends Model
         ]);
 
         // Mark user as verified if not already
-        if ($this->user && !$this->user->is_verified) {
+        if ($this->user && ! $this->user->is_verified) {
             $this->user->update([
                 'is_verified' => true,
                 'email_verified_at' => now(),
@@ -129,7 +129,7 @@ class Activation extends Model
 
     public function isPending(): bool
     {
-        return !$this->completed;
+        return ! $this->completed;
     }
 
     public function isExpired(int $hoursValid = 24): bool
@@ -139,7 +139,7 @@ class Activation extends Model
 
     public function isValid(int $hoursValid = 24): bool
     {
-        return !$this->isCompleted() && !$this->isExpired($hoursValid);
+        return ! $this->isCompleted() && ! $this->isExpired($hoursValid);
     }
 
     public function getExpiresAt(int $hoursValid = 24): \Carbon\Carbon
@@ -150,8 +150,8 @@ class Activation extends Model
     public function getRemainingTime(int $hoursValid = 24): \Carbon\CarbonInterval
     {
         $expiresAt = $this->getExpiresAt($hoursValid);
-        
-        return now() < $expiresAt 
+
+        return now() < $expiresAt
             ? now()->diffAsCarbonInterval($expiresAt)
             : \Carbon\CarbonInterval::seconds(0);
     }

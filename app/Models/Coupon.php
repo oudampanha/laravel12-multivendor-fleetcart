@@ -95,16 +95,16 @@ class Coupon extends Model
     public function scopeValid($query)
     {
         $now = now();
-        
+
         return $query->where('is_active', true)
-                    ->where(function ($query) use ($now) {
-                        $query->whereNull('start_date')
-                              ->orWhere('start_date', '<=', $now);
-                    })
-                    ->where(function ($query) use ($now) {
-                        $query->whereNull('end_date')
-                              ->orWhere('end_date', '>=', $now);
-                    });
+            ->where(function ($query) use ($now) {
+                $query->whereNull('start_date')
+                    ->orWhere('start_date', '<=', $now);
+            })
+            ->where(function ($query) use ($now) {
+                $query->whereNull('end_date')
+                    ->orWhere('end_date', '>=', $now);
+            });
     }
 
     public function isActive(): bool
@@ -114,7 +114,7 @@ class Coupon extends Model
 
     public function isExpired(): bool
     {
-        if (!$this->end_date) {
+        if (! $this->end_date) {
             return false;
         }
 
@@ -123,7 +123,7 @@ class Coupon extends Model
 
     public function isNotStarted(): bool
     {
-        if (!$this->start_date) {
+        if (! $this->start_date) {
             return false;
         }
 
@@ -132,7 +132,7 @@ class Coupon extends Model
 
     public function isValid(): bool
     {
-        return $this->isActive() && !$this->isExpired() && !$this->isNotStarted();
+        return $this->isActive() && ! $this->isExpired() && ! $this->isNotStarted();
     }
 
     public function isGlobal(): bool
@@ -142,17 +142,17 @@ class Coupon extends Model
 
     public function hasUsageLimit(): bool
     {
-        return !is_null($this->usage_limit_per_coupon);
+        return ! is_null($this->usage_limit_per_coupon);
     }
 
     public function hasCustomerUsageLimit(): bool
     {
-        return !is_null($this->usage_limit_per_customer);
+        return ! is_null($this->usage_limit_per_customer);
     }
 
     public function isUsageLimitReached(): bool
     {
-        if (!$this->hasUsageLimit()) {
+        if (! $this->hasUsageLimit()) {
             return false;
         }
 
@@ -161,7 +161,7 @@ class Coupon extends Model
 
     public function canBeUsed(): bool
     {
-        return $this->isValid() && !$this->isUsageLimitReached();
+        return $this->isValid() && ! $this->isUsageLimitReached();
     }
 
     public function isPercent(): bool
@@ -171,17 +171,17 @@ class Coupon extends Model
 
     public function isFixed(): bool
     {
-        return !$this->is_percent;
+        return ! $this->is_percent;
     }
 
     public function hasMinimumSpend(): bool
     {
-        return !is_null($this->minimum_spend) && $this->minimum_spend > 0;
+        return ! is_null($this->minimum_spend) && $this->minimum_spend > 0;
     }
 
     public function hasMaximumSpend(): bool
     {
-        return !is_null($this->maximum_spend) && $this->maximum_spend > 0;
+        return ! is_null($this->maximum_spend) && $this->maximum_spend > 0;
     }
 
     public function offersFreeShipping(): bool
@@ -191,7 +191,7 @@ class Coupon extends Model
 
     public function getDiscountAmount(float $subtotal): float
     {
-        if (!$this->canBeUsed()) {
+        if (! $this->canBeUsed()) {
             return 0;
         }
 

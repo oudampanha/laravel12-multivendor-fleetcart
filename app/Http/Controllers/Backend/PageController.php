@@ -11,6 +11,7 @@ class PageController extends Controller
     public function index()
     {
         $pages = Page::orderBy('created_at', 'desc')->paginate(15);
+
         return view('admin.pages.index', compact('pages'));
     }
 
@@ -23,7 +24,7 @@ class PageController extends Controller
     {
         $request->validate([
             'slug' => 'required|string|unique:pages,slug',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
         ]);
 
         Page::create($request->all());
@@ -45,8 +46,8 @@ class PageController extends Controller
     public function update(Request $request, Page $page)
     {
         $request->validate([
-            'slug' => 'required|string|unique:pages,slug,' . $page->id,
-            'is_active' => 'boolean'
+            'slug' => 'required|string|unique:pages,slug,'.$page->id,
+            'is_active' => 'boolean',
         ]);
 
         $page->update($request->all());

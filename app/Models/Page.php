@@ -61,7 +61,7 @@ class Page extends Model
 
     public function getTitle(?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -75,7 +75,7 @@ class Page extends Model
 
     public function getBody(?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -89,7 +89,7 @@ class Page extends Model
 
     public function getMetaTitle(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 
@@ -103,7 +103,7 @@ class Page extends Model
 
     public function getMetaDescription(?string $locale = null): ?string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 

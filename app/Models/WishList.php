@@ -45,7 +45,7 @@ class WishList extends Model
     {
         return $query->whereHas('product', function ($q) {
             $q->where('is_active', true)
-              ->where('in_stock', true);
+                ->where('in_stock', true);
         });
     }
 
@@ -56,7 +56,7 @@ class WishList extends Model
             ->where('is_active', true)
             ->first();
 
-        if (!$product) {
+        if (! $product) {
             return false;
         }
 
@@ -91,6 +91,7 @@ class WishList extends Model
     {
         if (static::isInWishlist($userId, $productId)) {
             static::removeFromWishlist($userId, $productId);
+
             return false; // Removed from wishlist
         } else {
             return static::addToWishlist($userId, $productId); // Added to wishlist (true) or failed (false)
@@ -102,7 +103,7 @@ class WishList extends Model
         return static::forUser($userId)
             ->with(['product' => function ($query) {
                 $query->with(['media', 'brand', 'categories'])
-                      ->where('is_active', true);
+                    ->where('is_active', true);
             }])
             ->latest()
             ->get();
@@ -145,17 +146,17 @@ class WishList extends Model
 
     public static function moveToCart(int $userId, int $productId, string $sessionId): bool
     {
-        if (!static::isInWishlist($userId, $productId)) {
+        if (! static::isInWishlist($userId, $productId)) {
             return false;
         }
 
         $product = Product::find($productId);
-        if (!$product || !$product->is_active || !$product->in_stock) {
+        if (! $product || ! $product->is_active || ! $product->in_stock) {
             return false;
         }
 
         $cart = Cart::getForSession($sessionId);
-        
+
         // Add to cart
         $cart->addItem([
             'product_id' => $productId,
@@ -186,14 +187,14 @@ class WishList extends Model
 
     public function isProductAvailable(): bool
     {
-        return $this->product && 
-               $this->product->is_active && 
+        return $this->product &&
+               $this->product->is_active &&
                $this->product->in_stock;
     }
 
     public function getProductPrice(): float
     {
-        if (!$this->product) {
+        if (! $this->product) {
             return 0.0;
         }
 

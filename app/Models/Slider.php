@@ -44,7 +44,7 @@ class Slider extends Model
 
     public function getName(?string $locale = null): string
     {
-        if (!$locale) {
+        if (! $locale) {
             $locale = app()->getLocale();
         }
 

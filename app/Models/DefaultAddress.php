@@ -36,7 +36,7 @@ class DefaultAddress extends Model
             ->where('customer_id', $customerId)
             ->first();
 
-        if (!$address) {
+        if (! $address) {
             throw new \InvalidArgumentException('Address does not belong to the specified customer.');
         }
 
@@ -76,7 +76,7 @@ class DefaultAddress extends Model
 
     public function isValidAddress(): bool
     {
-        return $this->address && 
+        return $this->address &&
                $this->address->customer_id === $this->customer_id;
     }
 

@@ -129,11 +129,11 @@ class Throttle extends Model
     public static function checkLoginThrottle(?User $user = null, ?string $ip = null): array
     {
         $ip = $ip ?? request()->ip();
-        
+
         // Check global throttling (by IP)
         $globalAttempts = static::getGlobalAttempts(60, $ip);
         $globalLimit = 50; // 50 attempts per hour per IP
-        
+
         if ($globalAttempts >= $globalLimit) {
             return [
                 'throttled' => true,
@@ -147,7 +147,7 @@ class Throttle extends Model
         // Check IP-specific throttling
         $ipAttempts = static::getIpAttempts($ip, 15);
         $ipLimit = 10; // 10 attempts per 15 minutes per IP
-        
+
         if ($ipAttempts >= $ipLimit) {
             return [
                 'throttled' => true,
@@ -162,7 +162,7 @@ class Throttle extends Model
         if ($user) {
             $userAttempts = static::getUserAttempts($user, 30);
             $userLimit = 5; // 5 attempts per 30 minutes per user
-            
+
             if ($userAttempts >= $userLimit) {
                 return [
                     'throttled' => true,
@@ -201,8 +201,8 @@ class Throttle extends Model
         }
 
         $oldestAttempt = $query->oldest()->first();
-        
-        return $oldestAttempt 
+
+        return $oldestAttempt
             ? $oldestAttempt->created_at->addMinutes($minutes)
             : now();
     }
@@ -271,8 +271,8 @@ class Throttle extends Model
     public function getRemainingTime(int $minutes = 60): int
     {
         $resetTime = $this->created_at->addMinutes($minutes);
-        
-        return now() < $resetTime 
+
+        return now() < $resetTime
             ? now()->diffInSeconds($resetTime)
             : 0;
     }

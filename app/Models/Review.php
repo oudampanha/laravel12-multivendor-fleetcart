@@ -85,18 +85,20 @@ class Review extends Model
 
     public function isPending(): bool
     {
-        return !$this->is_approved;
+        return ! $this->is_approved;
     }
 
     public function approve(): bool
     {
         $this->is_approved = true;
+
         return $this->save();
     }
 
     public function disapprove(): bool
     {
         $this->is_approved = false;
+
         return $this->save();
     }
 
@@ -117,22 +119,22 @@ class Review extends Model
 
     public function getStarRating(): string
     {
-        return str_repeat('★', $this->rating) . str_repeat('☆', 5 - $this->rating);
+        return str_repeat('★', $this->rating).str_repeat('☆', 5 - $this->rating);
     }
 
     public function hasComment(): bool
     {
-        return !empty(trim($this->comment));
+        return ! empty(trim($this->comment));
     }
 
     public function getShortComment(int $length = 100): string
     {
-        if (!$this->hasComment()) {
+        if (! $this->hasComment()) {
             return '';
         }
 
-        return strlen($this->comment) > $length 
-            ? substr($this->comment, 0, $length) . '...'
+        return strlen($this->comment) > $length
+            ? substr($this->comment, 0, $length).'...'
             : $this->comment;
     }
 
@@ -149,28 +151,28 @@ class Review extends Model
     public static function getAverageRating(int $productId): float
     {
         return static::where('product_id', $productId)
-                    ->where('is_approved', true)
-                    ->avg('rating') ?? 0;
+            ->where('is_approved', true)
+            ->avg('rating') ?? 0;
     }
 
     public static function getTotalReviews(int $productId): int
     {
         return static::where('product_id', $productId)
-                    ->where('is_approved', true)
-                    ->count();
+            ->where('is_approved', true)
+            ->count();
     }
 
     public static function getRatingDistribution(int $productId): array
     {
         $distribution = [];
-        
+
         for ($i = 1; $i <= 5; $i++) {
             $distribution[$i] = static::where('product_id', $productId)
-                                     ->where('is_approved', true)
-                                     ->where('rating', $i)
-                                     ->count();
+                ->where('is_approved', true)
+                ->where('rating', $i)
+                ->count();
         }
-        
+
         return $distribution;
     }
 
@@ -181,6 +183,7 @@ class Review extends Model
         }
 
         $this->rating = $rating;
+
         return $this->save();
     }
 }

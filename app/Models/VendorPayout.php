@@ -55,7 +55,7 @@ class VendorPayout extends Model
     /**
      * Mark the payout as completed.
      */
-    public function markAsCompleted(string $referenceNumber = null): void
+    public function markAsCompleted(?string $referenceNumber = null): void
     {
         $this->update([
             'status' => 'completed',
@@ -67,7 +67,7 @@ class VendorPayout extends Model
     /**
      * Mark the payout as failed.
      */
-    public function markAsFailed(string $note = null): void
+    public function markAsFailed(?string $note = null): void
     {
         $this->update([
             'status' => 'failed',

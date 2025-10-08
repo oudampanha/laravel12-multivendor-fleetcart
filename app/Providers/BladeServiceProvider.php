@@ -2,97 +2,105 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Blade;
 use App\Http\Middleware\PermissionMiddleware;
+use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
 
 class BladeServiceProvider extends ServiceProvider
 {
-  public function register(): void
-  {
-    //
-  }
+    public function register(): void
+    {
+        //
+    }
 
-  public function boot(): void
-  {
-    // Permission directive - check single permission
-    Blade::if('permission', function (string $permission) {
-      if (!auth()->check()) {
-        return false;
-      }
+    public function boot(): void
+    {
+        // Permission directive - check single permission
+        Blade::if('permission', function (string $permission) {
+            if (! auth()->check()) {
+                return false;
+            }
 
-      $middleware = new PermissionMiddleware();
-      return $middleware->hasPermission(auth()->user(), $permission);
-    });
+            $middleware = new PermissionMiddleware;
 
-    // Any permission directive - check if user has any of the permissions
-    Blade::if('anypermission', function (array $permissions) {
-      if (!auth()->check()) {
-        return false;
-      }
+            return $middleware->hasPermission(auth()->user(), $permission);
+        });
 
-      $middleware = new PermissionMiddleware();
-      return $middleware->hasAnyPermission(auth()->user(), $permissions);
-    });
+        // Any permission directive - check if user has any of the permissions
+        Blade::if('anypermission', function (array $permissions) {
+            if (! auth()->check()) {
+                return false;
+            }
 
-    // All permissions directive - check if user has all permissions
-    Blade::if('allpermissions', function (array $permissions) {
-      if (!auth()->check()) {
-        return false;
-      }
+            $middleware = new PermissionMiddleware;
 
-      $middleware = new PermissionMiddleware();
-      return $middleware->hasAllPermissions(auth()->user(), $permissions);
-    });
+            return $middleware->hasAnyPermission(auth()->user(), $permissions);
+        });
 
-    // Resource access directive
-    Blade::if('canaccess', function (string $resource, string $action = 'access') {
-      if (!auth()->check()) {
-        return false;
-      }
+        // All permissions directive - check if user has all permissions
+        Blade::if('allpermissions', function (array $permissions) {
+            if (! auth()->check()) {
+                return false;
+            }
 
-      $middleware = new PermissionMiddleware();
-      return $middleware->canAccessResource(auth()->user(), $resource, $action);
-    });
+            $middleware = new PermissionMiddleware;
 
-    // CRUD permission directive
-    Blade::if('cancrud', function (string $resource, string $action) {
-      if (!auth()->check()) {
-        return false;
-      }
+            return $middleware->hasAllPermissions(auth()->user(), $permissions);
+        });
 
-      $middleware = new PermissionMiddleware();
-      return $middleware->canCRUD(auth()->user(), $resource, $action);
-    });
+        // Resource access directive
+        Blade::if('canaccess', function (string $resource, string $action = 'access') {
+            if (! auth()->check()) {
+                return false;
+            }
 
-    // Super admin directive
-    Blade::if('superadmin', function () {
-      if (!auth()->check()) {
-        return false;
-      }
+            $middleware = new PermissionMiddleware;
 
-      $middleware = new PermissionMiddleware();
-      return $middleware->isSuperAdmin(auth()->user());
-    });
+            return $middleware->canAccessResource(auth()->user(), $resource, $action);
+        });
 
-    // Dashboard access directive
-    Blade::if('dashboard', function () {
-      if (!auth()->check()) {
-        return false;
-      }
+        // CRUD permission directive
+        Blade::if('cancrud', function (string $resource, string $action) {
+            if (! auth()->check()) {
+                return false;
+            }
 
-      $middleware = new PermissionMiddleware();
-      return $middleware->canAccessDashboard(auth()->user());
-    });
+            $middleware = new PermissionMiddleware;
 
-    // User management directive
-    Blade::if('usermanager', function () {
-      if (!auth()->check()) {
-        return false;
-      }
+            return $middleware->canCRUD(auth()->user(), $resource, $action);
+        });
 
-      $middleware = new PermissionMiddleware();
-      return $middleware->canManageUsers(auth()->user());
-    });
-  }
+        // Super admin directive
+        Blade::if('superadmin', function () {
+            if (! auth()->check()) {
+                return false;
+            }
+
+            $middleware = new PermissionMiddleware;
+
+            return $middleware->isSuperAdmin(auth()->user());
+        });
+
+        // Dashboard access directive
+        Blade::if('dashboard', function () {
+            if (! auth()->check()) {
+                return false;
+            }
+
+            $middleware = new PermissionMiddleware;
+
+            return $middleware->canAccessDashboard(auth()->user());
+        });
+
+        // User management directive
+        Blade::if('usermanager', function () {
+            if (! auth()->check()) {
+                return false;
+            }
+
+            $middleware = new PermissionMiddleware;
+
+            return $middleware->canManageUsers(auth()->user());
+        });
+    }
 }

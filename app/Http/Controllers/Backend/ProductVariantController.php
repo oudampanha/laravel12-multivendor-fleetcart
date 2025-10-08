@@ -2,26 +2,27 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\ProductVariant;
 use App\Models\Product;
-use App\Http\Controllers\Backend\BaseController;
+use App\Models\ProductVariant;
 use Illuminate\Http\Request;
 
 class ProductVariantController extends BaseController
 {
     protected string $resource = 'product_variant';
-    
+
     protected array $additionalPermissions = ['product_variant_management_access'];
 
     public function index()
     {
         $productVariants = ProductVariant::with('product')->orderBy('position', 'asc')->paginate(15);
+
         return view('admin.product_variants.index', compact('productVariants'));
     }
 
     public function create()
     {
         $products = Product::all();
+
         return view('admin.product_variants.create', compact('products'));
     }
 
@@ -44,7 +45,7 @@ class ProductVariantController extends BaseController
             'in_stock' => 'nullable|boolean',
             'is_default' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
-            'position' => 'nullable|integer|min:0'
+            'position' => 'nullable|integer|min:0',
         ]);
 
         ProductVariant::create($validated);
@@ -55,12 +56,14 @@ class ProductVariantController extends BaseController
     public function show(ProductVariant $productVariant)
     {
         $productVariant->load('product');
+
         return view('admin.product_variants.show', compact('productVariant'));
     }
 
     public function edit(ProductVariant $productVariant)
     {
         $products = Product::all();
+
         return view('admin.product_variants.edit', compact('productVariant', 'products'));
     }
 
@@ -83,7 +86,7 @@ class ProductVariantController extends BaseController
             'in_stock' => 'nullable|boolean',
             'is_default' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
-            'position' => 'nullable|integer|min:0'
+            'position' => 'nullable|integer|min:0',
         ]);
 
         $productVariant->update($validated);

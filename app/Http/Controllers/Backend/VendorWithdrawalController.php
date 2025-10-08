@@ -2,34 +2,36 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\VendorWithdrawal;
 use Illuminate\Http\Request;
 
 class VendorWithdrawalController extends BaseController
 {
     protected string $resource = 'vendor_withdrawal';
-    
+
     protected array $additionalPermissions = ['vendor_management_access'];
 
     public function __construct()
     {
         parent::__construct();
-        
+
         // Apply specific permissions for withdrawal management methods
         $this->applyMethodPermission('vendor_withdrawal_edit', ['approve', 'reject', 'complete']);
     }
+
     public function index()
     {
         $withdrawals = VendorWithdrawal::with('vendor')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
+
         return view('admin.vendor-withdrawals.index', compact('withdrawals'));
     }
 
     public function show(VendorWithdrawal $vendorWithdrawal)
     {
         $vendorWithdrawal->load('vendor');
+
         return view('admin.vendor-withdrawals.show', compact('vendorWithdrawal'));
     }
 
@@ -52,13 +54,13 @@ class VendorWithdrawalController extends BaseController
 
         $request->validate([
             'status' => 'required|in:pending,processing,completed,rejected',
-            'admin_note' => 'nullable|string'
+            'admin_note' => 'nullable|string',
         ]);
 
         $data = $request->all();
-        
-        if (in_array($request->status, ['completed', 'rejected']) && 
-            !in_array($vendorWithdrawal->status, ['completed', 'rejected'])) {
+
+        if (in_array($request->status, ['completed', 'rejected']) &&
+            ! in_array($vendorWithdrawal->status, ['completed', 'rejected'])) {
             $data['processed_at'] = now();
         }
 
@@ -89,13 +91,13 @@ class VendorWithdrawalController extends BaseController
         }
 
         $request->validate([
-            'admin_note' => 'nullable|string'
+            'admin_note' => 'nullable|string',
         ]);
 
         $vendorWithdrawal->update([
             'status' => 'processing',
             'admin_note' => $request->admin_note,
-            'processed_at' => now()
+            'processed_at' => now(),
         ]);
 
         return redirect()->back()
@@ -110,13 +112,13 @@ class VendorWithdrawalController extends BaseController
         }
 
         $request->validate([
-            'admin_note' => 'required|string'
+            'admin_note' => 'required|string',
         ]);
 
         $vendorWithdrawal->update([
             'status' => 'rejected',
             'admin_note' => $request->admin_note,
-            'processed_at' => now()
+            'processed_at' => now(),
         ]);
 
         return redirect()->back()
@@ -131,7 +133,7 @@ class VendorWithdrawalController extends BaseController
         }
 
         $request->validate([
-            'admin_note' => 'nullable|string'
+            'admin_note' => 'nullable|string',
         ]);
 
         $vendor = $vendorWithdrawal->vendor;
@@ -140,7 +142,7 @@ class VendorWithdrawalController extends BaseController
         $vendorWithdrawal->update([
             'status' => 'completed',
             'admin_note' => $request->admin_note,
-            'processed_at' => now()
+            'processed_at' => now(),
         ]);
 
         return redirect()->back()

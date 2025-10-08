@@ -53,17 +53,17 @@ class VendorShippingZone extends Model
     /**
      * Check if a location is covered by this shipping zone.
      */
-    public function coversLocation(string $country, string $state = null, string $zipCode = null): bool
+    public function coversLocation(string $country, ?string $state = null, ?string $zipCode = null): bool
     {
-        if (!in_array($country, $this->countries)) {
+        if (! in_array($country, $this->countries)) {
             return false;
         }
 
-        if ($this->states && $state && !in_array($state, $this->states)) {
+        if ($this->states && $state && ! in_array($state, $this->states)) {
             return false;
         }
 
-        if ($this->zip_codes && $zipCode && !in_array($zipCode, $this->zip_codes)) {
+        if ($this->zip_codes && $zipCode && ! in_array($zipCode, $this->zip_codes)) {
             return false;
         }
 

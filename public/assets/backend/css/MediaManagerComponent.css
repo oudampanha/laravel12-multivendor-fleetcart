@@ -1,0 +1,879 @@
+/**
+ * MediaManagerComponent.css - Styles for the reusable Media Manager Component
+ * @version 2.0.0
+ * @author Laravel Media Management System
+ * @license MIT
+ *
+ * This CSS is optimized for reusable components and can be used alongside
+ * the main MediaManager.css or standalone.
+ */
+
+/* ========================================
+   Component Base Styles
+   ======================================== */
+.mmc-container {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #333;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.mmc-container * {
+  box-sizing: border-box;
+}
+
+/* ========================================
+   Mode-specific containers
+   ======================================== */
+.mmc-mode-picker {
+  min-height: 400px;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mmc-mode-selector {
+  display: inline-block;
+  position: relative;
+}
+
+.mmc-mode-upload {
+  min-height: 200px;
+}
+
+.mmc-mode-full {
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mmc-compact {
+  font-size: 12px;
+}
+
+.mmc-compact .mmc-item {
+  padding: 8px;
+  min-height: 100px;
+}
+
+/* ========================================
+   Header & Toolbar
+   ======================================== */
+.mmc-header,
+.mmc-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  flex-shrink: 0;
+}
+
+.mmc-header-left,
+.mmc-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.mmc-header-right,
+.mmc-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mmc-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.mmc-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 300px;
+  margin-left: 16px;
+}
+
+.mmc-search-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 13px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.mmc-search-input:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+}
+
+.mmc-search-btn {
+  padding: 6px 10px;
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mmc-search-btn:hover {
+  background: #e9ecef;
+}
+
+/* ========================================
+   Breadcrumb
+   ======================================== */
+.mmc-breadcrumb {
+  padding: 8px 16px;
+  background: #fff;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.mmc-breadcrumb-item {
+  color: #007bff;
+  text-decoration: none;
+  transition: color 0.15s ease-in-out;
+}
+
+.mmc-breadcrumb-item:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+.mmc-breadcrumb-separator {
+  color: #6c757d;
+  margin: 0 6px;
+}
+
+/* ========================================
+   Content Area
+   ======================================== */
+.mmc-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  position: relative;
+}
+
+.mmc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.mmc-compact .mmc-grid {
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+/* ========================================
+   Items
+   ======================================== */
+.mmc-item {
+  background: #fff;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.mmc-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #007bff;
+}
+
+.mmc-item.mmc-selectable {
+  cursor: pointer;
+}
+
+.mmc-item.mmc-selected {
+  border-color: #007bff;
+  background: rgba(0, 123, 255, 0.05);
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.mmc-item-check {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border: 2px solid #dee2e6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.mmc-item:hover .mmc-item-check,
+.mmc-item.mmc-selected .mmc-item-check {
+  opacity: 1;
+}
+
+.mmc-item.mmc-selected .mmc-item-check {
+  background: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.mmc-folder {
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+}
+
+.mmc-folder:hover {
+  background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+}
+
+.mmc-folder .mmc-item-name,
+.mmc-folder .mmc-item-meta {
+  color: white;
+}
+
+/* ========================================
+   Item Components
+   ======================================== */
+.mmc-item-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+  color: #6c757d;
+}
+
+.mmc-folder .mmc-item-icon {
+  color: #ffc107;
+}
+
+.mmc-item-preview {
+  width: 80px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.mmc-item-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* ========================================
+   List View
+   ======================================== */
+.mmc-list-view {
+  width: 100%;
+}
+
+.mmc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  background: #fff;
+}
+
+.mmc-table thead {
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.mmc-table th {
+  padding: 12px;
+  text-align: left;
+  font-weight: 600;
+  color: #495057;
+  border-bottom: 1px solid #dee2e6;
+  white-space: nowrap;
+}
+
+.mmc-table tbody tr {
+  transition: background-color 0.15s ease;
+  border-bottom: 1px solid #dee2e6;
+  cursor: pointer;
+}
+
+.mmc-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.mmc-table tbody tr.mmc-selected {
+  background-color: rgba(0, 123, 255, 0.1);
+  border-color: #007bff;
+}
+
+.mmc-table td {
+  padding: 10px 12px;
+  vertical-align: middle;
+}
+
+.mmc-list-thumbnail {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid #dee2e6;
+}
+
+.mmc-type-cell {
+  text-align: center;
+  width: 50px;
+}
+
+.mmc-type-cell .mm-icon {
+  font-size: 20px;
+  color: #6c757d;
+}
+
+.mmc-name-cell {
+  font-weight: 500;
+  color: #495057;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mmc-date-cell,
+.mmc-size-cell {
+  color: #6c757d;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.mmc-actions-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.mmc-actions-cell .mmc-btn {
+  margin-left: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+}
+
+.mmc-item-checkbox {
+  margin: 0;
+  cursor: pointer;
+}
+
+.mmc-item-name {
+  font-size: 12px;
+  font-weight: 500;
+  word-break: break-word;
+  margin-bottom: 4px;
+  line-height: 1.2;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.mmc-item-meta {
+  font-size: 10px;
+  color: #6c757d;
+}
+
+/* ========================================
+   Loading & Empty States
+   ======================================== */
+.mmc-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 10;
+}
+
+.mmc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.mmc-empty .mm-icon {
+  font-size: 48px;
+  opacity: 0.3;
+  margin-bottom: 16px;
+}
+
+/* ========================================
+   Footer & Actions
+   ======================================== */
+.mmc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  flex-shrink: 0;
+}
+
+.mmc-selection-info {
+  font-size: 13px;
+  color: #6c757d;
+}
+
+.mmc-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ========================================
+   Buttons
+   ======================================== */
+.mmc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 400;
+  color: #495057;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.mmc-btn:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #adb5bd;
+}
+
+.mmc-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.mmc-btn-primary {
+  color: #fff;
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.mmc-btn-primary:hover:not(:disabled) {
+  background-color: #0069d9;
+  border-color: #0062cc;
+}
+
+.mmc-btn-upload {
+  color: #fff;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.mmc-btn-upload:hover:not(:disabled) {
+  background-color: #218838;
+  border-color: #1e7e34;
+}
+
+/* ========================================
+   View Toggle
+   ======================================== */
+.mmc-view-toggle {
+  display: flex;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #ced4da;
+}
+
+.mmc-view-btn {
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid #ced4da;
+  padding: 6px 10px;
+  font-size: 14px;
+  background: #fff;
+  color: #495057;
+  transition: all 0.15s ease;
+}
+
+.mmc-view-btn:last-child {
+  border-right: none;
+}
+
+.mmc-view-btn:hover:not(.active) {
+  background-color: #f8f9fa;
+}
+
+.mmc-view-btn.active {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.mmc-view-btn.active:hover {
+  background-color: #0056b3;
+}
+
+/* ========================================
+   Selector Mode Styles
+   ======================================== */
+.mmc-selector-trigger {
+  display: flex;
+  align-items: stretch;
+  border: 2px dashed #dee2e6;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 80px;
+}
+
+.mmc-selector-trigger:hover {
+  border-color: #007bff;
+  background: #f8f9fa;
+}
+
+.mmc-selected-preview {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+}
+
+.mmc-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #6c757d;
+  width: 100%;
+}
+
+.mmc-placeholder .mm-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.mmc-selected-preview img {
+  max-width: 60px;
+  max-height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 12px;
+}
+
+.mmc-selected-icon {
+  font-size: 36px;
+  margin-right: 12px;
+  color: #6c757d;
+}
+
+.mmc-selected-name {
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.mmc-browse-btn {
+  flex-shrink: 0;
+  border-radius: 0;
+  border-left: 2px solid #dee2e6;
+  padding: 12px 16px;
+  background: #f8f9fa;
+}
+
+/* ========================================
+   Modal (for selector mode)
+   ======================================== */
+.mmc-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.mmc-modal-backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.mmc-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  max-width: 90vw;
+  max-height: 90vh;
+  width: 700px;
+  z-index: 1;
+}
+
+/* ========================================
+   Upload Zone Styles
+   ======================================== */
+.mmc-upload-zone {
+  padding: 20px;
+}
+
+.mmc-dropzone {
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 40px 20px;
+  text-align: center;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mmc-dropzone:hover,
+.mmc-dropzone.mmc-dragover {
+  border-color: #9ca3af;
+  background: #f9fafb;
+  transform: translateY(-2px);
+}
+
+.mmc-upload-icon .mm-icon {
+  font-size: 48px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.mmc-upload-text h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.mmc-upload-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.mmc-upload-progress {
+  margin-top: 16px;
+  display: none;
+}
+
+.mmc-progress-bar {
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mmc-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  width: 0;
+  transition: width 0.3s ease;
+}
+
+.mmc-upload-status {
+  margin-top: 8px;
+  text-align: center;
+  color: #6c757d;
+  font-size: 13px;
+}
+
+.mmc-upload-list {
+  margin-top: 16px;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 768px) {
+  .mmc-header,
+  .mmc-toolbar,
+  .mmc-footer {
+    padding: 8px 12px;
+  }
+
+  .mmc-content {
+    padding: 12px;
+  }
+
+  .mmc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+  }
+
+  .mmc-item {
+    padding: 8px;
+    min-height: 100px;
+  }
+
+  .mmc-item-icon {
+    font-size: 24px;
+  }
+
+  .mmc-modal-content {
+    width: 95vw;
+    margin: 10px;
+  }
+
+  .mmc-search {
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mmc-header,
+  .mmc-toolbar {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mmc-search {
+    max-width: 100%;
+    margin-left: 0;
+  }
+
+  .mmc-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mmc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+
+  .mmc-selector-trigger {
+    flex-direction: column;
+    min-height: 120px;
+  }
+
+  .mmc-browse-btn {
+    border-left: none;
+    border-top: 2px solid #dee2e6;
+  }
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+.mmc-hidden {
+  display: none !important;
+}
+
+.mmc-loading .mm-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: mmc-spin 1s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes mmc-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Integration with existing MediaManager styles
+   ======================================== */
+
+/* Use existing icon styles if available */
+.mmc-container .mm-icon {
+  display: inline-block;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* Ensure compatibility */
+.mmc-container .mm-icon-search::before,
+.mmc-container .mm-icon-home::before,
+.mmc-container .mm-icon-folder::before,
+.mmc-container .mm-icon-folder-empty::before,
+.mmc-container .mm-icon-folder-plus::before,
+.mmc-container .mm-icon-upload::before,
+.mmc-container .mm-icon-cloud-upload-alt::before,
+.mmc-container .mm-icon-file::before,
+.mmc-container .mm-icon-image::before,
+.mmc-container .mm-icon-video::before,
+.mmc-container .mm-icon-audio::before,
+.mmc-container .mm-icon-document::before,
+.mmc-container .mm-icon-pdf::before,
+.mmc-container .mm-icon-archive::before,
+.mmc-container .mm-icon-check::before {
+  font-family: 'Font Awesome 5 Free', FontAwesome, sans-serif;
+  font-weight: 900;
+}
+
+/* Fallback icons if Font Awesome is not available */
+.mmc-container .mm-icon-search::before { content: '🔍'; }
+.mmc-container .mm-icon-home::before { content: '🏠'; }
+.mmc-container .mm-icon-folder::before { content: '📁'; }
+.mmc-container .mm-icon-folder-empty::before { content: '📂'; }
+.mmc-container .mm-icon-folder-plus::before { content: '📁+'; }
+.mmc-container .mm-icon-upload::before { content: '⬆️'; }
+.mmc-container .mm-icon-cloud-upload-alt::before { content: '☁️⬆️'; }
+.mmc-container .mm-icon-file::before { content: '📄'; }
+.mmc-container .mm-icon-image::before { content: '🖼️'; }
+.mmc-container .mm-icon-video::before { content: '🎥'; }
+.mmc-container .mm-icon-audio::before { content: '🎵'; }
+.mmc-container .mm-icon-document::before { content: '📝'; }
+.mmc-container .mm-icon-pdf::before { content: '📋'; }
+.mmc-container .mm-icon-archive::before { content: '🗜️'; }
+.mmc-container .mm-icon-check::before { content: '✓'; }

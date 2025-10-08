@@ -4,9 +4,9 @@ namespace App\Models;
 
 use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
@@ -115,24 +115,24 @@ class Category extends Model
     {
         $ancestors = [];
         $category = $this;
-        
+
         while ($category->parent) {
             $ancestors[] = $category->parent;
             $category = $category->parent;
         }
-        
+
         return array_reverse($ancestors);
     }
 
     public function getDescendants(): array
     {
         $descendants = [];
-        
+
         foreach ($this->children as $child) {
             $descendants[] = $child;
             $descendants = array_merge($descendants, $child->getDescendants());
         }
-        
+
         return $descendants;
     }
 }

@@ -4,31 +4,32 @@ namespace App\Http\Controllers\Backend;
 
 use App\Models\Persistence;
 use App\Models\User;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 
 class PersistenceController extends BaseController
 {
     protected string $resource = 'persistence';
-    
+
     protected array $additionalPermissions = ['session_management_access'];
 
     public function index(Request $request)
     {
         $query = Persistence::with('user')->orderBy('created_at', 'desc');
-        
+
         // Filter by user if provided
         if ($request->filled('user_id')) {
             $query->where('user_id', $request->user_id);
         }
-        
+
         $persistences = $query->paginate(15);
+
         return view('admin.persistences.index', compact('persistences'));
     }
 
     public function destroy(Persistence $persistence)
     {
         $persistence->delete();
+
         return redirect()->route('admin.persistences.index')->with('success', 'Session record deleted successfully.');
     }
 
@@ -40,7 +41,7 @@ class PersistenceController extends BaseController
         $persistences = Persistence::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->paginate(15);
-            
+
         return view('admin.persistences.by-user', compact('persistences', 'user'));
     }
 
@@ -51,9 +52,9 @@ class PersistenceController extends BaseController
     {
         $days = $request->input('days', 30);
         $cutoffDate = now()->subDays($days);
-        
+
         $deleted = Persistence::where('created_at', '<', $cutoffDate)->delete();
-            
+
         return redirect()->route('admin.persistences.index')
             ->with('success', "Cleaned up {$deleted} old session records.");
     }
@@ -65,7 +66,7 @@ class PersistenceController extends BaseController
     {
         $count = Persistence::where('user_id', $user->id)->count();
         Persistence::where('user_id', $user->id)->delete();
-        
+
         return redirect()->route('admin.persistences.index')
             ->with('success', "Revoked {$count} sessions for user: {$user->full_name}.");
     }
@@ -84,7 +85,7 @@ class PersistenceController extends BaseController
             'unique_users_week' => Persistence::where('created_at', '>=', now()->startOfWeek())->distinct('user_id')->count(),
             'unique_users_month' => Persistence::where('created_at', '>=', now()->startOfMonth())->distinct('user_id')->count(),
         ];
-        
+
         return view('admin.persistences.statistics', compact('stats'));
     }
 }

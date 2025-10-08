@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Carbon\Carbon;
 
 class FlashSaleProduct extends Model
 {
@@ -45,7 +45,7 @@ class FlashSaleProduct extends Model
     public function scopeActive($query)
     {
         return $query->where('end_date', '>=', now())
-                    ->where('qty', '>', 0);
+            ->where('qty', '>', 0);
     }
 
     public function scopeExpired($query)
@@ -61,7 +61,7 @@ class FlashSaleProduct extends Model
     public function scopeAvailable($query)
     {
         return $query->where('end_date', '>=', now())
-                    ->where('qty', '>', 0);
+            ->where('qty', '>', 0);
     }
 
     public function scopeOrdered($query)
@@ -81,7 +81,7 @@ class FlashSaleProduct extends Model
 
     public function isActive(): bool
     {
-        return !$this->isExpired() && !$this->isSoldOut();
+        return ! $this->isExpired() && ! $this->isSoldOut();
     }
 
     public function isExpired(): bool
@@ -111,8 +111,8 @@ class FlashSaleProduct extends Model
     public function getRemainingTimeInHours(): int
     {
         $remainingTime = $this->getRemainingTime();
-        
-        if (!$remainingTime) {
+
+        if (! $remainingTime) {
             return 0;
         }
 
@@ -122,8 +122,8 @@ class FlashSaleProduct extends Model
     public function getRemainingTimeInMinutes(): int
     {
         $remainingTime = $this->getRemainingTime();
-        
-        if (!$remainingTime) {
+
+        if (! $remainingTime) {
             return 0;
         }
 
@@ -132,7 +132,7 @@ class FlashSaleProduct extends Model
 
     public function getDiscountAmount(): float
     {
-        if (!$this->product) {
+        if (! $this->product) {
             return 0;
         }
 
@@ -141,11 +141,12 @@ class FlashSaleProduct extends Model
 
     public function getDiscountPercentage(): float
     {
-        if (!$this->product || $this->product->price <= 0) {
+        if (! $this->product || $this->product->price <= 0) {
             return 0;
         }
 
         $discount = $this->getDiscountAmount();
+
         return round(($discount / $this->product->price) * 100, 2);
     }
 
@@ -175,13 +176,13 @@ class FlashSaleProduct extends Model
 
     public function purchaseQuantity(int $qty, Order $order): bool
     {
-        if (!$this->canPurchase($qty)) {
+        if (! $this->canPurchase($qty)) {
             return false;
         }
 
         // Add to pivot table
         $this->orders()->attach($order->id, ['qty' => $qty]);
-        
+
         return true;
     }
 

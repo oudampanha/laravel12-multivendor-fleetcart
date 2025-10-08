@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
 use App\Models\Variation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -81,16 +80,16 @@ class VariationController extends BaseController
             'values.*.label' => 'required_with:values|string|max:255',
             'values.*.value' => 'nullable|string|max:255',
             'values.*.color' => 'nullable|string|max:7',
-            'values.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'values.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->except(['name', 'values']);
-        
+
         // Handle boolean fields
         $data['is_global'] = $request->has('is_global') ? 1 : 0;
 
         // Set position if not provided
-        if (!isset($data['position'])) {
+        if (! isset($data['position'])) {
             $maxPosition = Variation::max('position');
             $data['position'] = ($maxPosition ?? 0) + 1;
         }
@@ -113,11 +112,12 @@ class VariationController extends BaseController
                 'message' => '🎉 Variation created successfully!',
                 'title' => 'Success',
                 'type' => 'success',
-                'variation' => $variation->load('variationValues')
+                'variation' => $variation->load('variationValues'),
             ]);
         }
 
         sweetalert()->success('Variation created successfully!');
+
         return redirect()->route('admin.variations.index');
     }
 
@@ -132,10 +132,10 @@ class VariationController extends BaseController
             // Load translations for the response
             $variationData = $variation->toArray();
             $variationData['name'] = $variation->getTranslation('name');
-            
+
             return response()->json([
                 'success' => true,
-                'variation' => $variationData
+                'variation' => $variationData,
             ]);
         }
 
@@ -153,19 +153,19 @@ class VariationController extends BaseController
             // Load translations for the response
             $variationData = $variation->toArray();
             $variationData['name'] = $variation->getTranslation('name');
-            
+
             // Format values for the frontend
             $variationData['values'] = $variation->variationValues->map(function ($value) {
                 return [
                     'value' => $value->value,
                     'color' => $value->color_value ?? null,
-                    'image' => $value->image_path ? asset('storage/' . $value->image_path) : null
+                    'image' => $value->image_path ? asset('storage/'.$value->image_path) : null,
                 ];
             });
-            
+
             return response()->json([
                 'success' => true,
-                'variation' => $variationData
+                'variation' => $variationData,
             ]);
         }
 
@@ -179,7 +179,7 @@ class VariationController extends BaseController
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'uid' => 'required|string|unique:variations,uid,' . $variation->id,
+            'uid' => 'required|string|unique:variations,uid,'.$variation->id,
             'type' => 'required|string|in:text,color,image',
             'is_global' => 'boolean',
             'position' => 'nullable|integer|min:0',
@@ -187,11 +187,11 @@ class VariationController extends BaseController
             'values.*.label' => 'required_with:values|string|max:255',
             'values.*.value' => 'nullable|string|max:255',
             'values.*.color' => 'nullable|string|max:7',
-            'values.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'values.*.image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $data = $request->except(['name', 'values']);
-        
+
         // Handle boolean fields
         $data['is_global'] = $request->has('is_global') ? 1 : 0;
 
@@ -216,11 +216,12 @@ class VariationController extends BaseController
                 'message' => '✅ Variation updated successfully!',
                 'title' => 'Updated',
                 'type' => 'success',
-                'variation' => $variation->load('variationValues')
+                'variation' => $variation->load('variationValues'),
             ]);
         }
 
         sweetalert()->success('Variation updated successfully!');
+
         return redirect()->route('admin.variations.index');
     }
 
@@ -236,11 +237,12 @@ class VariationController extends BaseController
                     'success' => false,
                     'message' => 'Cannot delete variation that has values!',
                     'title' => 'Error',
-                    'type' => 'error'
+                    'type' => 'error',
                 ], 422);
             }
 
             sweetalert()->error('Cannot delete variation that has values!');
+
             return redirect()->route('admin.variations.index');
         }
 
@@ -251,11 +253,12 @@ class VariationController extends BaseController
                 'success' => true,
                 'message' => '🗑️ Variation deleted successfully!',
                 'title' => 'Deleted',
-                'type' => 'success'
+                'type' => 'success',
             ]);
         }
 
         sweetalert()->success('Variation deleted successfully!');
+
         return redirect()->route('admin.variations.index');
     }
 
@@ -268,10 +271,10 @@ class VariationController extends BaseController
 
         $variations = Variation::where(function ($q) use ($query) {
             $q->where('uid', 'like', "%{$query}%")
-              ->orWhereHas('translations', function ($subQ) use ($query) {
-                  $subQ->where('field', 'name')
-                       ->where('value', 'like', "%{$query}%");
-              });
+                ->orWhereHas('translations', function ($subQ) use ($query) {
+                    $subQ->where('field', 'name')
+                        ->where('value', 'like', "%{$query}%");
+                });
         })->paginate(15);
 
         return view('admin.variations.index', compact('variations', 'query'));
@@ -283,18 +286,19 @@ class VariationController extends BaseController
     public function toggleGlobal(Request $request, Variation $variation)
     {
         $variation->update([
-            'is_global' => !$variation->is_global
+            'is_global' => ! $variation->is_global,
         ]);
 
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
                 'message' => 'Global status updated successfully!',
-                'is_global' => $variation->is_global
+                'is_global' => $variation->is_global,
             ]);
         }
 
         sweetalert()->success('Global status updated successfully!');
+
         return redirect()->back();
     }
 
@@ -308,7 +312,7 @@ class VariationController extends BaseController
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'values' => $values
+                'values' => $values,
             ]);
         }
 
@@ -327,7 +331,7 @@ class VariationController extends BaseController
         ]);
 
         $data = $request->only(['label', 'color', 'image_url']);
-        
+
         // Set position
         $maxPosition = $variation->variationValues()->max('position');
         $data['position'] = ($maxPosition ?? 0) + 1;
@@ -338,11 +342,12 @@ class VariationController extends BaseController
             return response()->json([
                 'success' => true,
                 'message' => 'Value added successfully!',
-                'value' => $variationValue
+                'value' => $variationValue,
             ]);
         }
 
         sweetalert()->success('Value added successfully!');
+
         return redirect()->back();
     }
 
@@ -357,11 +362,12 @@ class VariationController extends BaseController
         if ($request->ajax()) {
             return response()->json([
                 'success' => true,
-                'message' => 'Value deleted successfully!'
+                'message' => 'Value deleted successfully!',
             ]);
         }
 
         sweetalert()->success('Value deleted successfully!');
+
         return redirect()->back();
     }
 
@@ -373,7 +379,7 @@ class VariationController extends BaseController
         $request->validate([
             'values' => 'required|array',
             'values.*.id' => 'required|exists:variation_values,id',
-            'values.*.position' => 'required|integer|min:0'
+            'values.*.position' => 'required|integer|min:0',
         ]);
 
         foreach ($request->values as $valueData) {
@@ -383,7 +389,7 @@ class VariationController extends BaseController
 
         return response()->json([
             'success' => true,
-            'message' => 'Values reordered successfully!'
+            'message' => 'Values reordered successfully!',
         ]);
     }
 
@@ -410,18 +416,18 @@ class VariationController extends BaseController
                         $data['color_value'] = $valueData['color'];
                     }
                     break;
-                    
+
                 case 'text':
                     if (isset($valueData['value'])) {
                         $data['text_value'] = $valueData['value'];
                     }
                     break;
-                    
+
                 case 'image':
                     // Handle image upload
                     if (isset($valueData['image']) && $request->hasFile("values.{$index}.image")) {
                         $image = $request->file("values.{$index}.image");
-                        $imageName = time() . '_' . $index . '_' . $image->getClientOriginalName();
+                        $imageName = time().'_'.$index.'_'.$image->getClientOriginalName();
                         $imagePath = $image->storeAs('variation-values', $imageName, 'public');
                         $data['image_path'] = $imagePath;
                     }

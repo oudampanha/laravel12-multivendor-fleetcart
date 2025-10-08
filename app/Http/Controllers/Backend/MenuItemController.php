@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\MenuItem;
-use App\Models\Menu;
 use App\Models\Category;
+use App\Models\Menu;
+use App\Models\MenuItem;
 use App\Models\Page;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 
 class MenuItemController extends BaseController
 {
     protected string $resource = 'menu_item';
-    
+
     protected array $additionalPermissions = ['menu_item_management_access'];
 
     public function index()
     {
         $menuItems = MenuItem::with(['menu', 'parent', 'category', 'page'])
-                            ->orderBy('position', 'asc')
-                            ->paginate(15);
+            ->orderBy('position', 'asc')
+            ->paginate(15);
+
         return view('admin.menu_items.index', compact('menuItems'));
     }
 
@@ -29,6 +29,7 @@ class MenuItemController extends BaseController
         $menuItems = MenuItem::all();
         $categories = Category::all();
         $pages = Page::all();
+
         return view('admin.menu_items.create', compact('menus', 'menuItems', 'categories', 'pages'));
     }
 
@@ -46,7 +47,7 @@ class MenuItemController extends BaseController
             'position' => 'nullable|integer|min:0',
             'is_root' => 'boolean',
             'is_fluid' => 'boolean',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
         ]);
 
         MenuItem::create($validated);
@@ -57,6 +58,7 @@ class MenuItemController extends BaseController
     public function show(MenuItem $menuItem)
     {
         $menuItem->load(['menu', 'parent', 'category', 'page']);
+
         return view('admin.menu_items.show', compact('menuItem'));
     }
 
@@ -66,6 +68,7 @@ class MenuItemController extends BaseController
         $menuItems = MenuItem::where('id', '!=', $menuItem->id)->get();
         $categories = Category::all();
         $pages = Page::all();
+
         return view('admin.menu_items.edit', compact('menuItem', 'menus', 'menuItems', 'categories', 'pages'));
     }
 
@@ -83,7 +86,7 @@ class MenuItemController extends BaseController
             'position' => 'nullable|integer|min:0',
             'is_root' => 'boolean',
             'is_fluid' => 'boolean',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
         ]);
 
         $menuItem->update($validated);

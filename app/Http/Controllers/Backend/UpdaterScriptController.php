@@ -3,33 +3,32 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\UpdaterScript;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Storage;
 
 class UpdaterScriptController extends BaseController
 {
     protected string $resource = 'updater_script';
-    
+
     protected array $additionalPermissions = ['system_management_access'];
 
     public function index(Request $request)
     {
         $query = UpdaterScript::orderBy('version', 'desc');
-        
+
         // Filter by status if provided
         if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
-        
+
         // Filter by type if provided
         if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
-        
+
         $updaterScripts = $query->paginate(15);
+
         return view('admin.updater-scripts.index', compact('updaterScripts'));
     }
 
@@ -39,11 +38,11 @@ class UpdaterScriptController extends BaseController
         if ($updaterScript->status === 'running') {
             return redirect()->back()->with('error', 'Script is already running.');
         }
-        
+
         if ($updaterScript->status === 'completed') {
             return redirect()->back()->with('error', 'Script has already been completed.');
         }
-        
+
         try {
             // Mark script as running
             $updaterScript->update([
@@ -51,30 +50,30 @@ class UpdaterScriptController extends BaseController
                 'started_at' => now(),
                 'output' => 'Script execution started...',
             ]);
-            
+
             $output = '';
             $exitCode = 0;
-            
+
             // Execute the script based on its type
             switch ($updaterScript->type) {
                 case 'migration':
                     $exitCode = Artisan::call('migrate', ['--force' => true]);
                     $output = Artisan::output();
                     break;
-                    
+
                 case 'seeder':
                     $exitCode = Artisan::call('db:seed', [
                         '--class' => $updaterScript->script_class,
-                        '--force' => true
+                        '--force' => true,
                     ]);
                     $output = Artisan::output();
                     break;
-                    
+
                 case 'command':
                     $exitCode = Artisan::call($updaterScript->script_command);
                     $output = Artisan::output();
                     break;
-                    
+
                 case 'php':
                     // Execute PHP script file
                     if ($updaterScript->script_file && file_exists($updaterScript->script_file)) {
@@ -82,14 +81,14 @@ class UpdaterScriptController extends BaseController
                         include $updaterScript->script_file;
                         $output = ob_get_clean();
                     } else {
-                        throw new \Exception('Script file not found: ' . $updaterScript->script_file);
+                        throw new \Exception('Script file not found: '.$updaterScript->script_file);
                     }
                     break;
-                    
+
                 default:
-                    throw new \Exception('Unknown script type: ' . $updaterScript->type);
+                    throw new \Exception('Unknown script type: '.$updaterScript->type);
             }
-            
+
             // Mark script as completed or failed
             $status = $exitCode === 0 ? 'completed' : 'failed';
             $updaterScript->update([
@@ -98,15 +97,15 @@ class UpdaterScriptController extends BaseController
                 'output' => $output,
                 'exit_code' => $exitCode,
             ]);
-            
+
             // Log the execution
-            Log::info("Updater script executed", [
+            Log::info('Updater script executed', [
                 'script_id' => $updaterScript->id,
                 'version' => $updaterScript->version,
                 'status' => $status,
                 'exit_code' => $exitCode,
             ]);
-            
+
             if ($status === 'completed') {
                 return redirect()->route('admin.updater-scripts.index')
                     ->with('success', 'Script executed successfully.');
@@ -114,24 +113,24 @@ class UpdaterScriptController extends BaseController
                 return redirect()->route('admin.updater-scripts.index')
                     ->with('error', 'Script execution failed. Check the output for details.');
             }
-            
+
         } catch (\Exception $e) {
             // Mark script as failed
             $updaterScript->update([
                 'status' => 'failed',
                 'completed_at' => now(),
-                'output' => 'Error: ' . $e->getMessage(),
+                'output' => 'Error: '.$e->getMessage(),
                 'exit_code' => 1,
             ]);
-            
-            Log::error("Updater script execution failed", [
+
+            Log::error('Updater script execution failed', [
                 'script_id' => $updaterScript->id,
                 'version' => $updaterScript->version,
                 'error' => $e->getMessage(),
             ]);
-            
+
             return redirect()->route('admin.updater-scripts.index')
-                ->with('error', 'Script execution failed: ' . $e->getMessage());
+                ->with('error', 'Script execution failed: '.$e->getMessage());
         }
     }
 
@@ -143,7 +142,7 @@ class UpdaterScriptController extends BaseController
         $logs = UpdaterScript::whereNotNull('started_at')
             ->orderBy('started_at', 'desc')
             ->paginate(15);
-            
+
         return view('admin.updater-scripts.logs', compact('logs'));
     }
 
@@ -154,12 +153,12 @@ class UpdaterScriptController extends BaseController
     {
         $days = $request->input('days', 30);
         $cutoffDate = now()->subDays($days);
-        
+
         $deleted = UpdaterScript::where('status', 'completed')
             ->where('completed_at', '<', $cutoffDate)
             ->whereNotNull('output')
             ->update(['output' => null]);
-            
+
         return redirect()->route('admin.updater-scripts.logs')
             ->with('success', "Cleaned up logs for {$deleted} completed scripts.");
     }
@@ -172,7 +171,7 @@ class UpdaterScriptController extends BaseController
         $pendingScripts = UpdaterScript::where('status', 'pending')
             ->orderBy('version', 'asc')
             ->paginate(15);
-            
+
         return view('admin.updater-scripts.pending', compact('pendingScripts'));
     }
 
@@ -184,7 +183,7 @@ class UpdaterScriptController extends BaseController
         $completedScripts = UpdaterScript::where('status', 'completed')
             ->orderBy('completed_at', 'desc')
             ->paginate(15);
-            
+
         return view('admin.updater-scripts.completed', compact('completedScripts'));
     }
 
@@ -196,7 +195,7 @@ class UpdaterScriptController extends BaseController
         $failedScripts = UpdaterScript::where('status', 'failed')
             ->orderBy('started_at', 'desc')
             ->paginate(15);
-            
+
         return view('admin.updater-scripts.failed', compact('failedScripts'));
     }
 
@@ -208,7 +207,7 @@ class UpdaterScriptController extends BaseController
         if ($updaterScript->status === 'running') {
             return redirect()->back()->with('error', 'Cannot reset a running script.');
         }
-        
+
         $updaterScript->update([
             'status' => 'pending',
             'started_at' => null,
@@ -216,7 +215,7 @@ class UpdaterScriptController extends BaseController
             'output' => null,
             'exit_code' => null,
         ]);
-        
+
         return redirect()->route('admin.updater-scripts.index')
             ->with('success', 'Script has been reset to pending status.');
     }
@@ -229,9 +228,9 @@ class UpdaterScriptController extends BaseController
         if (empty($updaterScript->output)) {
             return redirect()->back()->with('error', 'No output available for this script.');
         }
-        
+
         $filename = "updater_script_{$updaterScript->version}_{$updaterScript->id}_output.txt";
-        
+
         return response()->streamDownload(function () use ($updaterScript) {
             echo $updaterScript->output;
         }, $filename, [
@@ -247,14 +246,14 @@ class UpdaterScriptController extends BaseController
         $pendingScripts = UpdaterScript::where('status', 'pending')
             ->orderBy('version', 'asc')
             ->get();
-            
+
         if ($pendingScripts->isEmpty()) {
             return redirect()->back()->with('info', 'No pending scripts to run.');
         }
-        
+
         $executed = 0;
         $failed = 0;
-        
+
         foreach ($pendingScripts as $script) {
             try {
                 // Use a simple approach to run the script
@@ -267,19 +266,19 @@ class UpdaterScriptController extends BaseController
                 }
             } catch (\Exception $e) {
                 $failed++;
-                Log::error("Batch script execution failed", [
+                Log::error('Batch script execution failed', [
                     'script_id' => $script->id,
                     'error' => $e->getMessage(),
                 ]);
                 break;
             }
         }
-        
+
         $message = "Executed {$executed} scripts successfully.";
         if ($failed > 0) {
             $message .= " {$failed} scripts failed.";
         }
-        
+
         return redirect()->route('admin.updater-scripts.index')
             ->with($failed > 0 ? 'warning' : 'success', $message);
     }
@@ -290,11 +289,11 @@ class UpdaterScriptController extends BaseController
     private function executeScript(UpdaterScript $script)
     {
         $script->update(['status' => 'running', 'started_at' => now()]);
-        
+
         try {
             $exitCode = 0;
             $output = '';
-            
+
             switch ($script->type) {
                 case 'migration':
                     $exitCode = Artisan::call('migrate', ['--force' => true]);
@@ -304,9 +303,9 @@ class UpdaterScriptController extends BaseController
                     $exitCode = Artisan::call($script->script_command);
                     $output = Artisan::output();
                     break;
-                // Add other types as needed
+                    // Add other types as needed
             }
-            
+
             $status = $exitCode === 0 ? 'completed' : 'failed';
             $script->update([
                 'status' => $status,
@@ -314,15 +313,16 @@ class UpdaterScriptController extends BaseController
                 'output' => $output,
                 'exit_code' => $exitCode,
             ]);
-            
+
             return $status === 'completed';
         } catch (\Exception $e) {
             $script->update([
                 'status' => 'failed',
                 'completed_at' => now(),
-                'output' => 'Error: ' . $e->getMessage(),
+                'output' => 'Error: '.$e->getMessage(),
                 'exit_code' => 1,
             ]);
+
             return false;
         }
     }

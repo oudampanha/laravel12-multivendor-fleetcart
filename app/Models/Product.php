@@ -5,13 +5,13 @@ namespace App\Models;
 use App\Traits\HasTranslations;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use SoftDeletes, HasTranslations;
+    use HasTranslations, SoftDeletes;
 
     protected $fillable = [
         'vendor_id',
@@ -199,9 +199,9 @@ class Product extends Model
     public function scopeFeatured($query)
     {
         return $query->whereNotNull('new_from')
-                    ->whereNotNull('new_to')
-                    ->where('new_from', '<=', now())
-                    ->where('new_to', '>=', now());
+            ->whereNotNull('new_to')
+            ->where('new_from', '<=', now())
+            ->where('new_to', '>=', now());
     }
 
     public function getSellingPriceAttribute()
@@ -220,7 +220,7 @@ class Product extends Model
         }
 
         $now = now();
-        
+
         if ($this->special_price_start && $this->special_price_start > $now) {
             return false;
         }
@@ -234,7 +234,7 @@ class Product extends Model
 
     public function getSpecialPrice()
     {
-        if (!$this->hasSpecialPrice()) {
+        if (! $this->hasSpecialPrice()) {
             return $this->price;
         }
 
@@ -247,7 +247,7 @@ class Product extends Model
 
     public function getDiscountPercentage(): float
     {
-        if (!$this->hasSpecialPrice() || $this->price <= 0) {
+        if (! $this->hasSpecialPrice() || $this->price <= 0) {
             return 0;
         }
 
@@ -256,7 +256,7 @@ class Product extends Model
 
     public function isInStock(): bool
     {
-        if (!$this->manage_stock) {
+        if (! $this->manage_stock) {
             return $this->in_stock;
         }
 
@@ -281,7 +281,7 @@ class Product extends Model
     public function isNew(): bool
     {
         $now = now();
-        
+
         return $this->new_from && $this->new_to &&
                $this->new_from <= $now &&
                $this->new_to >= $now;

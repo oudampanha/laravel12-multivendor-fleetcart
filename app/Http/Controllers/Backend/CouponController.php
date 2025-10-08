@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Backend\BaseController;
-use App\Models\Coupon;
-use App\Models\Vendor;
 use App\Models\Category;
+use App\Models\Coupon;
 use App\Models\Product;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 
 class CouponController extends BaseController
@@ -17,9 +16,11 @@ class CouponController extends BaseController
     {
         parent::__construct();
     }
+
     public function index()
     {
         $coupons = Coupon::with('vendor')->paginate(15);
+
         return view('admin.coupons.index', compact('coupons'));
     }
 
@@ -28,7 +29,7 @@ class CouponController extends BaseController
         $vendors = Vendor::where('is_active', true)->get();
         $categories = Category::where('is_active', true)->get();
         $products = Product::where('is_active', true)->get();
-        
+
         return view('admin.coupons.create', compact('vendors', 'categories', 'products'));
     }
 
@@ -46,7 +47,7 @@ class CouponController extends BaseController
             'usage_limit_per_customer' => 'nullable|integer|min:1',
             'is_active' => 'boolean',
             'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after:start_date'
+            'end_date' => 'nullable|date|after:start_date',
         ]);
 
         $coupon = Coupon::create($request->all());
@@ -66,6 +67,7 @@ class CouponController extends BaseController
     public function show(Coupon $coupon)
     {
         $coupon->load(['vendor', 'categories', 'products']);
+
         return view('admin.coupons.show', compact('coupon'));
     }
 
@@ -74,7 +76,7 @@ class CouponController extends BaseController
         $vendors = Vendor::where('is_active', true)->get();
         $categories = Category::where('is_active', true)->get();
         $products = Product::where('is_active', true)->get();
-        
+
         return view('admin.coupons.edit', compact('coupon', 'vendors', 'categories', 'products'));
     }
 
@@ -82,7 +84,7 @@ class CouponController extends BaseController
     {
         $request->validate([
             'vendor_id' => 'nullable|exists:vendors,id',
-            'code' => 'required|string|unique:coupons,code,' . $coupon->id,
+            'code' => 'required|string|unique:coupons,code,'.$coupon->id,
             'value' => 'nullable|numeric|min:0',
             'is_percent' => 'boolean',
             'free_shipping' => 'boolean',
@@ -92,7 +94,7 @@ class CouponController extends BaseController
             'usage_limit_per_customer' => 'nullable|integer|min:1',
             'is_active' => 'boolean',
             'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after:start_date'
+            'end_date' => 'nullable|date|after:start_date',
         ]);
 
         $coupon->update($request->all());

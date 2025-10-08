@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\OtpVerification;
-use App\Http\Controllers\Backend\BaseController;
 use Illuminate\Http\Request;
 
 class OtpVerificationController extends BaseController
 {
     protected string $resource = 'otp_verification';
-    
+
     protected array $additionalPermissions = ['otp_verification_management_access'];
 
     public function index()
     {
         $otpVerifications = OtpVerification::orderBy('created_at', 'desc')->paginate(15);
+
         return view('admin.otp_verifications.index', compact('otpVerifications'));
     }
 
@@ -29,7 +29,7 @@ class OtpVerificationController extends BaseController
             'email' => 'required|email',
             'otp' => 'required|string|size:6',
             'expires_at' => 'required|date',
-            'is_used' => 'boolean'
+            'is_used' => 'boolean',
         ]);
 
         OtpVerification::create($validated);
@@ -53,7 +53,7 @@ class OtpVerificationController extends BaseController
             'email' => 'required|email',
             'otp' => 'required|string|size:6',
             'expires_at' => 'required|date',
-            'is_used' => 'boolean'
+            'is_used' => 'boolean',
         ]);
 
         $otpVerification->update($validated);
