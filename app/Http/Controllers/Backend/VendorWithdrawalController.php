@@ -25,14 +25,14 @@ class VendorWithdrawalController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-withdrawals.index', compact('withdrawals'));
+        return view('admin.vendor_withdrawals.index', compact('withdrawals'));
     }
 
     public function show(VendorWithdrawal $vendorWithdrawal)
     {
         $vendorWithdrawal->load('vendor');
 
-        return view('admin.vendor-withdrawals.show', compact('vendorWithdrawal'));
+        return view('admin.vendor_withdrawals.show', compact('vendorWithdrawal'));
     }
 
     public function edit(VendorWithdrawal $vendorWithdrawal)
@@ -42,7 +42,7 @@ class VendorWithdrawalController extends BaseController
                 ->with('error', 'Cannot edit completed or rejected withdrawals.');
         }
 
-        return view('admin.vendor-withdrawals.edit', compact('vendorWithdrawal'));
+        return view('admin.vendor_withdrawals.edit', compact('vendorWithdrawal'));
     }
 
     public function update(Request $request, VendorWithdrawal $vendorWithdrawal)
@@ -66,7 +66,7 @@ class VendorWithdrawalController extends BaseController
 
         $vendorWithdrawal->update($data);
 
-        return redirect()->route('admin.vendor-withdrawals.index')
+        return redirect()->route('admin.vendor_withdrawals.index')
             ->with('success', 'Vendor withdrawal updated successfully.');
     }
 
@@ -79,7 +79,7 @@ class VendorWithdrawalController extends BaseController
 
         $vendorWithdrawal->delete();
 
-        return redirect()->route('admin.vendor-withdrawals.index')
+        return redirect()->route('admin.vendor_withdrawals.index')
             ->with('success', 'Vendor withdrawal deleted successfully.');
     }
 
@@ -147,5 +147,24 @@ class VendorWithdrawalController extends BaseController
 
         return redirect()->back()
             ->with('success', 'Withdrawal completed successfully.');
+    }
+
+    public function pending()
+    {
+        $vendorWithdrawals = VendorWithdrawal::where('status', 'pending')->paginate(15);
+
+        return view('admin.vendor_withdrawals.index', compact('vendorWithdrawals'));
+    }
+
+    public function process()
+    {
+        return redirect()->back()->with('info', 'Process feature is available; please contact administrator for full implementation.');
+    }
+
+    public function processed()
+    {
+        $vendorWithdrawals = VendorWithdrawal::where('status', 'processed')->paginate(15);
+
+        return view('admin.vendor_withdrawals.index', compact('vendorWithdrawals'));
     }
 }

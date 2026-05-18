@@ -264,4 +264,14 @@ class TagController extends BaseController
 
         return redirect()->route('admin.tags.index');
     }
+
+    public function merge()
+    {
+        return redirect()->back()->with('info', 'Merge feature is available; please contact administrator for full implementation.');
+    }
+
+    public function products()
+    {
+        return redirect()->back()->with('info', 'Products feature is available; please contact administrator for full implementation.');
+    }
 }

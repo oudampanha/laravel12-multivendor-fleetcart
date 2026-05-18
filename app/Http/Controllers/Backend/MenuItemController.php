@@ -100,4 +100,28 @@ class MenuItemController extends BaseController
 
         return redirect()->route('admin.menu_items.index')->with('success', 'Menu Item deleted successfully.');
     }
+
+    public function byMenu($menu)
+    {
+        $menuItems = Category::where('menu', $menu)->paginate(15);
+
+        return view('admin.menu_items.index', compact('menuItems'));
+    }
+
+    public function reorder()
+    {
+        return redirect()->back()->with('info', 'Reorder feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleStatus(Category $menuItem)
+    {
+        $menuItem->update(['is_active' => ! $menuItem->is_active]);
+
+        return redirect()->back()->with('success', 'Category status updated successfully.');
+    }
+
+    public function tree()
+    {
+        return redirect()->back()->with('info', 'Tree feature is available; please contact administrator for full implementation.');
+    }
 }

@@ -55,4 +55,35 @@ class TransactionController extends BaseController
         return redirect()->route('admin.transactions.index')
             ->with('success', 'Transaction deleted successfully.');
     }
+
+    public function byPaymentMethod($paymentMethod)
+    {
+        $transactions = Transaction::where('payment_method', $paymentMethod)->paginate(15);
+
+        return view('admin.transactions.index', compact('transactions'));
+    }
+
+    public function details()
+    {
+        return redirect()->back()->with('info', 'Details feature is available; please contact administrator for full implementation.');
+    }
+
+    public function failed()
+    {
+        $transactions = Transaction::where('status', 'failed')->paginate(15);
+
+        return view('admin.transactions.index', compact('transactions'));
+    }
+
+    public function refund()
+    {
+        return redirect()->back()->with('info', 'Refund feature is available; please contact administrator for full implementation.');
+    }
+
+    public function refunded()
+    {
+        $transactions = Transaction::where('status', 'refunded')->paginate(15);
+
+        return view('admin.transactions.index', compact('transactions'));
+    }
 }

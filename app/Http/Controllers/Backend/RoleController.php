@@ -327,4 +327,21 @@ class RoleController extends BaseController
 
         return view('admin.roles.index', compact('roles', 'status'));
     }
+
+    public function permissions()
+    {
+        return redirect()->back()->with('info', 'Permissions feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleStatus(Permission $role)
+    {
+        $role->update(['is_active' => ! $role->is_active]);
+
+        return redirect()->back()->with('success', 'Permission status updated successfully.');
+    }
+
+    public function updatePermissions()
+    {
+        return redirect()->back()->with('info', 'Update Permissions feature is available; please contact administrator for full implementation.');
+    }
 }

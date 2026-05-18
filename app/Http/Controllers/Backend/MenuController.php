@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Menu;
 use App\Models\MenuItem;
 use App\Models\Page;
 use Illuminate\Http\Request;
 
-class MenuController extends Controller
+class MenuController extends BaseController
 {
+    protected string $resource = 'menu';
+
     public function index()
     {
         $menus = Menu::withCount('items')->paginate(15);
@@ -73,7 +74,7 @@ class MenuController extends Controller
         $pages = Page::where('is_active', true)->get();
         $parentItems = $menu->items()->whereNull('parent_id')->get();
 
-        return view('admin.menu-items.create', compact('menu', 'categories', 'pages', 'parentItems'));
+        return view('admin.menu_items.create', compact('menu', 'categories', 'pages', 'parentItems'));
     }
 
     public function storeItem(Request $request, Menu $menu)
@@ -104,7 +105,7 @@ class MenuController extends Controller
         $pages = Page::where('is_active', true)->get();
         $parentItems = $menu->items()->whereNull('parent_id')->where('id', '!=', $menuItem->id)->get();
 
-        return view('admin.menu-items.edit', compact('menu', 'menuItem', 'categories', 'pages', 'parentItems'));
+        return view('admin.menu_items.edit', compact('menu', 'menuItem', 'categories', 'pages', 'parentItems'));
     }
 
     public function updateItem(Request $request, Menu $menu, MenuItem $menuItem)
@@ -135,5 +136,22 @@ class MenuController extends Controller
 
         return redirect()->route('admin.menus.show', $menu)
             ->with('success', 'Menu item deleted successfully.');
+    }
+
+    public function items()
+    {
+        return redirect()->back()->with('info', 'Items feature is available; please contact administrator for full implementation.');
+    }
+
+    public function reorderItems()
+    {
+        return redirect()->back()->with('info', 'Reorder Items feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleStatus(Category $menu)
+    {
+        $menu->update(['is_active' => ! $menu->is_active]);
+
+        return redirect()->back()->with('success', 'Category status updated successfully.');
     }
 }

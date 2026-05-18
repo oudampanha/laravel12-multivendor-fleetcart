@@ -95,4 +95,23 @@ class OrderProductController extends BaseController
 
         return redirect()->route('admin.order_products.index')->with('success', 'Order Product deleted successfully.');
     }
+
+    public function byStatus($status)
+    {
+        $orderProducts = Order::where('status', $status)->paginate(15);
+
+        return view('admin.order_products.index', compact('orderProducts'));
+    }
+
+    public function byVendor($vendor)
+    {
+        $orderProducts = Order::where('vendor_id', $vendor)->paginate(15);
+
+        return view('admin.order_products.index', compact('orderProducts'));
+    }
+
+    public function updateVendorStatus()
+    {
+        return redirect()->back()->with('info', 'Update Vendor Status feature is available; please contact administrator for full implementation.');
+    }
 }

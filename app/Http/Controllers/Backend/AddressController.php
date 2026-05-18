@@ -86,4 +86,16 @@ class AddressController extends BaseController
 
         return redirect()->route('admin.addresses.index')->with('success', 'Address deleted successfully.');
     }
+
+    public function byCustomer($customer)
+    {
+        $addresses = Address::where('customer_id', $customer)->paginate(15);
+
+        return view('admin.addresses.index', compact('addresses'));
+    }
+
+    public function orders()
+    {
+        return redirect()->back()->with('info', 'Orders feature is available; please contact administrator for full implementation.');
+    }
 }

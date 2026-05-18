@@ -67,4 +67,11 @@ class OtpVerificationController extends BaseController
 
         return redirect()->route('admin.otp_verifications.index')->with('success', 'OTP Verification deleted successfully.');
     }
+
+    public function cleanup()
+    {
+        $deleted = OtpVerification::where('created_at', '<', now()->subDays(30))->delete();
+
+        return redirect()->back()->with('success', "Cleanup complete. Removed {$deleted} records.");
+    }
 }

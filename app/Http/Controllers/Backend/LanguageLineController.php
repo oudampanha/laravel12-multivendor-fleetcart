@@ -34,7 +34,7 @@ class LanguageLineController extends BaseController
         $languageLines = $query->paginate(15);
         $groups = LanguageLine::distinct('group')->pluck('group')->sort();
 
-        return view('admin.language-lines.index', compact('languageLines', 'groups'));
+        return view('admin.language_lines.index', compact('languageLines', 'groups'));
     }
 
     public function create()
@@ -42,7 +42,7 @@ class LanguageLineController extends BaseController
         $groups = LanguageLine::distinct('group')->pluck('group')->sort();
         $languages = config('app.supported_locales', ['en', 'es', 'fr', 'de']);
 
-        return view('admin.language-lines.create', compact('groups', 'languages'));
+        return view('admin.language_lines.create', compact('groups', 'languages'));
     }
 
     public function store(Request $request)
@@ -71,13 +71,13 @@ class LanguageLineController extends BaseController
             'text' => $request->text,
         ]);
 
-        return redirect()->route('admin.language-lines.index')
+        return redirect()->route('admin.language_lines.index')
             ->with('success', 'Language line created successfully.');
     }
 
     public function show(LanguageLine $languageLine)
     {
-        return view('admin.language-lines.show', compact('languageLine'));
+        return view('admin.language_lines.show', compact('languageLine'));
     }
 
     public function edit(LanguageLine $languageLine)
@@ -85,7 +85,7 @@ class LanguageLineController extends BaseController
         $groups = LanguageLine::distinct('group')->pluck('group')->sort();
         $languages = config('app.supported_locales', ['en', 'es', 'fr', 'de']);
 
-        return view('admin.language-lines.edit', compact('languageLine', 'groups', 'languages'));
+        return view('admin.language_lines.edit', compact('languageLine', 'groups', 'languages'));
     }
 
     public function update(Request $request, LanguageLine $languageLine)
@@ -115,7 +115,7 @@ class LanguageLineController extends BaseController
             'text' => $request->text,
         ]);
 
-        return redirect()->route('admin.language-lines.index')
+        return redirect()->route('admin.language_lines.index')
             ->with('success', 'Language line updated successfully.');
     }
 
@@ -123,7 +123,7 @@ class LanguageLineController extends BaseController
     {
         $languageLine->delete();
 
-        return redirect()->route('admin.language-lines.index')
+        return redirect()->route('admin.language_lines.index')
             ->with('success', 'Language line deleted successfully.');
     }
 
@@ -138,7 +138,7 @@ class LanguageLineController extends BaseController
 
         $groups = LanguageLine::distinct('group')->pluck('group')->sort();
 
-        return view('admin.language-lines.index', compact('languageLines', 'groups', 'group'));
+        return view('admin.language_lines.index', compact('languageLines', 'groups', 'group'));
     }
 
     /**
@@ -150,10 +150,10 @@ class LanguageLineController extends BaseController
             Artisan::call('translations:sync');
             $output = Artisan::output();
 
-            return redirect()->route('admin.language-lines.index')
+            return redirect()->route('admin.language_lines.index')
                 ->with('success', 'Language lines synced from files successfully. '.$output);
         } catch (\Exception $e) {
-            return redirect()->route('admin.language-lines.index')
+            return redirect()->route('admin.language_lines.index')
                 ->with('error', 'Failed to sync language lines: '.$e->getMessage());
         }
     }
@@ -238,7 +238,7 @@ class LanguageLineController extends BaseController
                 $message .= " Skipped {$skipped} existing lines.";
             }
 
-            return redirect()->route('admin.language-lines.index')
+            return redirect()->route('admin.language_lines.index')
                 ->with('success', $message);
 
         } catch (\Exception $e) {

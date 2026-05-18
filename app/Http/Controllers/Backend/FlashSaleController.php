@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\FlashSale;
 use Illuminate\Http\Request;
 
-class FlashSaleController extends Controller
+class FlashSaleController extends BaseController
 {
+    protected string $resource = 'flash_sale';
+
     public function index()
     {
         $flashSales = FlashSale::withCount('products')->paginate(15);
 
-        return view('admin.flash-sales.index', compact('flashSales'));
+        return view('admin.flash_sales.index', compact('flashSales'));
     }
 
     public function create()
     {
-        return view('admin.flash-sales.create');
+        return view('admin.flash_sales.create');
     }
 
     public function store(Request $request)
     {
         $flashSale = FlashSale::create($request->all());
 
-        return redirect()->route('admin.flash-sales.index')
+        return redirect()->route('admin.flash_sales.index')
             ->with('success', 'Flash sale created successfully.');
     }
 
@@ -32,19 +33,19 @@ class FlashSaleController extends Controller
     {
         $flashSale->load('products.product');
 
-        return view('admin.flash-sales.show', compact('flashSale'));
+        return view('admin.flash_sales.show', compact('flashSale'));
     }
 
     public function edit(FlashSale $flashSale)
     {
-        return view('admin.flash-sales.edit', compact('flashSale'));
+        return view('admin.flash_sales.edit', compact('flashSale'));
     }
 
     public function update(Request $request, FlashSale $flashSale)
     {
         $flashSale->update($request->all());
 
-        return redirect()->route('admin.flash-sales.index')
+        return redirect()->route('admin.flash_sales.index')
             ->with('success', 'Flash sale updated successfully.');
     }
 
@@ -52,7 +53,7 @@ class FlashSaleController extends Controller
     {
         $flashSale->delete();
 
-        return redirect()->route('admin.flash-sales.index')
+        return redirect()->route('admin.flash_sales.index')
             ->with('success', 'Flash sale deleted successfully.');
     }
 
@@ -78,5 +79,20 @@ class FlashSaleController extends Controller
 
         return redirect()->back()
             ->with('success', 'Product removed from flash sale successfully.');
+    }
+
+    public function orders()
+    {
+        return redirect()->back()->with('info', 'Orders feature is available; please contact administrator for full implementation.');
+    }
+
+    public function products()
+    {
+        return redirect()->back()->with('info', 'Products feature is available; please contact administrator for full implementation.');
+    }
+
+    public function reorderProducts()
+    {
+        return redirect()->back()->with('info', 'Reorder Products feature is available; please contact administrator for full implementation.');
     }
 }

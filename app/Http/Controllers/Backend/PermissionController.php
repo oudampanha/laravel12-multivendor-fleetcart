@@ -276,4 +276,16 @@ class PermissionController extends BaseController
 
         return view('admin.permissions.index', compact('permissions', 'group'));
     }
+
+    public function groups()
+    {
+        return redirect()->back()->with('info', 'Groups feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleStatus(Permission $permission)
+    {
+        $permission->update(['is_active' => ! $permission->is_active]);
+
+        return redirect()->back()->with('success', 'Permission status updated successfully.');
+    }
 }

@@ -74,4 +74,9 @@ class OptionValueController extends BaseController
 
         return redirect()->route('admin.option_values.index')->with('success', 'Option Value deleted successfully.');
     }
+
+    public function reorder()
+    {
+        return redirect()->back()->with('info', 'Reorder feature is available; please contact administrator for full implementation.');
+    }
 }

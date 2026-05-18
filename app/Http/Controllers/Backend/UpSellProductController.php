@@ -25,7 +25,7 @@ class UpSellProductController extends BaseController
 
         $products = $query->orderBy('name')->paginate(15);
 
-        return view('admin.up-sell-products.index', compact('products'));
+        return view('admin.up_sell_products.index', compact('products'));
     }
 
     public function store(Request $request)
@@ -46,7 +46,7 @@ class UpSellProductController extends BaseController
         // Attach the up-sell product
         $product->upSellProducts()->attach($upSellProduct->id);
 
-        return redirect()->route('admin.up-sell-products.index')
+        return redirect()->route('admin.up_sell_products.index')
             ->with('success', 'Up-sell product relationship created successfully.');
     }
 
@@ -55,7 +55,7 @@ class UpSellProductController extends BaseController
         // Detach the up-sell product relationship
         $product->upSellProducts()->detach($upSellProduct->id);
 
-        return redirect()->route('admin.up-sell-products.index')
+        return redirect()->route('admin.up_sell_products.index')
             ->with('success', 'Up-sell product relationship removed successfully.');
     }
 
@@ -95,11 +95,11 @@ class UpSellProductController extends BaseController
             $product->upSellProducts()->attach($newIds);
             $count = count($newIds);
 
-            return redirect()->route('admin.up-sell-products.index')
+            return redirect()->route('admin.up_sell_products.index')
                 ->with('success', "Added {$count} up-sell product relationships successfully.");
         }
 
-        return redirect()->route('admin.up-sell-products.index')
+        return redirect()->route('admin.up_sell_products.index')
             ->with('info', 'All selected up-sell relationships already exist.');
     }
 
@@ -111,7 +111,7 @@ class UpSellProductController extends BaseController
         $count = $product->upSellProducts()->count();
         $product->upSellProducts()->detach();
 
-        return redirect()->route('admin.up-sell-products.index')
+        return redirect()->route('admin.up_sell_products.index')
             ->with('success', "Removed {$count} up-sell product relationships successfully.");
     }
 
@@ -143,11 +143,11 @@ class UpSellProductController extends BaseController
         }
 
         if ($attached > 0) {
-            return redirect()->route('admin.up-sell-products.index')
+            return redirect()->route('admin.up_sell_products.index')
                 ->with('success', "Created {$attached} mutual up-sell product relationships successfully.");
         }
 
-        return redirect()->route('admin.up-sell-products.index')
+        return redirect()->route('admin.up_sell_products.index')
             ->with('info', 'Mutual up-sell product relationships already exist.');
     }
 

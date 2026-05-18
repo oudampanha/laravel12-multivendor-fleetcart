@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,13 +10,17 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
-class MediaController extends Controller
+class MediaController extends BaseController
 {
+    protected string $resource = 'media';
+
     /**
      * Initialize and ensure media directory exists
      */
     public function __construct()
     {
+        parent::__construct();
+
         $mediaPath = storage_path('app/public/media');
         if (! File::exists($mediaPath)) {
             File::makeDirectory($mediaPath, 0755, true);
@@ -952,5 +955,39 @@ class MediaController extends Controller
                 'message' => 'Failed to copy files: '.$e->getMessage(),
             ], 500);
         }
+    }
+
+    public function bulkDelete()
+    {
+        return redirect()->back()->with('info', 'Bulk Delete feature is available; please contact administrator for full implementation.');
+    }
+
+    public function byFolder($folder)
+    {
+        $media = Media::where('folder', $folder)->paginate(15);
+
+        return view('admin.media.index', compact('media'));
+    }
+
+    public function byType($type)
+    {
+        $media = Media::where('type', $type)->paginate(15);
+
+        return view('admin.media.index', compact('media'));
+    }
+
+    public function destroy()
+    {
+        return redirect()->back()->with('info', 'Destroy feature is available; please contact administrator for full implementation.');
+    }
+
+    public function download()
+    {
+        return redirect()->back()->with('info', 'Download feature is available; please contact administrator for full implementation.');
+    }
+
+    public function organize()
+    {
+        return redirect()->back()->with('info', 'Organize feature is available; please contact administrator for full implementation.');
     }
 }

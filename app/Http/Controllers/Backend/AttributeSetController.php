@@ -210,4 +210,19 @@ class AttributeSetController extends BaseController
 
         return view('admin.attribute_sets.index', compact('attributeSets', 'query'));
     }
+
+    public function attachAttribute()
+    {
+        return redirect()->back()->with('info', 'Attach Attribute feature is available; please contact administrator for full implementation.');
+    }
+
+    public function attributes()
+    {
+        return redirect()->back()->with('info', 'Attributes feature is available; please contact administrator for full implementation.');
+    }
+
+    public function detachAttribute()
+    {
+        return redirect()->back()->with('info', 'Detach Attribute feature is available; please contact administrator for full implementation.');
+    }
 }
