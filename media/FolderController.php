@@ -58,8 +58,8 @@ class FolderController extends Controller
                 }),
             ],
         ], [
-        'name.unique' => __('Folder name exists, please select new one'),
-    ]);
+            'name.unique' => __('Folder name exists, please select new one'),
+        ]);
 
         $folder->name = $request->input('name');
         $folder->parent_id = $request->input('parent_id', 0);

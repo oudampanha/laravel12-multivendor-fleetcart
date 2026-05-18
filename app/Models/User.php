@@ -255,14 +255,4 @@ class User extends Authenticatable
     {
         return $this->avatar_url;
     }
-
-    /**
-     * Set password attribute - automatically hash password
-     */
-    public function setPasswordAttribute($value)
-    {
-        if (! empty($value)) {
-            $this->attributes['password'] = bcrypt($value);
-        }
-    }
 }
