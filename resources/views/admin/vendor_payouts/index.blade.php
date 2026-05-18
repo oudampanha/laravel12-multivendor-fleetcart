@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Vendor Payouts Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor_payouts.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.vendor-payouts.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Create New Payout
           </a>
         </div>

@@ -29,7 +29,7 @@ class DefaultAddressController extends BaseController
 
         $defaultAddresses = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.default_addresses.index', compact('defaultAddresses'));
+        return view('admin.default-addresses.index', compact('defaultAddresses'));
     }
 
     public function store(Request $request, User $customer)
@@ -63,7 +63,7 @@ class DefaultAddressController extends BaseController
             $message = 'Default address created successfully.';
         }
 
-        return redirect()->route('admin.default_addresses.index')
+        return redirect()->route('admin.default-addresses.index')
             ->with('success', $message);
     }
 
@@ -71,7 +71,7 @@ class DefaultAddressController extends BaseController
     {
         $defaultAddress->delete();
 
-        return redirect()->route('admin.default_addresses.index')
+        return redirect()->route('admin.default-addresses.index')
             ->with('success', 'Default address removed successfully.');
     }
 
@@ -152,7 +152,7 @@ class DefaultAddressController extends BaseController
         $count = DefaultAddress::where('customer_id', $customer->id)->count();
         DefaultAddress::where('customer_id', $customer->id)->delete();
 
-        return redirect()->route('admin.default_addresses.index')
+        return redirect()->route('admin.default-addresses.index')
             ->with('success', "Cleared {$count} default addresses for customer.");
     }
 }

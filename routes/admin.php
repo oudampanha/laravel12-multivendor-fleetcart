@@ -266,9 +266,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
   Route::post('attribute-values/reorder', [AttributeValueController::class, 'reorder'])->name('attribute-values.reorder');
 
   // Product Attributes
-  Route::resource('product-attributes', ProductAttributeController::class);
   Route::get('product-attributes/by-product/{product}', [ProductAttributeController::class, 'byProduct'])->name('product-attributes.by-product');
   Route::get('product-attributes/by-attribute/{attribute}', [ProductAttributeController::class, 'byAttribute'])->name('product-attributes.by-attribute');
+  Route::resource('product-attributes', ProductAttributeController::class);
 
   // Variations
   Route::resource('variations', VariationController::class);

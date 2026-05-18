@@ -9,13 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Create New Related Product</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.related_products.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.related-products.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.related_products.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.related-products.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="form-group">
@@ -58,7 +58,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Create Related Product
             </button>
-            <a href="{{ route('admin.related_products.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.related-products.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

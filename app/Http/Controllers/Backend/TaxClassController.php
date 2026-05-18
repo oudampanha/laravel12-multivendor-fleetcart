@@ -18,12 +18,12 @@ class TaxClassController extends BaseController
     {
         $taxClasses = TaxClass::with('taxRates')->paginate(15);
 
-        return view('admin.tax_classes.index', compact('taxClasses'));
+        return view('admin.tax-classes.index', compact('taxClasses'));
     }
 
     public function create()
     {
-        return view('admin.tax_classes.create');
+        return view('admin.tax-classes.create');
     }
 
     public function store(Request $request)
@@ -34,7 +34,7 @@ class TaxClassController extends BaseController
 
         TaxClass::create($request->all());
 
-        return redirect()->route('admin.tax_classes.index')
+        return redirect()->route('admin.tax-classes.index')
             ->with('success', 'Tax class created successfully.');
     }
 
@@ -42,12 +42,12 @@ class TaxClassController extends BaseController
     {
         $taxClass->load('taxRates');
 
-        return view('admin.tax_classes.show', compact('taxClass'));
+        return view('admin.tax-classes.show', compact('taxClass'));
     }
 
     public function edit(TaxClass $taxClass)
     {
-        return view('admin.tax_classes.edit', compact('taxClass'));
+        return view('admin.tax-classes.edit', compact('taxClass'));
     }
 
     public function update(Request $request, TaxClass $taxClass)
@@ -58,7 +58,7 @@ class TaxClassController extends BaseController
 
         $taxClass->update($request->all());
 
-        return redirect()->route('admin.tax_classes.index')
+        return redirect()->route('admin.tax-classes.index')
             ->with('success', 'Tax class updated successfully.');
     }
 
@@ -66,7 +66,7 @@ class TaxClassController extends BaseController
     {
         $taxClass->delete();
 
-        return redirect()->route('admin.tax_classes.index')
+        return redirect()->route('admin.tax-classes.index')
             ->with('success', 'Tax class deleted successfully.');
     }
 

@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.attribute_values.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.attribute-values.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
 
           <div class="form-group">

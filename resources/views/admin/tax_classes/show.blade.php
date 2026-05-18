@@ -9,10 +9,10 @@
       <div class="card-header">
         <h4 class="card-title">Tax Class Details: {{ $taxClass->id }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.tax_classes.edit', $taxClass->id) }}" class="btn btn-warning">
+          <a href="{{ route('admin.tax-classes.edit', $taxClass->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
-          <a href="{{ route('admin.tax_classes.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.tax-classes.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>

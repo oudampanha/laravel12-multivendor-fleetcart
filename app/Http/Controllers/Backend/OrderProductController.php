@@ -21,7 +21,7 @@ class OrderProductController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.order_products.index', compact('orderProducts'));
+        return view('admin.order-products.index', compact('orderProducts'));
     }
 
     public function create()
@@ -50,7 +50,7 @@ class OrderProductController extends BaseController
 
         OrderProduct::create($validated);
 
-        return redirect()->route('admin.order_products.index')->with('success', 'Order Product created successfully.');
+        return redirect()->route('admin.order-products.index')->with('success', 'Order Product created successfully.');
     }
 
     public function show(OrderProduct $orderProduct)
@@ -86,28 +86,28 @@ class OrderProductController extends BaseController
 
         $orderProduct->update($validated);
 
-        return redirect()->route('admin.order_products.index')->with('success', 'Order Product updated successfully.');
+        return redirect()->route('admin.order-products.index')->with('success', 'Order Product updated successfully.');
     }
 
     public function destroy(OrderProduct $orderProduct)
     {
         $orderProduct->delete();
 
-        return redirect()->route('admin.order_products.index')->with('success', 'Order Product deleted successfully.');
+        return redirect()->route('admin.order-products.index')->with('success', 'Order Product deleted successfully.');
     }
 
     public function byStatus($status)
     {
         $orderProducts = Order::where('status', $status)->paginate(15);
 
-        return view('admin.order_products.index', compact('orderProducts'));
+        return view('admin.order-products.index', compact('orderProducts'));
     }
 
     public function byVendor($vendor)
     {
         $orderProducts = Order::where('vendor_id', $vendor)->paginate(15);
 
-        return view('admin.order_products.index', compact('orderProducts'));
+        return view('admin.order-products.index', compact('orderProducts'));
     }
 
     public function updateVendorStatus()

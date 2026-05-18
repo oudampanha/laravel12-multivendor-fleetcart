@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Order Downloads Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.order_downloads.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.order-downloads.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Order Download
           </a>
         </div>

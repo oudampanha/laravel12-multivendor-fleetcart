@@ -19,7 +19,7 @@ class VendorOrderController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_orders.index', compact('vendorOrders'));
+        return view('admin.vendor-orders.index', compact('vendorOrders'));
     }
 
     public function create()
@@ -44,14 +44,14 @@ class VendorOrderController extends BaseController
 
         VendorOrder::create($validated);
 
-        return redirect()->route('admin.vendor_orders.index')->with('success', 'Vendor Order created successfully.');
+        return redirect()->route('admin.vendor-orders.index')->with('success', 'Vendor Order created successfully.');
     }
 
     public function show(VendorOrder $vendorOrder)
     {
         $vendorOrder->load(['vendor', 'order']);
 
-        return view('admin.vendor_orders.show', compact('vendorOrder'));
+        return view('admin.vendor-orders.show', compact('vendorOrder'));
     }
 
     public function edit(VendorOrder $vendorOrder)
@@ -76,28 +76,28 @@ class VendorOrderController extends BaseController
 
         $vendorOrder->update($validated);
 
-        return redirect()->route('admin.vendor_orders.index')->with('success', 'Vendor Order updated successfully.');
+        return redirect()->route('admin.vendor-orders.index')->with('success', 'Vendor Order updated successfully.');
     }
 
     public function destroy(VendorOrder $vendorOrder)
     {
         $vendorOrder->delete();
 
-        return redirect()->route('admin.vendor_orders.index')->with('success', 'Vendor Order deleted successfully.');
+        return redirect()->route('admin.vendor-orders.index')->with('success', 'Vendor Order deleted successfully.');
     }
 
     public function byStatus($status)
     {
         $vendorOrders = Order::where('status', $status)->paginate(15);
 
-        return view('admin.vendor_orders.index', compact('vendorOrders'));
+        return view('admin.vendor-orders.index', compact('vendorOrders'));
     }
 
     public function byVendor($vendor)
     {
         $vendorOrders = Order::where('vendor_id', $vendor)->paginate(15);
 
-        return view('admin.vendor_orders.index', compact('vendorOrders'));
+        return view('admin.vendor-orders.index', compact('vendorOrders'));
     }
 
     public function updateStatus()

@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Edit Updater Script</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.updater_scripts.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.updater-scripts.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
@@ -68,7 +68,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Update Updater Script
             </button>
-            <a href="{{ route('admin.updater_scripts.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.updater-scripts.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

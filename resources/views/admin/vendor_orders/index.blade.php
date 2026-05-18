@@ -67,7 +67,7 @@
                 <td>{{ $vendorOrder->created_at->format('Y-m-d H:i:s') }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.vendor_orders.show', $vendorOrder->id) }}" class="btn btn-sm btn-info">
+                    <a href="{{ route('admin.vendor-orders.show', $vendorOrder->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
                     <a href="{{ route('admin.vendor_orders.edit', $vendorOrder->id) }}" class="btn btn-sm btn-warning">

@@ -9,11 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Flash Sale Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.flash_sales.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.flash-sales.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          @if(Route::has('admin.flash_sales.edit'))
-            <a href="{{ route('admin.flash_sales.edit', $flashSale->id) }}" class="btn btn-warning">
+          @if(Route::has('admin.flash-sales.edit'))
+            <a href="{{ route('admin.flash-sales.edit', $flashSale->id) }}" class="btn btn-warning">
               <i class="fas fa-edit"></i> Edit
             </a>
           @endif

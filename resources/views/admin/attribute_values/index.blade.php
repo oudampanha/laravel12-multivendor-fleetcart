@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Attribute Values Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.attribute_values.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.attribute-values.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Attribute Value
           </a>
         </div>

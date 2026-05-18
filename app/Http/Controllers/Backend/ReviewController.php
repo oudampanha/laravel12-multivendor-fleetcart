@@ -87,7 +87,7 @@ class ReviewController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function showVendorReview(VendorReview $vendorReview)
@@ -113,7 +113,7 @@ class ReviewController extends BaseController
 
         $vendorReview->update($request->all());
 
-        return redirect()->route('admin.vendor_reviews.index')
+        return redirect()->route('admin.vendor-reviews.index')
             ->with('success', 'Vendor review updated successfully.');
     }
 
@@ -121,7 +121,7 @@ class ReviewController extends BaseController
     {
         $vendorReview->delete();
 
-        return redirect()->route('admin.vendor_reviews.index')
+        return redirect()->route('admin.vendor-reviews.index')
             ->with('success', 'Vendor review deleted successfully.');
     }
 

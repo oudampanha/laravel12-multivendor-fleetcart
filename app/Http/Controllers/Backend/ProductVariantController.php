@@ -23,7 +23,7 @@ class ProductVariantController extends BaseController
     {
         $products = Product::all();
 
-        return view('admin.product_variants.create', compact('products'));
+        return view('admin.product-variants.create', compact('products'));
     }
 
     public function store(Request $request)

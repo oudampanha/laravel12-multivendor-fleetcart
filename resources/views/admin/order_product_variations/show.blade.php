@@ -12,7 +12,7 @@
           <a href="{{ route('admin.order_product_variations.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          <a href="{{ route('admin.order_product_variations.edit', $item->id ?? 0) }}" class="btn btn-warning">
+          <a href="{{ route('admin.order-product-variations.edit', $item->id ?? 0) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit Order Product Variation
           </a>
         </div>
@@ -48,7 +48,7 @@
         <div class="row mt-4">
           <div class="col-12">
             <div class="btn-group">
-              <a href="{{ route('admin.order_product_variations.edit', $item->id ?? 0) }}" class="btn btn-warning">
+              <a href="{{ route('admin.order-product-variations.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Order Product Variation
               </a>
               <form action="{{ route('admin.order_product_variations.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">

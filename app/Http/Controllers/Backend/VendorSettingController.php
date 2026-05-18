@@ -18,7 +18,7 @@ class VendorSettingController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_settings.index', compact('vendorSettings'));
+        return view('admin.vendor-settings.index', compact('vendorSettings'));
     }
 
     public function create()
@@ -38,14 +38,14 @@ class VendorSettingController extends BaseController
 
         VendorSetting::create($validated);
 
-        return redirect()->route('admin.vendor_settings.index')->with('success', 'Vendor Setting created successfully.');
+        return redirect()->route('admin.vendor-settings.index')->with('success', 'Vendor Setting created successfully.');
     }
 
     public function show(VendorSetting $vendorSetting)
     {
         $vendorSetting->load('vendor');
 
-        return view('admin.vendor_settings.show', compact('vendorSetting'));
+        return view('admin.vendor-settings.show', compact('vendorSetting'));
     }
 
     public function edit(VendorSetting $vendorSetting)
@@ -65,13 +65,13 @@ class VendorSettingController extends BaseController
 
         $vendorSetting->update($validated);
 
-        return redirect()->route('admin.vendor_settings.index')->with('success', 'Vendor Setting updated successfully.');
+        return redirect()->route('admin.vendor-settings.index')->with('success', 'Vendor Setting updated successfully.');
     }
 
     public function destroy(VendorSetting $vendorSetting)
     {
         $vendorSetting->delete();
 
-        return redirect()->route('admin.vendor_settings.index')->with('success', 'Vendor Setting deleted successfully.');
+        return redirect()->route('admin.vendor-settings.index')->with('success', 'Vendor Setting deleted successfully.');
     }
 }

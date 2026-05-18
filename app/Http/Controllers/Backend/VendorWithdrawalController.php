@@ -25,7 +25,7 @@ class VendorWithdrawalController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_withdrawals.index', compact('withdrawals'));
+        return view('admin.vendor-withdrawals.index', compact('withdrawals'));
     }
 
     public function show(VendorWithdrawal $vendorWithdrawal)
@@ -66,7 +66,7 @@ class VendorWithdrawalController extends BaseController
 
         $vendorWithdrawal->update($data);
 
-        return redirect()->route('admin.vendor_withdrawals.index')
+        return redirect()->route('admin.vendor-withdrawals.index')
             ->with('success', 'Vendor withdrawal updated successfully.');
     }
 
@@ -79,7 +79,7 @@ class VendorWithdrawalController extends BaseController
 
         $vendorWithdrawal->delete();
 
-        return redirect()->route('admin.vendor_withdrawals.index')
+        return redirect()->route('admin.vendor-withdrawals.index')
             ->with('success', 'Vendor withdrawal deleted successfully.');
     }
 
@@ -153,7 +153,7 @@ class VendorWithdrawalController extends BaseController
     {
         $vendorWithdrawals = VendorWithdrawal::where('status', 'pending')->paginate(15);
 
-        return view('admin.vendor_withdrawals.index', compact('vendorWithdrawals'));
+        return view('admin.vendor-withdrawals.index', compact('vendorWithdrawals'));
     }
 
     public function process()
@@ -165,6 +165,6 @@ class VendorWithdrawalController extends BaseController
     {
         $vendorWithdrawals = VendorWithdrawal::where('status', 'processed')->paginate(15);
 
-        return view('admin.vendor_withdrawals.index', compact('vendorWithdrawals'));
+        return view('admin.vendor-withdrawals.index', compact('vendorWithdrawals'));
     }
 }

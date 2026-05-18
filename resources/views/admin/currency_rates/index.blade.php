@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Currency Rates Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.currency_rates.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.currency-rates.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Rate
           </a>
         </div>

@@ -9,13 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Create New Currency Rate</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.currency_rates.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.currency-rates.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.currency_rates.store') }}" method="POST">
+        <form action="{{ route('admin.currency-rates.store') }}" method="POST">
           @csrf
           
           <div class="row">
@@ -98,7 +98,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Create Currency Rate
             </button>
-            <a href="{{ route('admin.currency_rates.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.currency-rates.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

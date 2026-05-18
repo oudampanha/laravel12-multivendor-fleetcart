@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.product_variants.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.product-variants.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="form-group">

@@ -13,19 +13,19 @@ class FlashSaleController extends BaseController
     {
         $flashSales = FlashSale::withCount('products')->paginate(15);
 
-        return view('admin.flash_sales.index', compact('flashSales'));
+        return view('admin.flash-sales.index', compact('flashSales'));
     }
 
     public function create()
     {
-        return view('admin.flash_sales.create');
+        return view('admin.flash-sales.create');
     }
 
     public function store(Request $request)
     {
         $flashSale = FlashSale::create($request->all());
 
-        return redirect()->route('admin.flash_sales.index')
+        return redirect()->route('admin.flash-sales.index')
             ->with('success', 'Flash sale created successfully.');
     }
 
@@ -33,19 +33,19 @@ class FlashSaleController extends BaseController
     {
         $flashSale->load('products.product');
 
-        return view('admin.flash_sales.show', compact('flashSale'));
+        return view('admin.flash-sales.show', compact('flashSale'));
     }
 
     public function edit(FlashSale $flashSale)
     {
-        return view('admin.flash_sales.edit', compact('flashSale'));
+        return view('admin.flash-sales.edit', compact('flashSale'));
     }
 
     public function update(Request $request, FlashSale $flashSale)
     {
         $flashSale->update($request->all());
 
-        return redirect()->route('admin.flash_sales.index')
+        return redirect()->route('admin.flash-sales.index')
             ->with('success', 'Flash sale updated successfully.');
     }
 
@@ -53,7 +53,7 @@ class FlashSaleController extends BaseController
     {
         $flashSale->delete();
 
-        return redirect()->route('admin.flash_sales.index')
+        return redirect()->route('admin.flash-sales.index')
             ->with('success', 'Flash sale deleted successfully.');
     }
 

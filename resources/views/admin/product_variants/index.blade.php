@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Product Variants Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.product_variants.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.product-variants.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Product Variant
           </a>
         </div>

@@ -12,7 +12,7 @@
           <a href="{{ route('admin.currency_rates.edit', $currencyRate->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
-          <a href="{{ route('admin.currency_rates.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.currency-rates.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>

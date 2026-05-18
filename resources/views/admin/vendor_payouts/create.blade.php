@@ -9,13 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Create Vendor Payout</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor_payouts.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.vendor-payouts.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.vendor_payouts.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.vendor-payouts.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
 
           <div class="form-group">
@@ -40,7 +40,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Save
             </button>
-            <a href="{{ route('admin.vendor_payouts.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.vendor-payouts.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

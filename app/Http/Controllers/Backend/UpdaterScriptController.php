@@ -29,7 +29,7 @@ class UpdaterScriptController extends BaseController
 
         $updaterScripts = $query->paginate(15);
 
-        return view('admin.updater_scripts.index', compact('updaterScripts'));
+        return view('admin.updater-scripts.index', compact('updaterScripts'));
     }
 
     public function run(Request $request, UpdaterScript $updaterScript)
@@ -107,10 +107,10 @@ class UpdaterScriptController extends BaseController
             ]);
 
             if ($status === 'completed') {
-                return redirect()->route('admin.updater_scripts.index')
+                return redirect()->route('admin.updater-scripts.index')
                     ->with('success', 'Script executed successfully.');
             } else {
-                return redirect()->route('admin.updater_scripts.index')
+                return redirect()->route('admin.updater-scripts.index')
                     ->with('error', 'Script execution failed. Check the output for details.');
             }
 
@@ -129,7 +129,7 @@ class UpdaterScriptController extends BaseController
                 'error' => $e->getMessage(),
             ]);
 
-            return redirect()->route('admin.updater_scripts.index')
+            return redirect()->route('admin.updater-scripts.index')
                 ->with('error', 'Script execution failed: '.$e->getMessage());
         }
     }
@@ -216,7 +216,7 @@ class UpdaterScriptController extends BaseController
             'exit_code' => null,
         ]);
 
-        return redirect()->route('admin.updater_scripts.index')
+        return redirect()->route('admin.updater-scripts.index')
             ->with('success', 'Script has been reset to pending status.');
     }
 
@@ -279,7 +279,7 @@ class UpdaterScriptController extends BaseController
             $message .= " {$failed} scripts failed.";
         }
 
-        return redirect()->route('admin.updater_scripts.index')
+        return redirect()->route('admin.updater-scripts.index')
             ->with($failed > 0 ? 'warning' : 'success', $message);
     }
 

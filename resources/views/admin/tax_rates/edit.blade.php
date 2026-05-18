@@ -9,13 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Edit Tax Rate: {{ $taxRate->id }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.tax_rates.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.tax-rates.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.tax_rates.update', $taxRate->id) }}" method="POST">
+        <form action="{{ route('admin.tax-rates.update', $taxRate->id) }}" method="POST">
           @csrf
           @method('PUT')
           
@@ -121,7 +121,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Update Tax Rate
             </button>
-            <a href="{{ route('admin.tax_rates.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.tax-rates.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

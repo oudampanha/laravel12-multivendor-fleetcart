@@ -20,7 +20,7 @@ class ProductAttributeController extends BaseController
             ->orderBy('id', 'desc')
             ->paginate(15);
 
-        return view('admin.product_attributes.index', compact('productAttributes'));
+        return view('admin.product-attributes.index', compact('productAttributes'));
     }
 
     public function create()
@@ -50,7 +50,7 @@ class ProductAttributeController extends BaseController
             $productAttribute->attributeValues()->sync($validated['attribute_value_ids']);
         }
 
-        return redirect()->route('admin.product_attributes.index')
+        return redirect()->route('admin.product-attributes.index')
             ->with('success', 'Product attribute created successfully.');
     }
 
@@ -87,7 +87,7 @@ class ProductAttributeController extends BaseController
 
         $productAttribute->attributeValues()->sync($validated['attribute_value_ids'] ?? []);
 
-        return redirect()->route('admin.product_attributes.index')
+        return redirect()->route('admin.product-attributes.index')
             ->with('success', 'Product attribute updated successfully.');
     }
 
@@ -95,7 +95,7 @@ class ProductAttributeController extends BaseController
     {
         $productAttribute->delete();
 
-        return redirect()->route('admin.product_attributes.index')
+        return redirect()->route('admin.product-attributes.index')
             ->with('success', 'Product attribute deleted successfully.');
     }
 
@@ -105,7 +105,7 @@ class ProductAttributeController extends BaseController
             ->where('product_id', $product->id)
             ->paginate(15);
 
-        return view('admin.product_attributes.index', compact('productAttributes', 'product'));
+        return view('admin.product-attributes.index', compact('productAttributes', 'product'));
     }
 
     public function byAttribute(Attribute $attribute)
@@ -114,6 +114,6 @@ class ProductAttributeController extends BaseController
             ->where('attribute_id', $attribute->id)
             ->paginate(15);
 
-        return view('admin.product_attributes.index', compact('productAttributes', 'attribute'));
+        return view('admin.product-attributes.index', compact('productAttributes', 'attribute'));
     }
 }

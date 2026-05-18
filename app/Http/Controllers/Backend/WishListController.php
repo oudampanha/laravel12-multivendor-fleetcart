@@ -45,7 +45,7 @@ class WishListController extends BaseController
 
         $wishLists = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.wish_lists.index', compact('wishLists'));
+        return view('admin.wish-lists.index', compact('wishLists'));
     }
 
     /**
@@ -86,7 +86,7 @@ class WishListController extends BaseController
 
         $wishList->delete();
 
-        return redirect()->route('admin.wish_lists.index')
+        return redirect()->route('admin.wish-lists.index')
             ->with('success', 'Wish list item removed successfully.');
     }
 
@@ -179,7 +179,7 @@ class WishListController extends BaseController
 
         $deleted = WishList::whereIn('id', $request->wish_list_ids)->delete();
 
-        return redirect()->route('admin.wish_lists.index')
+        return redirect()->route('admin.wish-lists.index')
             ->with('success', "Removed {$deleted} wish list items successfully.");
     }
 
@@ -191,7 +191,7 @@ class WishListController extends BaseController
         $count = WishList::where('customer_id', $customer->id)->count();
         WishList::where('customer_id', $customer->id)->delete();
 
-        return redirect()->route('admin.wish_lists.index')
+        return redirect()->route('admin.wish-lists.index')
             ->with('success', "Cleared {$count} wish list items for customer: {$customer->full_name}.");
     }
 
@@ -203,7 +203,7 @@ class WishListController extends BaseController
         $count = WishList::where('product_id', $product->id)->count();
         WishList::where('product_id', $product->id)->delete();
 
-        return redirect()->route('admin.wish_lists.index')
+        return redirect()->route('admin.wish-lists.index')
             ->with('success', "Cleared {$count} wish list items for product: {$product->name}.");
     }
 

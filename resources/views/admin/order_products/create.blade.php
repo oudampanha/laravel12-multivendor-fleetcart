@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Create New Order Product</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.order_products.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.order-products.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
@@ -67,7 +67,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Create Order Product
             </button>
-            <a href="{{ route('admin.order_products.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.order-products.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

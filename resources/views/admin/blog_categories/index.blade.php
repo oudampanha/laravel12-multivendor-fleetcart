@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Blog Categories Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.blog_categories.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.blog-categories.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Blog Category
           </a>
         </div>

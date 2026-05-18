@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Cross Sell Product Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.cross_sell_products.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.cross-sell-products.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           <a href="{{ route('admin.cross_sell_products.edit', $item->id ?? 0) }}" class="btn btn-warning">

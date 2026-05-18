@@ -33,7 +33,7 @@ class AttributeSetController extends BaseController
       return response()->json($paginator);
     }
 
-    return view('admin.attribute_sets.index');
+    return view('admin.attribute-sets.index');
   }
 
   /**
@@ -41,7 +41,7 @@ class AttributeSetController extends BaseController
    */
   public function create()
   {
-    return view('admin.attribute_sets.create');
+    return view('admin.attribute-sets.create');
   }
 
   /**
@@ -74,7 +74,7 @@ class AttributeSetController extends BaseController
 
     sweetalert()->success('Attribute Set created successfully!');
 
-    return redirect()->route('admin.attribute_sets.index');
+    return redirect()->route('admin.attribute-sets.index');
   }
 
   /**
@@ -145,7 +145,7 @@ class AttributeSetController extends BaseController
 
     sweetalert()->success('Attribute Set updated successfully!');
 
-    return redirect()->route('admin.attribute_sets.index');
+    return redirect()->route('admin.attribute-sets.index');
   }
 
   /**
@@ -166,7 +166,7 @@ class AttributeSetController extends BaseController
 
       sweetalert()->error('Cannot delete attribute set that has attributes!');
 
-      return redirect()->route('admin.attribute_sets.index');
+      return redirect()->route('admin.attribute-sets.index');
     }
 
     $attributeSet->delete();
@@ -182,7 +182,7 @@ class AttributeSetController extends BaseController
 
     sweetalert()->success('Attribute Set deleted successfully!');
 
-    return redirect()->route('admin.attribute_sets.index');
+    return redirect()->route('admin.attribute-sets.index');
   }
 
   /**
@@ -210,7 +210,7 @@ class AttributeSetController extends BaseController
 
     $attributeSets = $paginator;
 
-    return view('admin.attribute_sets.index', compact('attributeSets', 'query'));
+    return view('admin.attribute-sets.index', compact('attributeSets', 'query'));
   }
 
   public function attachAttribute(Request $request, AttributeSet $attributeSet)

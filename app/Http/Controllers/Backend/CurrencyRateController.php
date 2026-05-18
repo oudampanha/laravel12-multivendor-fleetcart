@@ -13,12 +13,12 @@ class CurrencyRateController extends BaseController
     {
         $currencyRates = CurrencyRate::orderBy('currency')->paginate(15);
 
-        return view('admin.currency_rates.index', compact('currencyRates'));
+        return view('admin.currency-rates.index', compact('currencyRates'));
     }
 
     public function create()
     {
-        return view('admin.currency_rates.create');
+        return view('admin.currency-rates.create');
     }
 
     public function store(Request $request)
@@ -30,7 +30,7 @@ class CurrencyRateController extends BaseController
 
         CurrencyRate::create($request->all());
 
-        return redirect()->route('admin.currency_rates.index')
+        return redirect()->route('admin.currency-rates.index')
             ->with('success', 'Currency rate created successfully.');
     }
 
@@ -53,7 +53,7 @@ class CurrencyRateController extends BaseController
 
         $currencyRate->update($request->all());
 
-        return redirect()->route('admin.currency_rates.index')
+        return redirect()->route('admin.currency-rates.index')
             ->with('success', 'Currency rate updated successfully.');
     }
 
@@ -61,7 +61,7 @@ class CurrencyRateController extends BaseController
     {
         $currencyRate->delete();
 
-        return redirect()->route('admin.currency_rates.index')
+        return redirect()->route('admin.currency-rates.index')
             ->with('success', 'Currency rate deleted successfully.');
     }
 

@@ -9,13 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Edit Blog Post: {{ $blogPost->title }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.blog_posts.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.blog-posts.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.blog_posts.update', $blogPost->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.blog-posts.update', $blogPost->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           
@@ -133,7 +133,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Update Blog Post
             </button>
-            <a href="{{ route('admin.blog_posts.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.blog-posts.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

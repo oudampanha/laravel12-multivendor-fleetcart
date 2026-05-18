@@ -20,7 +20,7 @@ class MenuItemController extends BaseController
             ->orderBy('position', 'asc')
             ->paginate(15);
 
-        return view('admin.menu_items.index', compact('menuItems'));
+        return view('admin.menu-items.index', compact('menuItems'));
     }
 
     public function create()
@@ -30,7 +30,7 @@ class MenuItemController extends BaseController
         $categories = Category::all();
         $pages = Page::all();
 
-        return view('admin.menu_items.create', compact('menus', 'menuItems', 'categories', 'pages'));
+        return view('admin.menu-items.create', compact('menus', 'menuItems', 'categories', 'pages'));
     }
 
     public function store(Request $request)
@@ -52,14 +52,14 @@ class MenuItemController extends BaseController
 
         MenuItem::create($validated);
 
-        return redirect()->route('admin.menu_items.index')->with('success', 'Menu Item created successfully.');
+        return redirect()->route('admin.menu-items.index')->with('success', 'Menu Item created successfully.');
     }
 
     public function show(MenuItem $menuItem)
     {
         $menuItem->load(['menu', 'parent', 'category', 'page']);
 
-        return view('admin.menu_items.show', compact('menuItem'));
+        return view('admin.menu-items.show', compact('menuItem'));
     }
 
     public function edit(MenuItem $menuItem)
@@ -69,7 +69,7 @@ class MenuItemController extends BaseController
         $categories = Category::all();
         $pages = Page::all();
 
-        return view('admin.menu_items.edit', compact('menuItem', 'menus', 'menuItems', 'categories', 'pages'));
+        return view('admin.menu-items.edit', compact('menuItem', 'menus', 'menuItems', 'categories', 'pages'));
     }
 
     public function update(Request $request, MenuItem $menuItem)
@@ -91,21 +91,21 @@ class MenuItemController extends BaseController
 
         $menuItem->update($validated);
 
-        return redirect()->route('admin.menu_items.index')->with('success', 'Menu Item updated successfully.');
+        return redirect()->route('admin.menu-items.index')->with('success', 'Menu Item updated successfully.');
     }
 
     public function destroy(MenuItem $menuItem)
     {
         $menuItem->delete();
 
-        return redirect()->route('admin.menu_items.index')->with('success', 'Menu Item deleted successfully.');
+        return redirect()->route('admin.menu-items.index')->with('success', 'Menu Item deleted successfully.');
     }
 
     public function byMenu($menu)
     {
         $menuItems = Category::where('menu', $menu)->paginate(15);
 
-        return view('admin.menu_items.index', compact('menuItems'));
+        return view('admin.menu-items.index', compact('menuItems'));
     }
 
     public function reorder()
