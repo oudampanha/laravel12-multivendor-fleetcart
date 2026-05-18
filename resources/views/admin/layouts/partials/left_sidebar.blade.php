@@ -213,13 +213,15 @@
 
       <!-- Reviews & Ratings -->
       @permission('review_management_access')
-        <li class="{{ request()->is('admin/reviews*') ? 'mm-active' : '' }}">
-          <a href="#" aria-expanded="{{ request()->is('admin/reviews*') ? 'true' : 'false' }}">
+        <li
+          class="{{ request()->is('admin/reviews*') || request()->is('admin/vendor-reviews*') ? 'mm-active' : '' }}">
+          <a href="#"
+            aria-expanded="{{ request()->is('admin/reviews*') || request()->is('admin/vendor-reviews*') ? 'true' : 'false' }}">
             <i class="fas fa-star"></i>
             <span>Reviews & Ratings</span>
             <i class="fas fa-chevron-down" style="margin-left: auto;"></i>
           </a>
-          <ul class="{{ request()->is('admin/reviews*') ? 'mm-show' : '' }}">
+          <ul class="{{ request()->is('admin/reviews*') || request()->is('admin/vendor-reviews*') ? 'mm-show' : '' }}">
             @permission('review_access')
               <li
                 class="{{ request()->is('admin/reviews') && !request()->is('admin/reviews/pending') && !request()->is('admin/reviews/approved') ? 'mm-active' : '' }}">
@@ -228,6 +230,38 @@
                   href="{{ route('admin.reviews.pending') }}">Pending Reviews</a></li>
               <li class="{{ request()->is('admin/reviews/approved') ? 'mm-active' : '' }}"><a
                   href="{{ route('admin.reviews.approved') }}">Approved Reviews</a></li>
+            @endpermission
+            @permission('vendor_review_access')
+              <li class="{{ request()->is('admin/vendor-reviews*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.vendor-reviews.index') }}">Vendor Reviews</a></li>
+            @endpermission
+          </ul>
+        </li>
+      @endpermission
+
+      <!-- Localization -->
+      @permission('translation_management_access')
+        <li
+          class="{{ request()->is('admin/translations*') || request()->is('admin/language-lines*') || request()->is('admin/translation-management*') ? 'mm-active' : '' }}">
+          <a href="#"
+            aria-expanded="{{ request()->is('admin/translations*') || request()->is('admin/language-lines*') || request()->is('admin/translation-management*') ? 'true' : 'false' }}">
+            <i class="fas fa-language"></i>
+            <span>Localization</span>
+            <i class="fas fa-chevron-down" style="margin-left: auto;"></i>
+          </a>
+          <ul
+            class="{{ request()->is('admin/translations*') || request()->is('admin/language-lines*') || request()->is('admin/translation-management*') ? 'mm-show' : '' }}">
+            @permission('translation_access')
+              <li class="{{ request()->is('admin/translations*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.translations.index') }}">Translations</a></li>
+            @endpermission
+            @permission('language_line_access')
+              <li class="{{ request()->is('admin/language-lines*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.language-lines.index') }}">Language Lines</a></li>
+            @endpermission
+            @permission('can_manage_translations')
+              <li class="{{ request()->is('admin/translation-management*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.translation-management.index') }}">Translation Management</a></li>
             @endpermission
           </ul>
         </li>
