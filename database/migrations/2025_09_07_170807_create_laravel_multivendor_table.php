@@ -87,8 +87,6 @@ return new class extends Migration
 
       $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
       $table->foreign('permission_id')->references('id')->on('permissions')->onDelete('cascade');
-
-      $table->timestamps();
     });
 
     // Vendors table
@@ -865,11 +863,13 @@ return new class extends Migration
       $table->string('disk', 255);
       $table->string('file_type', 255);
       $table->json('metadata')->nullable();
+      $table->unsignedBigInteger('user_id')->nullable();
       $table->timestamps();
+
       $table->index('folder_path');
       $table->index('file_type');
-      $table->unsignedBigInteger('user_id')->constrained()->nullOnDelete()->nullable();
       $table->index('user_id');
+      $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
     });
 
     // Entity media table
@@ -1144,7 +1144,7 @@ return new class extends Migration
     Schema::dropIfExists('permission_role');
     Schema::dropIfExists('permissions');
     Schema::dropIfExists('permission_user');
-    Schema::dropIfExists('user_roles');
+    Schema::dropIfExists('role_user');
     Schema::dropIfExists('roles');
     Schema::dropIfExists('otp_verifications');
     Schema::dropIfExists('users');
