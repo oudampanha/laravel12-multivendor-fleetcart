@@ -89,7 +89,8 @@
 @push('styles')
   <link href="{{ assetUrl() }}assets/backend/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css"
+    rel="stylesheet">
   <style>
     .modal-lg {
       max-width: 1080px;
@@ -187,59 +188,88 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-md-8">
-              
-              <div class="form-group">
-                <label for="createName">Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="createName" name="name" required>
-                <div class="invalid-feedback"></div>
-              </div>
-
-              <div class="form-group">
-                <label for="createSlug">Slug <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="createSlug" name="slug" required>
-                <small class="form-text text-muted">URL-friendly version of the name. Auto-generated if left empty.</small>
-                <div class="invalid-feedback"></div>
-              </div>
-
-              <div class="form-group">
-                <label for="createDescription">Description</label>
-                <textarea class="form-control" id="createDescription" name="description" rows="4" 
-                          placeholder="Enter brand description..."></textarea>
-                <div class="invalid-feedback"></div>
-              </div>
-
-              <div class="form-group">
-                <label for="createStatus">Status</label>
-                <select class="form-control" id="createStatus" name="is_active">
-                  <option value="1">Active</option>
-                  <option value="0">Inactive</option>
-                </select>
-              </div>
-
-            </div>
-
-            <div class="col-md-4">
-              <!-- Media Upload using reusable component -->
-              <div class="card">
-                <div class="card-header">
-                  <h3 class="card-title">
-                    <i class="fas fa-images mr-2"></i>
-                    Brand Logo
-                  </h3>
+          <!-- Tabs with Icons -->
+          <div class="tabs-showcase">
+            <ul class="nav nav-tabs nav-tabs-icon" id="iconTab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab">
+                  <i class="fas fa-tachometer-alt"></i> General
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="images-tab" data-toggle="tab" href="#images" role="tab">
+                  <i class="fas fa-users"></i> Image
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="seo-tab" data-toggle="tab" href="#seo" role="tab">
+                  <i class="fas fa-users"></i> SEO
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content tab-content-bordered" id="iconTabContent">
+              <div class="tab-pane fade show active" id="general" role="tabpanel">
+                <div class="mb-3">
+                  <label for="brandName" class="form-label">Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="brandName" name="name" required>
                 </div>
-                <div class="card-body">
-                  <x-media-selector 
-                    name="logo" 
-                    label="" 
-                    :required="false" 
-                    preview_height="200px"
-                    placeholder_text="Click to choose from gallery" 
-                    upload_text="upload new logo" 
-                    :show_gallery="true"
-                    :show_upload="true" 
-                    :show_remove="true" />
+
+                <div class="form-check mb-3">
+                  <input class="form-check-input" type="checkbox" id="isActive" name="is_active" value="1"
+                    checked>
+                  <label class="form-check-label" for="isActive">
+                    Enable the Brand
+                  </label>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="images" role="tabpanel">
+                <div class="mb-3">
+                  <div class="image-upload-section">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="card">
+                          <div class="card-header">
+                            <h5 class="card-title">
+                              <i class="fas fa-images mr-2"></i>
+                              Logo
+                            </h5>
+                          </div>
+                          <div class="card-body">
+                            <x-media-selector name="logo" label="" :required="false" preview_height="200px"
+                              placeholder_text="Click to choose from gallery" upload_text="upload new image"
+                              :show_gallery="true" :show_upload="true" :show_remove="true" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="single-image-wrapper">
+                          <div class="card">
+                            <div class="card-header">
+                              <h5 class="card-title">
+                                <i class="fas fa-images mr-2"></i>
+                                Banner
+                              </h5>
+                            </div>
+                            <div class="card-body">
+                              <x-media-selector name="banner" label="" :required="false"
+                                preview_height="200px" placeholder_text="Click to choose from gallery"
+                                upload_text="upload new image" :show_gallery="true" :show_upload="true" :show_remove="true" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="seo" role="tabpanel">
+                <div class="mb-3">
+                  <label for="metaTitle" class="form-label">Meta Title <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="metaTitle" name="meta_title" required>
+                </div>
+                <div class="mb-3">
+                  <label for="metaDescription" class="form-label">Meta Description</label>
+                  <textarea class="form-control" id="metaDescription" name="meta_description" rows="4"></textarea>
                 </div>
               </div>
             </div>
@@ -286,8 +316,7 @@
           url: '{{ route('admin.brands.index') }}',
           type: 'GET'
         },
-        columns: [
-          {
+        columns: [{
             data: 'id',
             name: 'id'
           },
@@ -353,7 +382,7 @@
           const oldInput = document.getElementById(componentId + '_old_input');
           const imagePreview = document.getElementById(componentId + '_image_preview');
           const uploadContent = document.getElementById(componentId + '_upload_content');
-          
+
           if (urlInput) urlInput.value = '';
           if (oldInput) oldInput.value = '';
           if (imagePreview) imagePreview.style.display = 'none';
@@ -382,19 +411,6 @@
       // Reset modal when create button is clicked
       $('button[data-target="#createBrandModal"]').on('click', function() {
         resetModalToCreateMode();
-      });
-
-      // Auto-generate slug from name
-      $('#createName').on('keyup', function() {
-        const name = $(this).val();
-        if (name && $('#brandId').val() === '') { // Only auto-generate for new brands
-          const slug = name.toLowerCase()
-            .replace(/[^\w\s-]/g, '') // Remove special characters
-            .replace(/\s+/g, '-')     // Replace spaces with hyphens
-            .replace(/-+/g, '-')      // Remove multiple consecutive hyphens
-            .trim('-');               // Remove leading/trailing hyphens
-          $('#createSlug').val(slug);
-        }
       });
 
       // Status filter
@@ -516,9 +532,13 @@
           success: function(response) {
             if (response.success) {
               const brand = response.brand;
-              let logo = brand.logo 
-                ? `<img src="${brand.logo}" alt="${brand.name || 'Brand'}" class="img-thumbnail" style="max-width:200px;">` 
-                : '<div class="text-center text-muted"><i class="fas fa-image fa-3x"></i><br>No Logo</div>';
+              let logo = brand.logo ?
+                `<img src="${brand.logo}" alt="${brand.name || 'Brand'}" class="img-thumbnail" style="max-width:200px;">` :
+                '<div class="text-center text-muted"><i class="fas fa-image fa-3x"></i><br>No Logo</div>';
+
+              let banner = brand.banner ?
+                `<img src="${brand.banner}" alt="${brand.name || 'Brand'} Banner" class="img-thumbnail" style="max-width:100%; max-height:200px;">` :
+                '<div class="text-center text-muted"><i class="fas fa-image fa-3x"></i><br>No Banner</div>';
 
               $('#brandDetailsContent').html(`
                 <div class="row">
@@ -534,7 +554,15 @@
                     ${logo}
                   </div>
                 </div>
+                ${brand.banner ? `<div class="mt-3"><strong>Banner:</strong><br>${banner}</div>` : ''}
                 ${brand.description ? `<div class="mt-3"><strong>Description:</strong><br>${brand.description}</div>` : ''}
+                ${brand.meta_title || brand.meta_description ? `
+                                <div class="mt-3">
+                                  <h6><strong>SEO Information:</strong></h6>
+                                  ${brand.meta_title ? `<strong>Meta Title:</strong> ${brand.meta_title}<br>` : ''}
+                                  ${brand.meta_description ? `<strong>Meta Description:</strong> ${brand.meta_description}<br>` : ''}
+                                </div>
+                              ` : ''}
               `);
               $('#viewBrandModal').modal('show');
             }
@@ -548,7 +576,7 @@
       // Edit Brand
       $(document).on('click', '.edit-brand', function() {
         const brandId = $(this).data('id');
-        
+
         $.ajax({
           url: '{{ route('admin.brands.edit', ':id') }}'.replace(':id', brandId),
           type: 'GET',
@@ -558,7 +586,7 @@
           success: function(response) {
             if (response.success) {
               const brand = response.brand;
-              
+
               // Set modal mode to edit
               $('#modalTitle').text('Edit Brand');
               $('#buttonText').text('Update Brand');
@@ -570,31 +598,64 @@
               $('#brandId').val(brand.id);
 
               // Fill form fields
-              $('#createName').val(brand.name || '');
-              $('#createSlug').val(brand.slug);
-              $('#createDescription').val(brand.description || '');
-              $('#createStatus').val(brand.is_active ? '1' : '0');
+              $('#brandName').val(brand.name || '');
+              $('#isActive').prop('checked', brand.is_active == 1 || brand.is_active === true);
+
+              // Fill metadata fields
+              $('#metaTitle').val(brand.meta_title || '');
+              $('#metaDescription').val(brand.meta_description || '');
 
               // Handle logo preview if brand has one
-              const mediaSelector = document.querySelector('#createBrandModal .media-selector-component');
-              if (mediaSelector && brand.logo) {
-                const componentId = mediaSelector.id;
+              const logoSelector = document.querySelector('#createBrandModal [name="logo"]')?.closest(
+                '.media-selector-component');
+              if (logoSelector && brand.logo) {
+                const componentId = logoSelector.id;
                 const urlInput = document.getElementById(componentId + '_url_input');
                 const oldInput = document.getElementById(componentId + '_old_input');
-                
-                // Set the logo URL in hidden inputs
+                const idInput = document.getElementById(componentId + '_id_input');
+
+                // Set the logo URL and ID in hidden inputs
                 if (urlInput) urlInput.value = brand.logo;
                 if (oldInput) oldInput.value = brand.logo;
+                if (idInput && brand.logo_id) idInput.value = brand.logo_id;
 
                 // Show the logo preview
-                MediaSelector.setImagePreview(componentId, brand.logo);
+                if (typeof MediaSelector !== 'undefined') {
+                  MediaSelector.setImagePreview(componentId, brand.logo);
+                }
+              }
+
+              // Handle banner preview if brand has one
+              const bannerSelector = document.querySelector('#createBrandModal [name="banner"]')?.closest(
+                '.media-selector-component');
+              if (bannerSelector && brand.banner) {
+                const componentId = bannerSelector.id;
+                const urlInput = document.getElementById(componentId + '_url_input');
+                const oldInput = document.getElementById(componentId + '_old_input');
+                const idInput = document.getElementById(componentId + '_id_input');
+
+                // Set the banner URL and ID in hidden inputs
+                if (urlInput) urlInput.value = brand.banner;
+                if (oldInput) oldInput.value = brand.banner;
+                if (idInput && brand.banner_id) idInput.value = brand.banner_id;
+
+                // Show the banner preview
+                if (typeof MediaSelector !== 'undefined') {
+                  MediaSelector.setImagePreview(componentId, brand.banner);
+                }
               }
 
               $('#createBrandModal').modal('show');
             }
           },
           error: function(xhr) {
-            alert('Error loading brand data');
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error loading brand data',
+              position: 'top-end',
+              toast: true
+            });
           }
         });
       });

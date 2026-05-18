@@ -124,59 +124,113 @@
                 <div class="tab-content" id="attribute-tabContent">
                   <!-- General Tab -->
                   <div class="tab-pane fade show active" id="general" role="tabpanel">
-                    <div class="card">
-                      <div class="card-header">
-                        <h3 class="card-title">General</h3>
+                    <div class="card shadow-sm border-0">
+                      <div class="card-header bg-gradient-primary text-white">
+                        <h5 class="card-title mb-0">
+                          <i class="fas fa-info-circle me-2"></i>General Information
+                        </h5>
                       </div>
-                      <div class="card-body">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="createAttributeSet">Attribute Set <span class="text-danger">*</span></label>
-                              <select class="form-control" id="createAttributeSet" name="attribute_set_id" required>
-                                <option value="">Please Select</option>
-                                <!-- Options will be populated via AJAX -->
-                              </select>
-                              <div class="invalid-feedback"></div>
+                      <div class="card-body p-4">
+                        <!-- Basic Information -->
+                        <div class="form-section mb-4">
+                          <h6 class="text-uppercase text-muted mb-3"
+                            style="font-size: 0.875rem; font-weight: 600; letter-spacing: 0.5px;">
+                            <i class="fas fa-layer-group me-2"></i>Basic Information
+                          </h6>
+                          <div class="row g-3">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="createAttributeSet" class="form-label fw-semibold">
+                                  <i class="fas fa-folder me-1 text-primary"></i>
+                                  Attribute Set <span class="text-danger">*</span>
+                                </label>
+                                <select class="form-control select2-single" id="createAttributeSet"
+                                  name="attribute_set_id" required>
+                                  <option value="">Select an attribute set...</option>
+                                  <!-- Options will be populated via AJAX -->
+                                </select>
+                                <small class="form-text text-muted">
+                                  <i class="fas fa-info-circle me-1"></i>Choose which attribute set this belongs to
+                                </small>
+                                <div class="invalid-feedback"></div>
+                              </div>
                             </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="createName">Name <span class="text-danger">*</span></label>
-                              <input type="text" class="form-control" id="createName" name="name" required placeholder="Enter attribute name">
-                              <div class="invalid-feedback"></div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="createSlug">Slug</label>
-                              <input type="text" class="form-control" id="createSlug" name="slug" placeholder="Auto-generated from name">
-                              <div class="invalid-feedback"></div>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="createCategories">Categories</label>
-                              <select class="form-control" id="createCategories" name="categories[]" multiple>
-                                <!-- Categories will be loaded via AJAX -->
-                              </select>
-                              <small class="form-text text-muted">Select categories where this attribute should be available (optional)</small>
-                              <div class="invalid-feedback"></div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="createName" class="form-label fw-semibold">
+                                  <i class="fas fa-tag me-1 text-primary"></i>
+                                  Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control" id="createName" name="name" required
+                                  placeholder="e.g., Color, Size, Material">
+                                <div class="invalid-feedback"></div>
+                              </div>
                             </div>
                           </div>
                         </div>
 
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="createFilterable" name="is_filterable" value="1">
-                                <label class="custom-control-label" for="createFilterable">
-                                  Use this attribute for filtering products
+                        <!-- Additional Settings -->
+                        <div class="form-section mb-4">
+                          <h6 class="text-uppercase text-muted mb-3"
+                            style="font-size: 0.875rem; font-weight: 600; letter-spacing: 0.5px;">
+                            <i class="fas fa-cog me-2"></i>Additional Settings
+                          </h6>
+                          <div class="row g-3">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="createSlug" class="form-label fw-semibold">
+                                  <i class="fas fa-link me-1 text-primary"></i>
+                                  Slug
                                 </label>
+                                <input type="text" class="form-control" id="createSlug" name="slug"
+                                  placeholder="auto-generated-slug">
+                                <small class="form-text text-muted">
+                                  <i class="fas fa-magic me-1"></i>Auto-generated from name if left empty
+                                </small>
+                                <div class="invalid-feedback"></div>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="createCategories" class="form-label fw-semibold">
+                                  <i class="fas fa-th-list me-1 text-primary"></i>
+                                  Categories
+                                </label>
+                                <select class="form-control" id="createCategories" name="categories[]" multiple>
+                                  <!-- Categories will be loaded via AJAX -->
+                                </select>
+                                <small class="form-text text-muted">
+                                  <i class="fas fa-filter me-1"></i>Limit attribute to specific categories (optional)
+                                </small>
+                                <div class="invalid-feedback"></div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Options -->
+                        <div class="form-section">
+                          <h6 class="text-uppercase text-muted mb-3"
+                            style="font-size: 0.875rem; font-weight: 600; letter-spacing: 0.5px;">
+                            <i class="fas fa-sliders-h me-2"></i>Options
+                          </h6>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <div class="card bg-light border-0">
+                                  <div class="card-body py-3">
+                                    <div class="form-check form-switch">
+                                      <input type="checkbox" class="form-check-input" id="createFilterable"
+                                        name="is_filterable" value="1" style="cursor: pointer;">
+                                      <label class="form-check-label" for="createFilterable" style="cursor: pointer;">
+                                        <strong><i class="fas fa-filter me-2 text-primary"></i>Enable Product
+                                          Filtering</strong>
+                                        <div class="small text-muted mt-1">Allow customers to filter products using this
+                                          attribute</div>
+                                      </label>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -189,16 +243,19 @@
                   <div class="tab-pane fade" id="values" role="tabpanel">
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">Values</h3>
+                        <h3 class="card-title">Attribute Values</h3>
                       </div>
                       <div class="card-body">
                         <div class="form-group">
-                          <label>Value</label>
+                          <label class="form-label">Values <span class="text-muted">(Label & Image)</span></label>
+
+                          <!-- Values Container -->
                           <div id="attribute-values-container">
-                            <!-- Dynamic values will be added here -->
+                            <!-- Dynamic value rows will be added here -->
                           </div>
-                          <button type="button" class="btn btn-secondary btn-sm mt-2" id="addNewValueBtn">
-                            <i class="fas fa-plus"></i> Add New Value
+
+                          <button type="button" class="btn btn-sm btn-secondary mt-3" id="addNewValueBtn">
+                            <i class="fas fa-plus mr-1"></i> Add Value
                           </button>
                         </div>
                       </div>
@@ -239,8 +296,9 @@
 @push('styles')
   <link href="{{ assetUrl() }}assets/backend/lib/datatables/css/dataTables.bootstrap4.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" rel="stylesheet">
-  
+  <link href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css"
+    rel="stylesheet">
+
   <style>
     .modal-xl {
       max-width: 1200px;
@@ -298,30 +356,279 @@
       border-color: #007bff;
     }
 
-    .attribute-value-item {
+    /* Attribute Value Rows - Compact Layout */
+    .attribute-value-row {
       display: flex;
       align-items: center;
-      margin-bottom: 10px;
-      padding: 8px;
+      margin-bottom: 8px;
+      padding: 8px 12px;
       border: 1px solid #dee2e6;
       border-radius: 4px;
-      background: #f8f9fa;
+      background: #fff;
+      gap: 8px;
     }
 
-    .attribute-value-item .drag-handle {
+    .attribute-value-row .drag-handle {
       cursor: move;
-      margin-right: 10px;
       color: #6c757d;
+      font-size: 14px;
+      padding: 0 4px;
+      flex-shrink: 0;
     }
 
-    .attribute-value-item input {
+    .attribute-value-row .drag-handle:hover {
+      color: #495057;
+    }
+
+    .attribute-value-row input.label-input {
       flex: 1;
-      margin-right: 10px;
+      min-width: 200px;
     }
 
-    .attribute-value-item .btn-danger {
+    .attribute-value-row .image-input-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      max-width: 600px;
+    }
+
+    .attribute-value-row .image-preview-box {
+      width: 40px;
+      height: 40px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      background: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .attribute-value-row .image-preview-box:hover {
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+    }
+
+    .attribute-value-row .image-preview-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 3px;
+    }
+
+    .attribute-value-row .image-preview-box i {
+      color: #adb5bd;
+      font-size: 16px;
+    }
+
+    .attribute-value-row .image-name-input {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .attribute-value-row .btn-select-image {
+      flex-shrink: 0;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .attribute-value-row .delete-row {
+      cursor: pointer;
+      color: #dc3545;
+      font-size: 16px;
+      padding: 0 8px;
+      transition: color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .attribute-value-row .delete-row:hover {
+      color: #c82333;
+    }
+
+    /* Enhanced Select2 Styling */
+    .select2-container--bootstrap4 .select2-selection--single {
+      height: 38px !important;
+      border-radius: 6px !important;
+      border: 1px solid #ced4da !important;
+      transition: all 0.2s !important;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+      line-height: 36px !important;
+      padding-left: 12px !important;
+      padding-right: 36px !important;
+      color: #495057 !important;
+      font-size: 1rem !important;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__arrow {
+      height: 36px !important;
+      top: 1px !important;
+      right: 1px !important;
+      width: 32px !important;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--single .select2-selection__placeholder {
+      color: #6c757d !important;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--multiple {
+      min-height: calc(1.5em + 0.75rem + 2px);
+      border-radius: 6px;
+      border: 1px solid #ced4da;
+      transition: all 0.2s;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__rendered {
       padding: 2px 8px;
-      font-size: 12px;
+      min-height: calc(1.5em + 0.75rem);
+    }
+
+    .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice {
+      background-color: #667eea;
+      border-color: #5a67d8;
+      color: #fff;
+      padding: 4px 10px;
+      margin: 3px 4px 3px 0;
+      border-radius: 4px;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice__remove {
+      color: #fff;
+      margin-right: 6px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      line-height: 1;
+      opacity: 0.8;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--multiple .select2-selection__choice__remove:hover {
+      opacity: 1;
+      color: #ffe0e0;
+    }
+
+    .select2-container--bootstrap4.select2-container--focus .select2-selection {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .select2-dropdown {
+      border-color: #ced4da;
+      border-radius: 6px;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+      margin-top: 4px;
+    }
+
+    .select2-container--bootstrap4 .select2-results__option {
+      padding: 8px 12px;
+      font-size: 0.95rem;
+    }
+
+    .select2-container--bootstrap4 .select2-results__option--highlighted {
+      background-color: #667eea;
+      color: #fff;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+      border: 1px solid #ced4da;
+      border-radius: 6px;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .select2-search--dropdown .select2-search__field:focus {
+      border-color: #667eea;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    /* Make select boxes more prominent */
+    #createAttributeSet,
+    #createCategories {
+      font-size: 1rem;
+    }
+
+    /* Fix for category indentation display */
+    .select2-results__option[role="option"] {
+      white-space: normal;
+      word-wrap: break-word;
+    }
+
+    .select2-container--bootstrap4 .select2-selection--multiple .select2-search--inline .select2-search__field {
+      margin-top: 6px;
+      margin-bottom: 3px;
+      padding: 0 8px;
+      font-size: 1rem;
+    }
+
+    /* Form group spacing */
+    .form-group label {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Enhanced form styling */
+    .bg-gradient-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .form-section {
+      padding: 1.5rem;
+      border-radius: 8px;
+      background: #f8f9fa;
+      border-left: 4px solid #667eea;
+    }
+
+    .form-label {
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .form-label .fas {
+      font-size: 0.85rem;
+    }
+
+    .form-control {
+      border-radius: 6px;
+      border: 1px solid #ced4da;
+      transition: all 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .form-check-input:checked {
+      background-color: #667eea;
+      border-color: #667eea;
+    }
+
+    .form-check-input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+
+    .card.shadow-sm {
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .row.g-3 {
+      row-gap: 1rem;
+    }
+
+    .fw-semibold {
+      font-weight: 600;
     }
   </style>
 @endpush
@@ -331,7 +638,7 @@
   <script src="{{ assetUrl() }}assets/backend/lib/datatables/js/dataTables.bootstrap4.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-  
+
   <script>
     $(document).ready(function() {
       let currentAttributeValues = [];
@@ -399,14 +706,27 @@
         initializeSelect2();
       });
 
-      // Initialize Select2 for categories
+      // Initialize Select2 for both dropdowns
       function initializeSelect2() {
+        // Initialize Attribute Set select (single selection)
+        $('#createAttributeSet').select2({
+          theme: 'bootstrap4',
+          placeholder: 'Select an attribute set...',
+          allowClear: true,
+          dropdownParent: $('#createAttributeModal'),
+          width: '100%',
+          minimumResultsForSearch: 5, // Show search box if more than 5 items
+        });
+
+        // Initialize Categories select (multiple selection)
         $('#createCategories').select2({
           theme: 'bootstrap4',
           placeholder: 'Select categories (optional)',
           allowClear: true,
           dropdownParent: $('#createAttributeModal'),
-          width: '100%'
+          width: '100%',
+          closeOnSelect: false, // Keep dropdown open for multiple selections
+          tags: false, // Don't allow creating new tags
         });
       }
 
@@ -420,14 +740,28 @@
           },
           success: function(response) {
             const select = $('#createAttributeSet');
-            select.empty().append('<option value="">Please Select</option>');
-            
+            select.empty().append('<option value="">Select an attribute set...</option>');
+
             if (response.data && response.data.length > 0) {
               response.data.forEach(function(attributeSet) {
-                const name = $(attributeSet.name).text(); // Extract text from HTML
+                // Handle the name - it's already translated from the server
+                const name = attributeSet.name || 'Untitled';
                 select.append(`<option value="${attributeSet.id}">${name}</option>`);
               });
             }
+
+            // Reinitialize Select2 after loading data
+            if (select.hasClass('select2-hidden-accessible')) {
+              select.select2('destroy');
+            }
+            select.select2({
+              theme: 'bootstrap4',
+              placeholder: 'Select an attribute set...',
+              allowClear: true,
+              dropdownParent: $('#createAttributeModal'),
+              width: '100%',
+              minimumResultsForSearch: 5,
+            });
           },
           error: function(xhr) {
             console.error('Error loading attribute sets:', xhr);
@@ -446,12 +780,12 @@
           success: function(categories) {
             const select = $('#createCategories');
             select.empty();
-            
+
             if (categories && categories.length > 0) {
               // Group categories by parent
               const grouped = {};
               const rootCategories = [];
-              
+
               categories.forEach(function(category) {
                 if (category.parent_id === null) {
                   rootCategories.push(category);
@@ -462,11 +796,11 @@
                   grouped[category.parent_id].push(category);
                 }
               });
-              
+
               // Add root categories and their children
               rootCategories.forEach(function(category) {
                 select.append(`<option value="${category.id}">${category.text}</option>`);
-                
+
                 // Add child categories with indentation
                 if (grouped[category.id]) {
                   grouped[category.id].forEach(function(child) {
@@ -475,12 +809,20 @@
                 }
               });
             }
-            
+
             // Reinitialize Select2 after loading data
             if (select.hasClass('select2-hidden-accessible')) {
               select.select2('destroy');
             }
-            initializeSelect2();
+            select.select2({
+              theme: 'bootstrap4',
+              placeholder: 'Select categories (optional)',
+              allowClear: true,
+              dropdownParent: $('#createAttributeModal'),
+              width: '100%',
+              closeOnSelect: false,
+              tags: false,
+            });
           },
           error: function(xhr) {
             console.error('Error loading categories:', xhr);
@@ -498,14 +840,28 @@
           }
         }).then(function(response) {
           const select = $('#createAttributeSet');
-          select.empty().append('<option value="">Please Select</option>');
-          
+          select.empty().append('<option value="">Select an attribute set...</option>');
+
           if (response.data && response.data.length > 0) {
             response.data.forEach(function(attributeSet) {
-              const name = $(attributeSet.name).text(); // Extract text from HTML
+              // Handle the name - it's already translated from the server
+              const name = attributeSet.name || 'Untitled';
               select.append(`<option value="${attributeSet.id}">${name}</option>`);
             });
           }
+
+          // Reinitialize Select2
+          if (select.hasClass('select2-hidden-accessible')) {
+            select.select2('destroy');
+          }
+          select.select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select an attribute set...',
+            allowClear: true,
+            dropdownParent: $('#createAttributeModal'),
+            width: '100%',
+            minimumResultsForSearch: 5,
+          });
         });
       }
 
@@ -519,12 +875,12 @@
         }).then(function(categories) {
           const select = $('#createCategories');
           select.empty();
-          
+
           if (categories && categories.length > 0) {
             // Group categories by parent
             const grouped = {};
             const rootCategories = [];
-            
+
             categories.forEach(function(category) {
               if (category.parent_id === null) {
                 rootCategories.push(category);
@@ -535,11 +891,11 @@
                 grouped[category.parent_id].push(category);
               }
             });
-            
+
             // Add root categories and their children
             rootCategories.forEach(function(category) {
               select.append(`<option value="${category.id}">${category.text}</option>`);
-              
+
               // Add child categories with indentation
               if (grouped[category.id]) {
                 grouped[category.id].forEach(function(child) {
@@ -548,12 +904,20 @@
               }
             });
           }
-          
+
           // Reinitialize Select2 after loading data
           if (select.hasClass('select2-hidden-accessible')) {
             select.select2('destroy');
           }
-          initializeSelect2();
+          select.select2({
+            theme: 'bootstrap4',
+            placeholder: 'Select categories (optional)',
+            allowClear: true,
+            dropdownParent: $('#createAttributeModal'),
+            width: '100%',
+            closeOnSelect: false,
+            tags: false,
+          });
         });
       }
 
@@ -586,30 +950,102 @@
         addNewValue('');
       });
 
-      // Add value function
-      function addNewValue(value = '') {
+      // Add value function with label and image support
+      function addNewValue(label = '', imageUrl = '', imageId = '') {
         const index = Date.now();
+        const imagePreview = imageUrl ?
+          `<img src="${imageUrl}" alt="Preview">` :
+          '<i class="fas fa-image"></i>';
+
         const html = `
-          <div class="attribute-value-item" data-index="${index}">
+          <div class="attribute-value-row" data-index="${index}">
             <i class="fas fa-grip-vertical drag-handle"></i>
-            <input type="text" class="form-control" name="values[]" value="${value}" placeholder="Enter value">
-            <button type="button" class="btn btn-danger btn-sm remove-value">
-              <i class="fas fa-trash"></i>
-            </button>
+
+            <div class="image-input-group">
+              <div class="image-preview-box" data-index="${index}" title="Click to select image">
+                ${imagePreview}
+              </div>
+              <input type="text" class="form-control label-input" name="values[${index}][label]"
+                     value="${label}" placeholder="Enter label (e.g., Small, Red)">
+              <input type="hidden" class="image-id-input" name="values[${index}][image_id]" value="${imageId}">
+              <button type="button" class="btn btn-sm btn-outline-primary btn-select-image" data-index="${index}" title="Select image">
+                <i class="fas fa-image"></i>
+              </button>
+            </div>
+
+            <i class="fas fa-trash delete-row" title="Delete row"></i>
           </div>
         `;
         $('#attribute-values-container').append(html);
       }
 
+      // Handle image selection - can click preview box or select button
+      $(document).on('click', '.btn-select-image, .image-preview-box', function() {
+        const index = $(this).data('index');
+        const row = $(`.attribute-value-row[data-index="${index}"]`);
+
+        // Check if MediaManager is available
+        if (typeof window.MediaManager === 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Media Manager is not available. Please check if it is properly loaded.',
+            position: 'top-end',
+            toast: true,
+            timer: 3000,
+            showConfirmButton: false
+          });
+          return;
+        }
+
+        try {
+          const mediaManager = new MediaManager({
+            container: document.createElement('div'),
+            endpoints: window.MediaSelectorConfig?.endpoints || {},
+            modal: true,
+            multiple: false,
+            onSelect: (files) => {
+              if (files && files.length > 0) {
+                const file = files[0];
+
+                // Update preview
+                row.find('.image-preview-box').html(`<img src="${file.url}" alt="Preview">`);
+
+                // Store image ID
+                row.find('.image-id-input').val(file.id);
+
+                showAlert('Image selected successfully!', 'success');
+              }
+            }
+          });
+
+          mediaManager.open();
+        } catch (error) {
+          console.error('Error opening media manager:', error);
+          showAlert('Failed to open media manager', 'error');
+        }
+      }); // Clear image with right-click on preview
+      $(document).on('contextmenu', '.image-preview-box', function(e) {
+        e.preventDefault();
+        const row = $(this).closest('.attribute-value-row');
+        $(this).html('<i class="fas fa-image"></i>');
+        row.find('.image-id-input').val('');
+        showAlert('Image cleared', 'info');
+      });
+
       // Remove value
-      $(document).on('click', '.remove-value', function() {
-        $(this).closest('.attribute-value-item').remove();
+      $(document).on('click', '.delete-row', function() {
+        $(this).closest('.attribute-value-row').remove();
       });
 
       // Update value order
       function updateValueOrder() {
-        $('#attribute-values-container .attribute-value-item').each(function(index) {
-          $(this).find('input[name="values[]"]').attr('data-order', index);
+        $('#attribute-values-container .attribute-value-row').each(function(index) {
+          $(this).find('input[name^="values"]').each(function() {
+            const name = $(this).attr('name');
+            const newName = name.replace(/values\[\d+\]/, `values[${index}]`);
+            $(this).attr('name', newName);
+          });
         });
       }
 
@@ -651,6 +1087,9 @@
         $(this).find('.invalid-feedback').text('');
 
         // Destroy Select2 instances
+        if ($('#createAttributeSet').hasClass('select2-hidden-accessible')) {
+          $('#createAttributeSet').select2('destroy');
+        }
         if ($('#createCategories').hasClass('select2-hidden-accessible')) {
           $('#createCategories').select2('destroy');
         }
@@ -713,18 +1152,18 @@
 
         // Collect form data manually to properly handle arrays
         const formData = new FormData();
-        
+
         // Add basic fields
         formData.append('_token', $('meta[name="csrf-token"]').attr('content'));
         if (isEdit) {
           formData.append('_method', 'PUT');
         }
-        
+
         formData.append('name', $('#createName').val());
         formData.append('attribute_set_id', $('#createAttributeSet').val());
         formData.append('slug', $('#createSlug').val());
         formData.append('is_filterable', $('#createFilterable').is(':checked') ? '1' : '0');
-        
+
         // Add categories
         const categories = $('#createCategories').val() || [];
         if (categories.length > 0) {
@@ -732,22 +1171,21 @@
             formData.append(`categories[${index}]`, categoryId);
           });
         }
-        
-        // Add attribute values
-        const values = [];
-        $('#attribute-values-container .attribute-value-item').each(function() {
-          const value = $(this).find('input[name="values[]"]').val().trim();
-          if (value) {
-            values.push(value);
+
+        // Add attribute values with labels and images
+        $('#attribute-values-container .attribute-value-row').each(function(index) {
+          const label = $(this).find('.label-input').val().trim();
+          const imageId = $(this).find('.image-id-input').val();
+
+          if (label) {
+            formData.append(`values[${index}][label]`, label);
+            if (imageId) {
+              formData.append(`values[${index}][image_id]`, imageId);
+            }
           }
         });
-        
-        if (values.length > 0) {
-          values.forEach(function(value, index) {
-            formData.append(`values[${index}]`, value);
-          });
-        }
-        const url = isEdit ? '{{ route('admin.attributes.update', ':id') }}'.replace(':id', $('#attributeId').val()) :
+        const url = isEdit ? '{{ route('admin.attributes.update', ':id') }}'.replace(':id', $('#attributeId')
+            .val()) :
           '{{ route('admin.attributes.store') }}';
         const method = isEdit ? 'POST' : 'POST';
 
@@ -818,7 +1256,7 @@
           success: function(response) {
             if (response.success) {
               const attribute = response.attribute;
-              
+
               $('#attributeDetailsContent').html(`
                 <div class="row">
                   <div class="col-md-6">
@@ -845,7 +1283,7 @@
       // Edit Attribute
       $(document).on('click', '.edit-attribute', function() {
         const attributeId = $(this).data('id');
-        
+
         // Set modal mode to edit first
         $('#modalTitle').text('Edit Attribute');
         $('#buttonText').text('Update Attribute');
@@ -858,7 +1296,7 @@
 
         // Show modal and load data
         $('#createAttributeModal').modal('show');
-        
+
         // Load attribute sets and categories first, then populate the form
         Promise.all([
           loadAttributeSetsPromise(),
@@ -875,7 +1313,7 @@
         }).then(function(response) {
           if (response.success) {
             const attribute = response.attribute;
-            
+
             // Fill form fields
             $('#createName').val(attribute.name);
             $('#createSlug').val(attribute.slug);
@@ -895,7 +1333,11 @@
             $('#attribute-values-container').empty();
             if (attribute.attribute_values && attribute.attribute_values.length > 0) {
               attribute.attribute_values.forEach(function(value) {
-                addNewValue(value.value || '');
+                addNewValue(
+                  value.value || value.label || '',
+                  value.image_url || '',
+                  value.image_id || ''
+                );
               });
             }
           }

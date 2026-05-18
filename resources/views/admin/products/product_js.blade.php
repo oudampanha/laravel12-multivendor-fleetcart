@@ -1390,15 +1390,22 @@
           const $input = $row.find('input[type="text"]');
           const $hiddenInput = $row.find('input[type="hidden"]');
 
+          // Check if MediaManager is available
+          if (typeof window.MediaManager === 'undefined') {
+            console.error('MediaManager.js is not loaded');
+            alert('Media Manager is not available. Please refresh the page.');
+            return;
+          }
+
           // Open media manager
-          const manager = new MediaManager({
-            type: 'file',
-            onSelect: function(file) {
-              $input.val(file.name);
-              $hiddenInput.val(file.id);
-            }
+          const manager = new window.MediaManager({
+            modal: true,
+            multiple: false
           });
-          manager.show();
+          manager.open(function(file) {
+            $input.val(file.name);
+            $hiddenInput.val(file.id);
+          });
         })
 
         // Templates
@@ -1518,15 +1525,20 @@
         // Media
         .on('click', '#mainImageHolder', function(e) {
           e.preventDefault();
-          const manager = new MediaManager({
-            multiple: false,
-            onSelect: function(files) {
-              if (files.length > 0) {
-                GalleryManager.setMainImage(files[0]);
-              }
-            }
+
+          if (typeof window.MediaManager === 'undefined') {
+            console.error('MediaManager.js is not loaded');
+            alert('Media Manager is not available. Please refresh the page.');
+            return;
+          }
+
+          const manager = new window.MediaManager({
+            modal: true,
+            multiple: false
           });
-          manager.open();
+          manager.open(function(file) {
+            GalleryManager.setMainImage(file);
+          });
         })
         .on('click', '#removeMainImage', function(e) {
           e.stopPropagation();
@@ -1542,32 +1554,38 @@
             return;
           }
 
-          const manager = new MediaManager({
-            multiple: true,
-            onSelect: function(files) {
-              const available = CONFIG.MAX_GALLERY_IMAGES - state.galleryImages.length;
-              let added = 0;
+          if (typeof window.MediaManager === 'undefined') {
+            console.error('MediaManager.js is not loaded');
+            alert('Media Manager is not available. Please refresh the page.');
+            return;
+          }
 
-              files.forEach(file => {
-                if (added >= available) return;
-                if (!state.galleryImages.find(img => img.id === file.id)) {
-                  state.galleryImages.push(file);
-                  GalleryManager.addThumbnail(file);
-                  added++;
-                }
-              });
-
-              if (files.length > added && added > 0) {
-                alert(
-                  `Only ${added} image(s) were added. Maximum ${CONFIG.MAX_GALLERY_IMAGES} gallery images allowed.`
-                );
-              }
-
-              GalleryManager.updateInput();
-              GalleryManager.updateAddButton();
-            }
+          const manager = new window.MediaManager({
+            modal: true,
+            multiple: true
           });
-          manager.open();
+          manager.open(function(files) {
+            const available = CONFIG.MAX_GALLERY_IMAGES - state.galleryImages.length;
+            let added = 0;
+
+            files.forEach(file => {
+              if (added >= available) return;
+              if (!state.galleryImages.find(img => img.id === file.id)) {
+                state.galleryImages.push(file);
+                GalleryManager.addThumbnail(file);
+                added++;
+              }
+            });
+
+            if (files.length > added && added > 0) {
+              alert(
+                `Only ${added} image(s) were added. Maximum ${CONFIG.MAX_GALLERY_IMAGES} gallery images allowed.`
+              );
+            }
+
+            GalleryManager.updateInput();
+            GalleryManager.updateAddButton();
+          });
         })
         .on('click', '.remove-thumbnail', function(e) {
           e.stopPropagation();
@@ -1689,23 +1707,30 @@
           const $name = $row.find('.image-name');
           const $id = $row.find('.image-id');
 
-          const manager = new MediaManager({
-            multiple: false,
-            onSelect: function(files) {
-              if (files.length > 0) {
-                const file = files[0];
-                $preview.html(
-                  `<img src="${file.url}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 3px;">`
-                );
-                if (!$name.val()) {
-                  $name.val(file.name);
-                }
-                $id.val(file.id);
-                updateProductVariants();
-              }
-            }
+          if (typeof window.MediaManager === 'undefined') {
+            console.error('MediaManager.js is not loaded');
+            alert('Media Manager is not available. Please refresh the page.');
+            return;
+          }
+
+          const manager = new window.MediaManager({
+            modal: true,
+            multiple: false
           });
-          manager.open();
+          manager.open(function(file) {
+            $preview.html(
+              `<img src="${file.url}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 3px;">`
+            );
+            $name.val(file.name);
+            $id.val(file.id);
+          });
+          manager.open(function(file) {
+            $preview.html(
+              `<img src="${file.url}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 3px;">`
+            );
+            $name.val(file.name);
+            $id.val(file.id);
+          });
         })
         .on('input', '.image-name', function() {
           updateProductVariants();
@@ -2285,23 +2310,27 @@
         // Variant image upload
         .on('click', '.variant-image-upload', function() {
           const $uploadArea = $(this);
-          const manager = new MediaManager({
-            multiple: false,
-            onSelect: function(files) {
-              if (files.length > 0) {
-                const file = files[0];
-                $uploadArea.html(
-                  `<img src="${file.url}" class="img-fluid rounded" style="height: 100px; width: 100%; object-fit: cover;">`
-                );
-                // Store the image ID in a hidden field
-                const index = $uploadArea.closest('.variant-row-container').index();
-                $uploadArea.after(
-                  `<input type="hidden" name="variants[${index}][image_id]" value="${file.id}">`
-                );
-              }
-            }
+
+          if (typeof window.MediaManager === 'undefined') {
+            console.error('MediaManager.js is not loaded');
+            alert('Media Manager is not available. Please refresh the page.');
+            return;
+          }
+
+          const manager = new window.MediaManager({
+            modal: true,
+            multiple: false
           });
-          manager.open();
+          manager.open(function(file) {
+            $uploadArea.html(
+              `<img src="${file.url}" class="img-fluid rounded" style="height: 100px; width: 100%; object-fit: cover;">`
+            );
+            // Store the image ID in a hidden field
+            const index = $uploadArea.closest('.variant-row-container').index();
+            $uploadArea.after(
+              `<input type="hidden" name="variants[${index}][image_id]" value="${file.id}">`
+            );
+          });
         })
         // Default variant selection handler
         .on('change', '#defaultVariantSelect', function() {

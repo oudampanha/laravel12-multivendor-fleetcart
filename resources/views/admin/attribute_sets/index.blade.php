@@ -23,27 +23,8 @@
       </div>
 
       <div class="row">
-        <!-- Attribute Sets List -->
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <div>
-                  <button type="button" class="btn btn-sm btn-outline-primary" id="addAttributeSetBtn">
-                    Add Attribute Set
-                  </button>
-                </div>
-              </div>
-
-              <div id="attributeSetsList" class="attribute-sets-list">
-                <!-- Attribute sets will be loaded here -->
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Attribute Set Form -->
-        <div class="col-md-8">
+        <div class="col-md-5">
           <div class="card">
             <div class="card-body">
               <form id="attributeSetForm">
@@ -61,47 +42,56 @@
                         <input type="text" class="form-control" id="attributeSetName" name="name" required>
                       </div>
                     </div>
-                    <div class="col-md-6">
-                      <div class="mb-3">
-                        <label for="attributeSetType" class="form-label">Type <span class="text-danger">*</span></label>
-                        <select class="form-select" id="attributeSetType" name="type" required>
-                          <option value="">Select Type</option>
-                          <option value="text">Text</option>
-                          <option value="image">Image</option>
-                          <option value="color">Color</option>
-                        </select>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
-                <!-- Values Section -->
-                <div class="form-section mb-4">
-                  <h5 class="section-title">Values</h5>
-                  <div id="attributeValuesContainer">
-                    <div class="attribute-value-header d-flex mb-2">
-                      <div class="col-1"></div>
-                      <div class="col-5 text-muted">Label <span class="text-danger">*</span></div>
-                      <div class="col-5 text-muted">Image</div>
-                      <div class="col-1"></div>
-                    </div>
-                    <div id="attributeValuesList">
-                      <!-- Dynamic rows will be added here -->
-                    </div>
-                    <button type="button" class="btn btn-outline-secondary btn-sm mt-2" id="addRowBtn">
-                      <i class="fas fa-plus me-1"></i> Add Row
-                    </button>
-                  </div>
-                </div>
-
-                <div class="d-flex justify-content-end mt-4">
-                  <button type="button" class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
-                  <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+                <div class="text-right mt-4">
+                  <button type="button" class="btn btn-secondary" id="cancelBtn">
+                    <i class="fas fa-times mr-2"></i>Cancel
+                  </button>
+                  <button type="submit" class="btn btn-primary ml-2" id="saveBtn">
+                    <i class="fas fa-save mr-2"></i>Save
+                  </button>
                 </div>
               </form>
             </div>
           </div>
         </div>
+        <!-- Attribute Sets List -->
+        <div class="col-md-7">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <button type="button" class="btn btn-sm btn-outline-primary" id="addAttributeSetBtn">
+                    <i class="fas fa-plus me-2"></i>Add Attribute Set
+                  </button>
+                </div>
+              </div>
+
+              <div id="attributeSetsList" class="attribute-sets-list">
+                <!-- Attribute sets table will be loaded here -->
+                <div class="table-responsive">
+                  <table class="table table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th width="50">#</th>
+                        <th>Name</th>
+                        <th width="120">Attributes</th>
+                        <th width="150">Created Date</th>
+                        <th width="120" class="text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="attributeSetsTableBody">
+                      <!-- Rows will be loaded here -->
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -114,49 +104,46 @@
       overflow-y: auto;
     }
 
-    .attribute-set-item {
-      padding: 12px 15px;
-      border: 1px solid #e9ecef;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      background-color: #fff;
+    .table-responsive {
+      max-height: 550px;
+      overflow-y: auto;
     }
 
-    .attribute-set-item:hover {
+    .attribute-sets-list table {
+      margin-bottom: 0;
+    }
+
+    .attribute-sets-list thead th {
+      position: sticky;
+      top: 0;
       background-color: #f8f9fa;
-      border-color: #007bff;
-    }
-
-    .attribute-set-item.selected {
-      background-color: #007bff;
-      border-color: #007bff;
-      color: white;
-    }
-
-    .attribute-set-item .item-name {
+      z-index: 10;
+      border-bottom: 2px solid #dee2e6;
       font-weight: 600;
-      margin-bottom: 5px;
+      font-size: 14px;
     }
 
-    .attribute-set-item .item-meta {
+    .attribute-sets-list tbody tr {
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .attribute-sets-list tbody tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    .attribute-sets-list tbody tr.selected {
+      background-color: #e7f3ff;
+      border-left: 3px solid #007bff;
+    }
+
+    .badge-attributes {
+      background-color: #e3f2fd;
+      color: #1976d2;
+      padding: 4px 10px;
+      border-radius: 12px;
       font-size: 12px;
-      opacity: 0.8;
-    }
-
-    .attribute-set-item .item-actions {
-      margin-top: 8px;
-    }
-
-    .attribute-set-item .item-actions .btn {
-      padding: 2px 8px;
-      font-size: 11px;
-      margin-right: 5px;
-    }
-
-    .attribute-set-item.selected .item-actions .btn {
-      opacity: 0.9;
+      font-weight: 500;
     }
 
     .empty-state {
@@ -198,120 +185,26 @@
       border-bottom: 1px solid #e9ecef;
     }
 
-    /* Attribute Values Styles */
-    .attribute-value-header {
-      font-weight: 500;
-      font-size: 14px;
-      padding: 0 15px;
-    }
-
-    .attribute-value-row {
-      border: 1px solid #e9ecef;
-      border-radius: 6px;
-      background-color: #fff;
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      display: flex;
-      align-items: center;
-      transition: all 0.2s ease;
-    }
-
-    .attribute-value-row:hover {
-      border-color: #007bff;
-      box-shadow: 0 2px 4px rgba(0, 123, 255, 0.1);
-    }
-
-    .drag-handle {
-      cursor: move;
-      color: #6c757d;
-      font-size: 16px;
-      margin-right: 10px;
-      padding: 5px;
-    }
-
-    .drag-handle:hover {
-      color: #495057;
-    }
-
-    .delete-row {
-      cursor: pointer;
-      color: #dc3545;
-      font-size: 16px;
-      padding: 5px;
-      margin-left: 10px;
-    }
-
-    .delete-row:hover {
-      color: #c82333;
-    }
-
-    .image-upload-wrapper {
-      position: relative;
-      display: inline-block;
-      width: 100%;
-    }
-
-    .image-upload-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 2px dashed #e9ecef;
-      border-radius: 6px;
-      padding: 30px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      background-color: #f8f9fa;
-    }
-
-    .image-upload-btn:hover {
-      border-color: #007bff;
-      background-color: #e3f2fd;
-    }
-
-    .image-upload-btn i {
-      font-size: 24px;
-      color: #6c757d;
-      margin-bottom: 8px;
-    }
-
-    .image-preview {
-      max-width: 60px;
-      max-height: 60px;
-      border-radius: 4px;
-      object-fit: cover;
-    }
-
-    .sortable-ghost {
-      opacity: 0.4;
-    }
-
-    .sortable-chosen {
-      transform: rotate(2deg);
-    }
-
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
   </style>
 @endpush
 
 @push('scripts')
-  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <script>
     $(document).ready(function() {
       let selectedAttributeSet = null;
       let isEditMode = false;
-      let rowCounter = 0;
 
       // Load attribute sets on page load
       loadAttributeSets();
-      
-      // Initialize with one empty row
-      addAttributeValueRow();
-      
-      // Initialize sortable
-      initializeSortable();
 
       // Add Attribute Set
       $('#addAttributeSetBtn').click(function() {
@@ -319,7 +212,7 @@
         isEditMode = false;
         $('#saveBtn').text('Save');
         selectedAttributeSet = null;
-        $('.attribute-set-item').removeClass('selected');
+        $('.attribute-set-row').removeClass('selected');
       });
 
       // Form submission
@@ -332,92 +225,85 @@
       $('#cancelBtn').click(function() {
         clearForm();
         selectedAttributeSet = null;
-        $('.attribute-set-item').removeClass('selected');
-      });
-
-      // Add Row button
-      $('#addRowBtn').click(function() {
-        addAttributeValueRow();
-      });
-
-      // Delegate event for delete buttons
-      $(document).on('click', '.delete-row', function() {
-        if ($('.attribute-value-row').length > 1) {
-          $(this).closest('.attribute-value-row').remove();
-        }
-      });
-
-      // Delegate event for image uploads
-      $(document).on('change', '.image-upload-input', function() {
-        handleImageUpload(this);
-      });
-
-      // Delegate event for clicking image upload area
-      $(document).on('click', '.image-upload-btn', function() {
-        $(this).siblings('.image-upload-input').click();
+        $('.attribute-set-row').removeClass('selected');
       });
 
       // Functions
       function loadAttributeSets() {
-        $('#attributeSetsList').html('<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div>');
+        $('#attributeSetsTableBody').html(
+          '<tr><td colspan="5" class="text-center"><div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i></div></td></tr>'
+        );
 
         $.ajax({
           url: '{{ route('admin.attribute-sets.index') }}',
           method: 'GET',
-          data: { ajax: true },
+          data: {
+            ajax: true
+          },
           success: function(response) {
-            displayAttributeSets(response);
+            displayAttributeSets(response.data);
           },
           error: function(xhr) {
             console.error('Error loading attribute sets:', xhr);
-            $('#attributeSetsList').html('<div class="text-center text-danger">Error loading attribute sets</div>');
+            $('#attributeSetsTableBody').html(
+              '<tr><td colspan="5" class="text-center text-danger">Error loading attribute sets</td></tr>');
           }
         });
       }
 
       function displayAttributeSets(attributeSets) {
-        const container = $('#attributeSetsList');
-        
+        const tbody = $('#attributeSetsTableBody');
+
         if (attributeSets.length === 0) {
-          container.html(`
-            <div class="empty-state">
-              <i class="fas fa-tags"></i>
-              <div class="h6">No attribute sets found</div>
-              <div class="text-muted">Click "Add Attribute Set" to create your first one.</div>
-            </div>
+          tbody.html(`
+            <tr>
+              <td colspan="5" class="text-center py-5">
+                <div class="empty-state">
+                  <i class="fas fa-tags"></i>
+                  <div class="h6">No attribute sets found</div>
+                  <div class="text-muted">Click "Add Attribute Set" to create your first one.</div>
+                </div>
+              </td>
+            </tr>
           `);
           return;
         }
 
         let html = '';
-        attributeSets.forEach(function(attributeSet) {
+        attributeSets.forEach(function(attributeSet, index) {
           const createdDate = new Date(attributeSet.created_at).toLocaleDateString();
           html += `
-            <div class="attribute-set-item" data-id="${attributeSet.id}">
-              <div class="item-name">${attributeSet.name}</div>
-              <div class="item-meta">
-                ${attributeSet.attributes_count} attributes • Created ${createdDate}
-              </div>
-              <div class="item-actions">
-                <button class="btn btn-sm btn-outline-primary edit-attribute-set" data-id="${attributeSet.id}">
-                  <i class="fas fa-edit"></i> Edit
+            <tr class="attribute-set-row" data-id="${attributeSet.id}">
+              <td class="text-center">${index + 1}</td>
+              <td>
+                <strong>${attributeSet.name}</strong>
+              </td>
+              <td class="text-center">
+                <span class="badge-attributes">
+                  <i class="fas fa-tags"></i> ${attributeSet.attributes_count}
+                </span>
+              </td>
+              <td class="text-muted small">${createdDate}</td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary edit-attribute-set" data-id="${attributeSet.id}" title="Edit">
+                  <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-danger delete-attribute-set" data-id="${attributeSet.id}">
-                  <i class="fas fa-trash"></i> Delete
+                <button class="btn btn-sm btn-outline-danger delete-attribute-set" data-id="${attributeSet.id}" title="Delete">
+                  <i class="fas fa-trash"></i>
                 </button>
-              </div>
-            </div>
+              </td>
+            </tr>
           `;
         });
 
-        container.html(html);
+        tbody.html(html);
 
         // Bind click events
-        $('.attribute-set-item').click(function(e) {
+        $('.attribute-set-row').click(function(e) {
           if ($(e.target).hasClass('btn') || $(e.target).parent().hasClass('btn')) {
             return; // Don't select when clicking buttons
           }
-          
+
           const attributeSetId = $(this).data('id');
           selectAttributeSet(attributeSetId);
         });
@@ -436,10 +322,10 @@
       }
 
       function selectAttributeSet(attributeSetId) {
-        $('.attribute-set-item').removeClass('selected');
-        $(`.attribute-set-item[data-id="${attributeSetId}"]`).addClass('selected');
+        $('.attribute-set-row').removeClass('selected');
+        $(`.attribute-set-row[data-id="${attributeSetId}"]`).addClass('selected');
         selectedAttributeSet = attributeSetId;
-        
+
         // Load attribute set data for viewing
         loadAttributeSetData(attributeSetId, false);
       }
@@ -448,10 +334,10 @@
         isEditMode = true;
         loadAttributeSetData(attributeSetId, true);
         $('#saveBtn').text('Update');
-        
-        // Select the item
-        $('.attribute-set-item').removeClass('selected');
-        $(`.attribute-set-item[data-id="${attributeSetId}"]`).addClass('selected');
+
+        // Select the row
+        $('.attribute-set-row').removeClass('selected');
+        $(`.attribute-set-row[data-id="${attributeSetId}"]`).addClass('selected');
         selectedAttributeSet = attributeSetId;
       }
 
@@ -459,11 +345,13 @@
         $.ajax({
           url: '{{ route('admin.attribute-sets.edit', ':id') }}'.replace(':id', attributeSetId),
           method: 'GET',
-          data: { ajax: true },
+          data: {
+            ajax: true
+          },
           success: function(response) {
             if (response.success) {
               const attributeSet = response.attribute_set;
-              
+
               if (isEdit) {
                 // Fill form for editing
                 $('#attributeSetId').val(attributeSet.id);
@@ -556,97 +444,7 @@
         isEditMode = false;
         selectedAttributeSet = null;
         $('#saveBtn').text('Save');
-        $('.attribute-set-item').removeClass('selected');
-        
-        // Clear and reset attribute values
-        $('#attributeValuesList').empty();
-        rowCounter = 0;
-        addAttributeValueRow();
-      }
-
-      function addAttributeValueRow(label = '', image = '') {
-        rowCounter++;
-        const rowHtml = `
-          <div class="attribute-value-row" data-row="${rowCounter}">
-            <div class="col-1">
-              <i class="fas fa-grip-vertical drag-handle"></i>
-            </div>
-            <div class="col-5">
-              <input type="text" class="form-control" name="values[${rowCounter}][label]" value="${label}" placeholder="Enter label" required>
-            </div>
-            <div class="col-5">
-              <div class="image-upload-wrapper">
-                <input type="file" class="image-upload-input" name="values[${rowCounter}][image]" accept="image/*" style="display: none;">
-                <div class="image-upload-btn">
-                  <div class="text-center">
-                    <i class="fas fa-image"></i>
-                    <div class="small text-muted mt-1">Click to upload</div>
-                  </div>
-                </div>
-                <div class="image-preview-container mt-2" style="display: none;">
-                  <img src="" alt="Preview" class="image-preview">
-                </div>
-              </div>
-            </div>
-            <div class="col-1">
-              <i class="fas fa-trash delete-row"></i>
-            </div>
-          </div>
-        `;
-        
-        $('#attributeValuesList').append(rowHtml);
-        
-        if (image) {
-          const $row = $(`.attribute-value-row[data-row="${rowCounter}"]`);
-          const $previewContainer = $row.find('.image-preview-container');
-          const $preview = $row.find('.image-preview');
-          $preview.attr('src', image);
-          $previewContainer.show();
-        }
-        
-        // Update row numbers after adding
-        updateRowNumbers();
-      }
-
-      function handleImageUpload(input) {
-        if (input.files && input.files[0]) {
-          const reader = new FileReader();
-          const $row = $(input).closest('.attribute-value-row');
-          const $previewContainer = $row.find('.image-preview-container');
-          const $preview = $row.find('.image-preview');
-          
-          reader.onload = function(e) {
-            $preview.attr('src', e.target.result);
-            $previewContainer.show();
-          };
-          
-          reader.readAsDataURL(input.files[0]);
-        }
-      }
-
-      function initializeSortable() {
-        const valuesList = document.getElementById('attributeValuesList');
-        if (valuesList) {
-          Sortable.create(valuesList, {
-            handle: '.drag-handle',
-            ghostClass: 'sortable-ghost',
-            chosenClass: 'sortable-chosen',
-            animation: 150,
-            onEnd: function(evt) {
-              // Update row numbers after reordering
-              updateRowNumbers();
-            }
-          });
-        }
-      }
-
-      function updateRowNumbers() {
-        $('#attributeValuesList .attribute-value-row').each(function(index) {
-          const newRowNum = index + 1;
-          $(this).attr('data-row', newRowNum);
-          $(this).find('input[name*="[label]"]').attr('name', `values[${newRowNum}][label]`);
-          $(this).find('input[name*="[image]"]').attr('name', `values[${newRowNum}][image]`);
-        });
+        $('.attribute-set-row').removeClass('selected');
       }
 
       function showSuccessAlert(message) {

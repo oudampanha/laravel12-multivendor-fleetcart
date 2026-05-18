@@ -155,7 +155,8 @@
                           <select class="form-control" name="attributes[0][attribute_id]">
                             <option value="">Please Select</option>
                             @foreach ($attributes as $attribute)
-                              <option value="{{ $attribute->id }}">{{ $attribute->getTranslation('name') ?? $attribute->slug }}</option>
+                              <option value="{{ $attribute->id }}">
+                                {{ $attribute->getTranslation('name') ?? $attribute->slug }}</option>
                             @endforeach
                           </select>
                         </div>

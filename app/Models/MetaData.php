@@ -20,10 +20,15 @@ class MetaData extends Model
         return $this->morphTo();
     }
 
-    public function getTranslations(): HasMany
+    public function translations(): HasMany
     {
         return $this->hasMany(Translation::class, 'translatable_id')
             ->where('translatable_type', MetaData::class);
+    }
+
+    public function getTranslations(): HasMany
+    {
+        return $this->translations();
     }
 
     public function scopeForEntity($query, string $entityType, int $entityId)
@@ -229,8 +234,15 @@ class MetaData extends Model
         }
 
         $fields = [
-            'title', 'description', 'keywords', 'og_title', 'og_description',
-            'og_image', 'twitter_title', 'twitter_description', 'twitter_image',
+            'title',
+            'description',
+            'keywords',
+            'og_title',
+            'og_description',
+            'og_image',
+            'twitter_title',
+            'twitter_description',
+            'twitter_image',
         ];
 
         foreach ($fields as $field) {
@@ -285,14 +297,14 @@ class MetaData extends Model
     public function hasOpenGraphData(?string $locale = null): bool
     {
         return ! empty($this->getOgTitle($locale)) ||
-               ! empty($this->getOgDescription($locale)) ||
-               ! empty($this->getOgImage($locale));
+            ! empty($this->getOgDescription($locale)) ||
+            ! empty($this->getOgImage($locale));
     }
 
     public function hasTwitterData(?string $locale = null): bool
     {
         return ! empty($this->getTwitterTitle($locale)) ||
-               ! empty($this->getTwitterDescription($locale)) ||
-               ! empty($this->getTwitterImage($locale));
+            ! empty($this->getTwitterDescription($locale)) ||
+            ! empty($this->getTwitterImage($locale));
     }
 }

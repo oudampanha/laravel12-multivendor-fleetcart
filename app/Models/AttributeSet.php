@@ -8,20 +8,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class AttributeSet extends Model
 {
-    use HasTranslations;
+  use HasTranslations;
 
-    protected $fillable = [];
+  protected $fillable = [];
 
-    protected array $translatable = ['name'];
+  protected array $translatable = ['name'];
 
-    public function attributes(): HasMany
-    {
-        return $this->hasMany(Attribute::class);
-    }
+  public function attributes(): HasMany
+  {
+    return $this->hasMany(Attribute::class);
+  }
 
-    public function getTranslations(): HasMany
-    {
-        return $this->hasMany(Translation::class, 'translatable_id')
-            ->where('translatable_type', AttributeSet::class);
-    }
+  public function getTranslations(): HasMany
+  {
+    return $this->hasMany(Translation::class, 'translatable_id')
+      ->where('translatable_type', AttributeSet::class);
+  }
 }

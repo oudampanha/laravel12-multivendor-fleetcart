@@ -185,10 +185,11 @@ class MediaSelector {
 
         const componentId = this.currentComponentId;
         const imageUrl = this.selectedFile.url;
+        const mediaId = this.selectedFile.id;
 
         // Update the component
         this.setImagePreview(componentId, imageUrl);
-        this.updateFormInputs(componentId, imageUrl, null);
+        this.updateFormInputs(componentId, imageUrl, null, mediaId);
 
         // Close modal
         $(this.mediaManagerModal).modal('hide');
@@ -320,13 +321,20 @@ class MediaSelector {
      * @param {string} componentId - Component identifier
      * @param {string|null} imageUrl - Image URL
      * @param {File|null} file - File object
+     * @param {number|null} mediaId - Media ID from database
      */
-    static updateFormInputs(componentId, imageUrl, file) {
+    static updateFormInputs(componentId, imageUrl, file, mediaId = null) {
         const urlInput = document.getElementById(componentId + '_url_input');
         const oldInput = document.getElementById(componentId + '_old_input');
+        const idInput = document.getElementById(componentId + '_id_input');
 
         if (urlInput) {
             urlInput.value = imageUrl || '';
+        }
+
+        // Store media ID if provided (from gallery selection)
+        if (idInput) {
+            idInput.value = mediaId || '';
         }
 
         // Don't clear old input when setting new image, let backend handle it
@@ -429,9 +437,9 @@ class MediaSelector {
 window.MediaSelector = MediaSelector;
 
 // Auto-initialize on DOM ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Auto-initialize all media selector components
-    document.querySelectorAll('.media-selector-component').forEach(function(component) {
+    document.querySelectorAll('.media-selector-component').forEach(function (component) {
         const componentId = component.id;
         if (componentId) {
             MediaSelector.initialize(componentId);

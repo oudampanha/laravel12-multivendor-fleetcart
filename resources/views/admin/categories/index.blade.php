@@ -143,9 +143,16 @@
                   </div>
                 </div>
 
-                <div class="d-flex justify-content-center mt-2">
-                  <button type="button" class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
-                  <button type="submit" class="btn btn-primary mx-2" id="saveBtn">Save</button>
+                <div class="d-flex justify-content-between mt-2">
+                  <div>
+                    <button type="button" class="btn btn-danger" id="deleteBtn" style="display: none;">
+                      <i class="fas fa-trash mr-2"></i>Delete
+                    </button>
+                  </div>
+                  <div>
+                    <button type="button" class="btn btn-secondary me-2" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary mx-2" id="saveBtn">Save</button>
+                  </div>
                 </div>
             </div>
             </form>
@@ -237,7 +244,6 @@
 
 @push('scripts')
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.12/jstree.min.js"></script>
-  <script src="{{ assetUrl() }}assets/backend/js/MediaManager.js"></script>
   <script>
     $(document).ready(function() {
       let selectedNode = null;
@@ -291,7 +297,8 @@
         $('#addSubBtn').prop('disabled', false);
 
         if (data.node.data) {
-          loadCategoryForm(data.node.data);
+          // Load category in edit mode when clicking on tree
+          editCategory(data.node.data);
         }
       });
 
@@ -308,6 +315,8 @@
         isEditMode = false;
         $('#parentId').val('');
         $('#saveBtn').text('Save');
+        $('#deleteBtn').hide();
+        $('#categoryTree').jstree('deselect_all');
       });
 
       // Add Subcategory
@@ -338,46 +347,15 @@
         $('#categoryTree').jstree('deselect_all');
       });
 
-      // Image picker button handlers - open media manager in new window
-      $('.image-picker').click(function() {
-        const type = $(this).data('type');
-        openMediaManager(type);
-      });
-
-      function openMediaManager(type) {
-        // Store the current type for callback
-        window.currentImageType = type;
-
-        // Open media manager in a popup window
-        const mediaWindow = window.open('/admin/media', 'MediaManager',
-          'width=1200,height=800,scrollbars=yes,resizable=yes');
-
-        if (mediaWindow) {
-          // Focus on the new window
-          mediaWindow.focus();
+      // Delete button
+      $('#deleteBtn').click(function() {
+        const categoryId = $('#categoryId').val();
+        if (categoryId && selectedNode && selectedNode.data) {
+          deleteCategory(selectedNode.data);
         }
-      }
-
-      // Global function to receive selected media from media manager
-      window.handleMediaSelection = function(file) {
-        if (window.currentImageType && file) {
-          const inputId = window.currentImageType === 'logo' ? '#logoInput' : '#bannerInput';
-          $(inputId).val(file.url);
-          showImagePreview(file.url, window.currentImageType);
-
-          // Clear the current type
-          window.currentImageType = null;
-        }
-      };
-
-      // Remove image handlers
-      $('#removeLogo').click(function() {
-        removeImagePreview('logo');
       });
 
-      $('#removeBanner').click(function() {
-        removeImagePreview('banner');
-      });
+      // Media selector components are handled by x-media-selector blade component
 
       // Functions
       function addSubcategory(parentData) {
@@ -385,28 +363,47 @@
         isEditMode = false;
         $('#parentId').val(parentData.id);
         $('#saveBtn').text('Save');
+        $('#deleteBtn').hide();
       }
 
       function editCategory(categoryData) {
         isEditMode = true;
-        loadCategoryForm(categoryData);
         $('#saveBtn').text('Update');
+        $('#deleteBtn').show();
+        // Load full category data from server
+        loadCategoryData(categoryData.id, true);
       }
 
       function loadCategoryForm(categoryData) {
         $('#categoryId').val(categoryData.id);
         $('#categoryName').val(categoryData.name);
         $('#parentId').val(categoryData.parent_id || '');
-        $('#isSearchable').prop('checked', categoryData.is_searchable);
-        $('#isActive').prop('checked', categoryData.is_active);
-
-        if (categoryData.image) {
-          showImagePreview(categoryData.image, 'logo');
-        }
+        $('#isSearchable').prop('checked', categoryData.is_searchable == 1 || categoryData.is_searchable === true);
+        $('#isActive').prop('checked', categoryData.is_active == 1 || categoryData.is_active === true);
 
         if (isEditMode) {
           $('#formMethod').val('PUT');
         }
+      }
+
+      function loadCategoryData(categoryId, isEdit) {
+        $.ajax({
+          url: '{{ route('admin.categories.index') }}/' + categoryId + '/edit',
+          method: 'GET',
+          data: {
+            ajax: true
+          },
+          success: function(response) {
+            if (response.success) {
+              const category = response.category;
+              loadCategoryForm(category);
+            }
+          },
+          error: function(xhr) {
+            console.error('Error loading category:', xhr);
+            showErrorAlert('Error loading category data');
+          }
+        });
       }
 
       function clearForm() {
@@ -415,10 +412,9 @@
         $('#parentId').val('');
         $('#formMethod').val('POST');
         $('#isActive').prop('checked', true);
-        removeImagePreview('logo');
-        removeImagePreview('banner');
         isEditMode = false;
         $('#saveBtn').text('Save');
+        $('#deleteBtn').hide();
       }
 
       function saveCategory() {
@@ -426,12 +422,6 @@
         const categoryId = $('#categoryId').val();
         const method = isEditMode ? 'PUT' : 'POST';
         let url = '{{ route('admin.categories.store') }}';
-
-        // Add image_url parameter from the hidden input
-        const logoUrl = $('#logoInput').val();
-        if (logoUrl) {
-          formData.append('image_url', logoUrl);
-        }
 
         if (isEditMode && categoryId) {
           url = '{{ route('admin.categories.index') }}/' + categoryId;
@@ -456,8 +446,11 @@
             let message = 'An error occurred';
             if (xhr.responseJSON && xhr.responseJSON.message) {
               message = xhr.responseJSON.message;
+            } else if (xhr.responseJSON && xhr.responseJSON.errors) {
+              const errors = Object.values(xhr.responseJSON.errors).flat();
+              message = errors.join(', ');
             }
-            alert('Error: ' + message);
+            showErrorAlert(message);
           }
         });
       }
@@ -475,6 +468,8 @@
                 showSuccessAlert(response.message || 'Category deleted successfully!');
                 $('#categoryTree').jstree('refresh');
                 clearForm();
+              } else {
+                showErrorAlert(response.message || 'Failed to delete category');
               }
             },
             error: function(xhr) {
@@ -482,42 +477,14 @@
               if (xhr.responseJSON && xhr.responseJSON.message) {
                 message = xhr.responseJSON.message;
               }
-              alert('Error: ' + message);
+              showErrorAlert(message);
             }
           });
         }
       }
 
-      function handleImagePreview(input, type) {
-        // This function is no longer used with MediaManager
-        // MediaManager handles image selection via URLs
-      }
-
-      function showImagePreview(imageSrc, type) {
-        let fullImageUrl = imageSrc;
-        if (!imageSrc.startsWith('http') && !imageSrc.startsWith('data:')) {
-          fullImageUrl = '{{ asset('storage') }}/' + imageSrc;
-        }
-
-        const previewId = type === 'logo' ? '#logoPreview' : '#bannerPreview';
-        const removeId = type === 'logo' ? '#removeLogo' : '#removeBanner';
-
-        // Clear existing content and add image
-        $(previewId).html('<img src="' + fullImageUrl +
-          '" alt="Preview" style="max-width: 200px; max-height: 200px; object-fit: cover;">');
-        $(removeId).show();
-      }
-
-      function removeImagePreview(type) {
-        const previewId = type === 'logo' ? '#logoPreview' : '#bannerPreview';
-        const inputId = type === 'logo' ? '#logoInput' : '#bannerInput';
-        const removeId = type === 'logo' ? '#removeLogo' : '#removeBanner';
-        const iconClass = type === 'logo' ? 'fa-regular fa-image' : 'fa fa-picture-o';
-
-        // Reset to placeholder
-        $(previewId).html('<i class="' + iconClass + '"></i>');
-        $(inputId).val('');
-        $(removeId).hide();
+      function showErrorAlert(message) {
+        alert('Error: ' + message);
       }
 
       function showSuccessAlert(message) {

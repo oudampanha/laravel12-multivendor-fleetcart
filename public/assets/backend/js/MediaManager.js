@@ -151,8 +151,12 @@
     style.innerHTML = `
             .media-container {
                 background: #f8f9fa;
-                min-height: 100vh;
+                min-height: 300px;
                 padding: 20px;
+            }
+            .media-modal-body .media-container {
+                min-height: auto;
+                padding: 15px;
             }
             .media-header {
                 background: white;
@@ -1306,7 +1310,7 @@
     }
 
     // Perform upload
-    fetch(endpoint, {
+    fetch(this.normalizeUrl(endpoint), {
       method: 'POST',
       headers: this.getHeaders(false), // Don't include Content-Type for FormData
       body: formData
@@ -1520,7 +1524,9 @@
   MediaManager.prototype.loadFiles = function (path = '') {
     this.currentPath = path || '';
 
-    fetch(this.options.endpoints.list + '?path=' + this.currentPath, {
+    const url = this.normalizeUrl(this.options.endpoints.list) + '?path=' + this.currentPath;
+
+    fetch(url, {
       headers: this.getHeaders()
     })
       .then(response => response.json())
@@ -1865,7 +1871,7 @@
     const name = prompt('Enter folder name:');
 
     if (name) {
-      fetch(this.options.endpoints.createFolder, {
+      fetch(this.normalizeUrl(this.options.endpoints.createFolder), {
         method: 'POST',
         headers: this.getHeaders(),
         body: JSON.stringify({
@@ -1928,7 +1934,7 @@
    * Upload file
    */
   MediaManager.prototype.uploadFile = function (formData, endpoint) {
-    fetch(endpoint, {
+    fetch(this.normalizeUrl(endpoint), {
       method: 'POST',
       headers: this.getHeaders(false),
       body: formData
@@ -2091,7 +2097,7 @@
         ? this.options.endpoints.renameFolder
         : this.options.endpoints.renameFile;
 
-      fetch(endpoint, {
+      fetch(this.normalizeUrl(endpoint), {
         method: 'POST',
         headers: this.getHeaders(),
         body: JSON.stringify({
@@ -2147,7 +2153,7 @@
           : this.options.endpoints.deleteFile.replace('{id}', item.id);
 
         // Return the fetch promise for SweetAlert to handle
-        return fetch(endpoint, {
+        return fetch(this.normalizeUrl(endpoint), {
           method: 'DELETE',
           headers: this.getHeaders(),
           body: type === 'folder' ? JSON.stringify({ path: item.path }) : null
@@ -2209,6 +2215,24 @@
     document.body.removeChild(input);
 
     this.showSuccess('URL copied to clipboard');
+  };
+
+  /**
+   * Normalize URL to ensure it's absolute
+   */
+  MediaManager.prototype.normalizeUrl = function (url) {
+    // If URL is already absolute (starts with http:// or https://), return as-is
+    if (/^https?:\/\//i.test(url)) {
+      return url;
+    }
+
+    // If URL starts with /, it's root-relative, prepend origin
+    if (url.startsWith('/')) {
+      return window.location.origin + url;
+    }
+
+    // Otherwise, it's a relative path, prepend origin and /
+    return window.location.origin + '/' + url;
   };
 
   /**
@@ -2503,7 +2527,7 @@
       if (item.type === 'file') {
         const endpoint = this.options.endpoints.deleteFile.replace('{id}', item.id);
         promises.push(
-          fetch(endpoint, {
+          fetch(this.normalizeUrl(endpoint), {
             method: 'DELETE',
             headers: this.getHeaders()
           })
@@ -2602,7 +2626,7 @@
    * Load folders for bulk selection
    */
   MediaManager.prototype.loadFoldersForBulkSelection = function (callback) {
-    fetch(this.options.endpoints.getFolders, {
+    fetch(this.normalizeUrl(this.options.endpoints.getFolders), {
       headers: this.getHeaders()
     })
       .then(response => response.json())
@@ -2803,7 +2827,7 @@
       }
     });
 
-    fetch(endpoint, {
+    fetch(this.normalizeUrl(endpoint), {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({
@@ -2886,7 +2910,7 @@
   MediaManager.prototype.loadFoldersForSelection = function (callback) {
     const excludePath = this.currentFolderAction.item.folder_path || '';
 
-    fetch(this.options.endpoints.getFolders + '?exclude_path=' + encodeURIComponent(excludePath), {
+    fetch(this.normalizeUrl(this.options.endpoints.getFolders) + '?exclude_path=' + encodeURIComponent(excludePath), {
       headers: this.getHeaders()
     })
       .then(response => response.json())
@@ -3045,7 +3069,7 @@
       }
     });
 
-    fetch(endpoint, {
+    fetch(this.normalizeUrl(endpoint), {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({
@@ -3096,6 +3120,109 @@
     this.currentFolderAction = null;
     this.selectedDestinationFolder = undefined;
     this.availableFolders = [];
+  };
+
+  /**
+   * Open media manager as modal picker
+   */
+  MediaManager.prototype.open = function (callback) {
+    this.options.modal = true;
+    this.options.onSelect = callback;
+
+    if (!this.container) {
+      this.init();
+    }
+
+    this.show();
+    if (!this.data || (!this.data.files && !this.data.folders)) {
+      this.loadFiles();
+    }
+  };
+
+  /**
+   * Show media manager modal
+   */
+  MediaManager.prototype.show = function () {
+    if (!this.container) {
+      this.init();
+    }
+
+    if (this.modal) {
+      this.modal.style.display = 'flex';
+    }
+
+    // Load files if not already loaded
+    if (!this.data || (!this.data.files && !this.data.folders)) {
+      this.loadFiles();
+    }
+  };
+
+  /**
+   * Create modal interface
+   */
+  MediaManager.prototype.createModal = function () {
+    const modal = document.createElement('div');
+    modal.className = 'media-manager-modal';
+    modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:9999;display:none;align-items:center;justify-content:center;';
+
+    const modalContent = document.createElement('div');
+    modalContent.style.cssText = 'background:white;width:90%;max-width:1200px;height:80vh;border-radius:8px;overflow:hidden;display:flex;flex-direction:column;';
+
+    modalContent.innerHTML = `
+      <div style="padding:20px;border-bottom:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:center;background:white;">
+        <h3 style="margin:0;">${this.options.texts.title}</h3>
+        <button class="media-modal-close" style="background:none;border:none;font-size:24px;cursor:pointer;color:#666;">&times;</button>
+      </div>
+      <div class="media-modal-body" style="flex:1;overflow:auto;background:#f8f9fa;"></div>
+      <div style="padding:20px;border-top:1px solid #e0e0e0;display:flex;justify-content:flex-end;gap:10px;background:white;">
+        <button class="media-modal-cancel btn btn-secondary">${this.options.texts.cancel}</button>
+        <button class="media-modal-select btn btn-primary">${this.options.texts.select}</button>
+      </div>
+    `;
+
+    modal.appendChild(modalContent);
+    document.body.appendChild(modal);
+
+    this.modal = modal;
+    this.container = modalContent.querySelector('.media-modal-body');
+    this.options.container = this.container; // Set options.container for renderInline()
+
+    // Render inline interface inside modal body
+    this.renderInline();
+
+    // Bind modal events
+    modal.querySelector('.media-modal-close').addEventListener('click', () => this.close());
+    modal.querySelector('.media-modal-cancel').addEventListener('click', () => this.close());
+    modal.querySelector('.media-modal-select').addEventListener('click', () => {
+      if (this.options.onSelect && this.selectedFiles.length > 0) {
+        if (this.options.multiple) {
+          this.options.onSelect(this.selectedFiles);
+        } else {
+          this.options.onSelect(this.selectedFiles[0]);
+        }
+      }
+      this.close();
+    });
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        this.close();
+      }
+    });
+  };
+
+  /**
+   * Close media manager modal
+   */
+  MediaManager.prototype.close = function () {
+    if (this.modal) {
+      this.modal.style.display = 'none';
+    }
+
+    if (this.options.onClose) {
+      this.options.onClose();
+    }
   };
 
   /**

@@ -43,7 +43,8 @@
   <!-- Hidden form inputs -->
   <input type="hidden" name="{{ $hiddenOldName }}" id="{{ $componentId }}_old_input" value="{{ $value }}">
   <input type="hidden" name="{{ $hiddenUrlName }}" id="{{ $componentId }}_url_input" value="{{ $value }}">
-  <input type="file" name="{{ $inputName }}" id="{{ $fileInputId }}" accept="{{ $accept }}"
+  <input type="hidden" name="{{ $inputName }}" id="{{ $componentId }}_id_input" value="{{ $value }}">
+  <input type="file" name="{{ $inputName }}_file" id="{{ $fileInputId }}" accept="{{ $accept }}"
     data-component-id="{{ $componentId }}" style="display: none;" @if ($multiple) multiple @endif>
 
   <!-- Upload area with preview -->
@@ -83,7 +84,7 @@
   </div>
 
   <!-- Action buttons -->
-  <div class="mt-2 text-center media-selector-actions">
+  {{-- <div class="mt-2 text-center media-selector-actions">
     @if ($show_gallery)
       <div class="mb-2">
         <button type="button" class="btn btn-success btn-sm"
@@ -107,7 +108,7 @@
         </button>
       </div>
     @endif
-  </div>
+  </div> --}}
 </div>
 
 @once
