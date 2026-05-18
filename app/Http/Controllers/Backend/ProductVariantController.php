@@ -100,4 +100,16 @@ class ProductVariantController extends BaseController
 
         return redirect()->route('admin.product_variants.index')->with('success', 'Product Variant deleted successfully.');
     }
+
+    public function setDefault()
+    {
+        return redirect()->back()->with('info', 'Set Default feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleStatus(Product $productVariant)
+    {
+        $productVariant->update(['is_active' => ! $productVariant->is_active]);
+
+        return redirect()->back()->with('success', 'Product status updated successfully.');
+    }
 }

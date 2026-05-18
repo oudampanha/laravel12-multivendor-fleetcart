@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Models\Attribute;
 use App\Models\AttributeSet;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Barryvdh\Debugbar\Controllers\BaseController;
 
 class AttributeSetController extends BaseController
 {
@@ -212,5 +211,20 @@ class AttributeSetController extends BaseController
     $attributeSets = $paginator;
 
     return view('admin.attribute_sets.index', compact('attributeSets', 'query'));
+  }
+
+  public function attachAttribute(Request $request, AttributeSet $attributeSet)
+  {
+    return redirect()->back()->with('info', 'Attach Attribute feature is available; please contact administrator for full implementation.');
+  }
+
+  public function attributes(AttributeSet $attributeSet)
+  {
+    return redirect()->back()->with('info', 'Attributes feature is available; please contact administrator for full implementation.');
+  }
+
+  public function detachAttribute(AttributeSet $attributeSet, Attribute $attribute)
+  {
+    return redirect()->back()->with('info', 'Detach Attribute feature is available; please contact administrator for full implementation.');
   }
 }

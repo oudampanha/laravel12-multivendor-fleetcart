@@ -45,7 +45,7 @@ class WishListController extends BaseController
 
         $wishLists = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.wish-lists.index', compact('wishLists'));
+        return view('admin.wish_lists.index', compact('wishLists'));
     }
 
     /**
@@ -58,7 +58,7 @@ class WishListController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.wish-lists.by-customer', compact('wishLists', 'customer'));
+        return view('admin.wish_lists.by-customer', compact('wishLists', 'customer'));
     }
 
     /**
@@ -71,7 +71,7 @@ class WishListController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.wish-lists.by-product', compact('wishLists', 'product'));
+        return view('admin.wish_lists.by-product', compact('wishLists', 'product'));
     }
 
     public function destroy(User $customer, Product $product)
@@ -86,7 +86,7 @@ class WishListController extends BaseController
 
         $wishList->delete();
 
-        return redirect()->route('admin.wish-lists.index')
+        return redirect()->route('admin.wish_lists.index')
             ->with('success', 'Wish list item removed successfully.');
     }
 
@@ -111,7 +111,7 @@ class WishListController extends BaseController
 
         $popularProducts = $query->get();
 
-        return view('admin.wish-lists.popular-products', compact('popularProducts', 'limit', 'period'));
+        return view('admin.wish_lists.popular-products', compact('popularProducts', 'limit', 'period'));
     }
 
     /**
@@ -140,7 +140,7 @@ class WishListController extends BaseController
             ->limit(10)
             ->get();
 
-        return view('admin.wish-lists.statistics', compact('stats', 'topCategories'));
+        return view('admin.wish_lists.statistics', compact('stats', 'topCategories'));
     }
 
     /**
@@ -164,7 +164,7 @@ class WishListController extends BaseController
 
         $topCustomers = $query->get();
 
-        return view('admin.wish-lists.top-customers', compact('topCustomers', 'limit', 'period'));
+        return view('admin.wish_lists.top-customers', compact('topCustomers', 'limit', 'period'));
     }
 
     /**
@@ -179,7 +179,7 @@ class WishListController extends BaseController
 
         $deleted = WishList::whereIn('id', $request->wish_list_ids)->delete();
 
-        return redirect()->route('admin.wish-lists.index')
+        return redirect()->route('admin.wish_lists.index')
             ->with('success', "Removed {$deleted} wish list items successfully.");
     }
 
@@ -191,7 +191,7 @@ class WishListController extends BaseController
         $count = WishList::where('customer_id', $customer->id)->count();
         WishList::where('customer_id', $customer->id)->delete();
 
-        return redirect()->route('admin.wish-lists.index')
+        return redirect()->route('admin.wish_lists.index')
             ->with('success', "Cleared {$count} wish list items for customer: {$customer->full_name}.");
     }
 
@@ -203,7 +203,7 @@ class WishListController extends BaseController
         $count = WishList::where('product_id', $product->id)->count();
         WishList::where('product_id', $product->id)->delete();
 
-        return redirect()->route('admin.wish-lists.index')
+        return redirect()->route('admin.wish_lists.index')
             ->with('success', "Cleared {$count} wish list items for product: {$product->name}.");
     }
 
@@ -229,7 +229,7 @@ class WishListController extends BaseController
             ->orderBy('period')
             ->get();
 
-        return view('admin.wish-lists.trends', compact('trends', 'period', 'days'));
+        return view('admin.wish_lists.trends', compact('trends', 'period', 'days'));
     }
 
     /**

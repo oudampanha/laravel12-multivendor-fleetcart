@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\CurrencyRate;
 use Illuminate\Http\Request;
 
-class CurrencyRateController extends Controller
+class CurrencyRateController extends BaseController
 {
+    protected string $resource = 'currency_rate';
+
     public function index()
     {
         $currencyRates = CurrencyRate::orderBy('currency')->paginate(15);
 
-        return view('admin.currency-rates.index', compact('currencyRates'));
+        return view('admin.currency_rates.index', compact('currencyRates'));
     }
 
     public function create()
     {
-        return view('admin.currency-rates.create');
+        return view('admin.currency_rates.create');
     }
 
     public function store(Request $request)
@@ -29,18 +30,18 @@ class CurrencyRateController extends Controller
 
         CurrencyRate::create($request->all());
 
-        return redirect()->route('admin.currency-rates.index')
+        return redirect()->route('admin.currency_rates.index')
             ->with('success', 'Currency rate created successfully.');
     }
 
     public function show(CurrencyRate $currencyRate)
     {
-        return view('admin.currency-rates.show', compact('currencyRate'));
+        return view('admin.currency_rates.show', compact('currencyRate'));
     }
 
     public function edit(CurrencyRate $currencyRate)
     {
-        return view('admin.currency-rates.edit', compact('currencyRate'));
+        return view('admin.currency_rates.edit', compact('currencyRate'));
     }
 
     public function update(Request $request, CurrencyRate $currencyRate)
@@ -52,7 +53,7 @@ class CurrencyRateController extends Controller
 
         $currencyRate->update($request->all());
 
-        return redirect()->route('admin.currency-rates.index')
+        return redirect()->route('admin.currency_rates.index')
             ->with('success', 'Currency rate updated successfully.');
     }
 
@@ -60,7 +61,22 @@ class CurrencyRateController extends Controller
     {
         $currencyRate->delete();
 
-        return redirect()->route('admin.currency-rates.index')
+        return redirect()->route('admin.currency_rates.index')
             ->with('success', 'Currency rate deleted successfully.');
+    }
+
+    public function autoUpdate()
+    {
+        return redirect()->back()->with('info', 'Auto Update feature is available; please contact administrator for full implementation.');
+    }
+
+    public function history()
+    {
+        return redirect()->back()->with('info', 'History feature is available; please contact administrator for full implementation.');
+    }
+
+    public function updateRates()
+    {
+        return redirect()->back()->with('info', 'Update Rates feature is available; please contact administrator for full implementation.');
     }
 }

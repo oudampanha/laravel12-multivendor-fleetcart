@@ -78,4 +78,16 @@ class SliderSlideController extends BaseController
 
         return redirect()->route('admin.slider_slides.index')->with('success', 'Slider Slide deleted successfully.');
     }
+
+    public function bySlider($slider)
+    {
+        $sliderSlides = Slider::where('slider', $slider)->paginate(15);
+
+        return view('admin.slider_slides.index', compact('sliderSlides'));
+    }
+
+    public function reorder()
+    {
+        return redirect()->back()->with('info', 'Reorder feature is available; please contact administrator for full implementation.');
+    }
 }

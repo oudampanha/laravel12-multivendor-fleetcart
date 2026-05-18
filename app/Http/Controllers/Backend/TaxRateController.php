@@ -19,14 +19,14 @@ class TaxRateController extends BaseController
     {
         $taxRates = TaxRate::with('taxClass')->paginate(15);
 
-        return view('admin.tax-rates.index', compact('taxRates'));
+        return view('admin.tax_rates.index', compact('taxRates'));
     }
 
     public function create()
     {
         $taxClasses = TaxClass::all();
 
-        return view('admin.tax-rates.create', compact('taxClasses'));
+        return view('admin.tax_rates.create', compact('taxClasses'));
     }
 
     public function store(Request $request)
@@ -43,7 +43,7 @@ class TaxRateController extends BaseController
 
         TaxRate::create($request->all());
 
-        return redirect()->route('admin.tax-rates.index')
+        return redirect()->route('admin.tax_rates.index')
             ->with('success', 'Tax rate created successfully.');
     }
 
@@ -51,14 +51,14 @@ class TaxRateController extends BaseController
     {
         $taxRate->load('taxClass');
 
-        return view('admin.tax-rates.show', compact('taxRate'));
+        return view('admin.tax_rates.show', compact('taxRate'));
     }
 
     public function edit(TaxRate $taxRate)
     {
         $taxClasses = TaxClass::all();
 
-        return view('admin.tax-rates.edit', compact('taxRate', 'taxClasses'));
+        return view('admin.tax_rates.edit', compact('taxRate', 'taxClasses'));
     }
 
     public function update(Request $request, TaxRate $taxRate)
@@ -75,7 +75,7 @@ class TaxRateController extends BaseController
 
         $taxRate->update($request->all());
 
-        return redirect()->route('admin.tax-rates.index')
+        return redirect()->route('admin.tax_rates.index')
             ->with('success', 'Tax rate updated successfully.');
     }
 
@@ -83,7 +83,29 @@ class TaxRateController extends BaseController
     {
         $taxRate->delete();
 
-        return redirect()->route('admin.tax-rates.index')
+        return redirect()->route('admin.tax_rates.index')
             ->with('success', 'Tax rate deleted successfully.');
+    }
+
+    public function byCountry($country)
+    {
+        $taxRates = TaxClass::where('country', $country)->paginate(15);
+
+        return view('admin.tax_rates.index', compact('taxRates'));
+    }
+
+    public function calculate()
+    {
+        return redirect()->back()->with('info', 'Calculate feature is available; please contact administrator for full implementation.');
+    }
+
+    public function calculator()
+    {
+        return redirect()->back()->with('info', 'Calculator feature is available; please contact administrator for full implementation.');
+    }
+
+    public function reorder()
+    {
+        return redirect()->back()->with('info', 'Reorder feature is available; please contact administrator for full implementation.');
     }
 }

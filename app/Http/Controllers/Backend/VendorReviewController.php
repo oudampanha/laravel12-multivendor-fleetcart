@@ -102,4 +102,25 @@ class VendorReviewController extends BaseController
 
         return redirect()->route('admin.vendor_reviews.index')->with('success', 'Vendor Review rejected successfully.');
     }
+
+    public function approved()
+    {
+        $vendorReviews = Order::where('status', 'approved')->paginate(15);
+
+        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+    }
+
+    public function byVendor($vendor)
+    {
+        $vendorReviews = Order::where('vendor_id', $vendor)->paginate(15);
+
+        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+    }
+
+    public function pending()
+    {
+        $vendorReviews = Order::where('status', 'pending')->paginate(15);
+
+        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+    }
 }

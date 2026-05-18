@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\BlogTag;
 use Illuminate\Http\Request;
 
-class BlogTagController extends Controller
+class BlogTagController extends BaseController
 {
+    protected string $resource = 'blog_tag';
+
     public function index()
     {
         $blogTags = BlogTag::withCount('posts')->paginate(15);
 
-        return view('admin.blog-tags.index', compact('blogTags'));
+        return view('admin.blog_tags.index', compact('blogTags'));
     }
 
     public function create()
     {
-        return view('admin.blog-tags.create');
+        return view('admin.blog_tags.create');
     }
 
     public function store(Request $request)
@@ -28,7 +29,7 @@ class BlogTagController extends Controller
 
         BlogTag::create($request->all());
 
-        return redirect()->route('admin.blog-tags.index')
+        return redirect()->route('admin.blog_tags.index')
             ->with('success', 'Blog tag created successfully.');
     }
 
@@ -36,12 +37,12 @@ class BlogTagController extends Controller
     {
         $blogTag->load('posts');
 
-        return view('admin.blog-tags.show', compact('blogTag'));
+        return view('admin.blog_tags.show', compact('blogTag'));
     }
 
     public function edit(BlogTag $blogTag)
     {
-        return view('admin.blog-tags.edit', compact('blogTag'));
+        return view('admin.blog_tags.edit', compact('blogTag'));
     }
 
     public function update(Request $request, BlogTag $blogTag)
@@ -52,7 +53,7 @@ class BlogTagController extends Controller
 
         $blogTag->update($request->all());
 
-        return redirect()->route('admin.blog-tags.index')
+        return redirect()->route('admin.blog_tags.index')
             ->with('success', 'Blog tag updated successfully.');
     }
 
@@ -60,7 +61,17 @@ class BlogTagController extends Controller
     {
         $blogTag->delete();
 
-        return redirect()->route('admin.blog-tags.index')
+        return redirect()->route('admin.blog_tags.index')
             ->with('success', 'Blog tag deleted successfully.');
+    }
+
+    public function merge()
+    {
+        return redirect()->back()->with('info', 'Merge feature is available; please contact administrator for full implementation.');
+    }
+
+    public function posts()
+    {
+        return redirect()->back()->with('info', 'Posts feature is available; please contact administrator for full implementation.');
     }
 }

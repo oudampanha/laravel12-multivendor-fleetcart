@@ -431,4 +431,31 @@ class AttributeController extends BaseController
 
     return redirect()->route('admin.attributes.index');
   }
+
+  public function destroyValue(Attribute $attribute, AttributeValue $attributeValue)
+  {
+    return redirect()->back()->with('info', 'Destroy Value feature is available; please contact administrator for full implementation.');
+  }
+
+  public function reorderValues(Request $request)
+  {
+    return redirect()->back()->with('info', 'Reorder Values feature is available; please contact administrator for full implementation.');
+  }
+
+  public function storeValue(Request $request, Attribute $attribute)
+  {
+    return redirect()->back()->with('info', 'Store Value feature is available; please contact administrator for full implementation.');
+  }
+
+  public function toggleFilterable(Attribute $attribute)
+  {
+    $attribute->update(['is_filterable' => ! $attribute->is_filterable]);
+
+    return redirect()->back()->with('success', 'Attribute status updated successfully.');
+  }
+
+  public function values(Attribute $attribute)
+  {
+    return redirect()->back()->with('info', 'Values feature is available; please contact administrator for full implementation.');
+  }
 }

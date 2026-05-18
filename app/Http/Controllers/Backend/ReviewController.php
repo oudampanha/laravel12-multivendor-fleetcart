@@ -87,19 +87,19 @@ class ReviewController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-reviews.index', compact('vendorReviews'));
+        return view('admin.vendor_reviews.index', compact('vendorReviews'));
     }
 
     public function showVendorReview(VendorReview $vendorReview)
     {
         $vendorReview->load(['vendor', 'customer', 'order']);
 
-        return view('admin.vendor-reviews.show', compact('vendorReview'));
+        return view('admin.vendor_reviews.show', compact('vendorReview'));
     }
 
     public function editVendorReview(VendorReview $vendorReview)
     {
-        return view('admin.vendor-reviews.edit', compact('vendorReview'));
+        return view('admin.vendor_reviews.edit', compact('vendorReview'));
     }
 
     public function updateVendorReview(Request $request, VendorReview $vendorReview)
@@ -113,7 +113,7 @@ class ReviewController extends BaseController
 
         $vendorReview->update($request->all());
 
-        return redirect()->route('admin.vendor-reviews.index')
+        return redirect()->route('admin.vendor_reviews.index')
             ->with('success', 'Vendor review updated successfully.');
     }
 
@@ -121,7 +121,7 @@ class ReviewController extends BaseController
     {
         $vendorReview->delete();
 
-        return redirect()->route('admin.vendor-reviews.index')
+        return redirect()->route('admin.vendor_reviews.index')
             ->with('success', 'Vendor review deleted successfully.');
     }
 
@@ -139,5 +139,50 @@ class ReviewController extends BaseController
 
         return redirect()->back()
             ->with('success', 'Vendor review unapproved successfully.');
+    }
+
+    public function approved()
+    {
+        $reviews = Review::where('status', 'approved')->paginate(15);
+
+        return view('admin.reviews.index', compact('reviews'));
+    }
+
+    public function bulkApprove()
+    {
+        return redirect()->back()->with('info', 'Bulk Approve feature is available; please contact administrator for full implementation.');
+    }
+
+    public function bulkReject()
+    {
+        return redirect()->back()->with('info', 'Bulk Reject feature is available; please contact administrator for full implementation.');
+    }
+
+    public function byProduct($product)
+    {
+        $reviews = Review::where('product_id', $product)->paginate(15);
+
+        return view('admin.reviews.index', compact('reviews'));
+    }
+
+    public function byRating($rating)
+    {
+        $reviews = Review::where('rating', $rating)->paginate(15);
+
+        return view('admin.reviews.index', compact('reviews'));
+    }
+
+    public function pending()
+    {
+        $reviews = Review::where('status', 'pending')->paginate(15);
+
+        return view('admin.reviews.index', compact('reviews'));
+    }
+
+    public function reject(Review $review)
+    {
+        $review->update(['status' => 'rejected']);
+
+        return redirect()->back()->with('success', 'Review rejected successfully.');
     }
 }

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Page;
 use Illuminate\Http\Request;
 
-class PageController extends Controller
+class PageController extends BaseController
 {
+    protected string $resource = 'page';
+
     public function index()
     {
         $pages = Page::orderBy('created_at', 'desc')->paginate(15);
@@ -62,5 +63,34 @@ class PageController extends Controller
 
         return redirect()->route('admin.pages.index')
             ->with('success', 'Page deleted successfully.');
+    }
+
+    public function active()
+    {
+        $pages = Page::where('is_active', true)->paginate(15);
+
+        return view('admin.pages.index', compact('pages'));
+    }
+
+    public function duplicate(Page $page)
+    {
+        $copy = $page->replicate();
+        $copy->save();
+
+        return redirect()->back()->with('success', 'Page duplicated successfully.');
+    }
+
+    public function inactive()
+    {
+        $pages = Page::where('is_active', false)->paginate(15);
+
+        return view('admin.pages.index', compact('pages'));
+    }
+
+    public function toggleStatus(Page $page)
+    {
+        $page->update(['is_active' => ! $page->is_active]);
+
+        return redirect()->back()->with('success', 'Page status updated successfully.');
     }
 }

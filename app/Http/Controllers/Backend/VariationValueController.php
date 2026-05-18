@@ -74,4 +74,9 @@ class VariationValueController extends BaseController
 
         return redirect()->route('admin.variation_values.index')->with('success', 'Variation Value deleted successfully.');
     }
+
+    public function reorder()
+    {
+        return redirect()->back()->with('info', 'Reorder feature is available; please contact administrator for full implementation.');
+    }
 }

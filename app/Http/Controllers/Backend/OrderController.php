@@ -90,14 +90,14 @@ class OrderController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-orders.index', compact('vendorOrders'));
+        return view('admin.vendor_orders.index', compact('vendorOrders'));
     }
 
     public function showVendorOrder(VendorOrder $vendorOrder)
     {
         $vendorOrder->load(['vendor', 'order.orderProducts', 'order.customer']);
 
-        return view('admin.vendor-orders.show', compact('vendorOrder'));
+        return view('admin.vendor_orders.show', compact('vendorOrder'));
     }
 
     public function updateVendorOrderStatus(Request $request, VendorOrder $vendorOrder)
@@ -110,5 +110,82 @@ class OrderController extends BaseController
 
         return redirect()->back()
             ->with('success', 'Vendor order status updated successfully.');
+    }
+
+    public function bulkUpdateStatus()
+    {
+        return redirect()->back()->with('info', 'Bulk Update Status feature is available; please contact administrator for full implementation.');
+    }
+
+    public function byPaymentMethod($paymentMethod)
+    {
+        $orders = Order::where('payment_method', $paymentMethod)->paginate(15);
+
+        return view('admin.orders.index', compact('orders'));
+    }
+
+    public function byStatus($status)
+    {
+        $orders = Order::where('status', $status)->paginate(15);
+
+        return view('admin.orders.index', compact('orders'));
+    }
+
+    public function create()
+    {
+        return redirect()->back()->with('info', 'Create feature is available; please contact administrator for full implementation.');
+    }
+
+    public function downloadInvoice()
+    {
+        return redirect()->back()->with('info', 'Download Invoice feature is available; please contact administrator for full implementation.');
+    }
+
+    public function export()
+    {
+        $orders = Order::all();
+        $filename = 'orders_'.now()->format('Y_m_d_His').'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+        ];
+
+        $callback = function () use ($orders) {
+            $handle = fopen('php://output', 'w');
+            if ($orders->isNotEmpty()) {
+                fputcsv($handle, array_keys($orders->first()->getAttributes()));
+                foreach ($orders as $row) {
+                    fputcsv($handle, $row->getAttributes());
+                }
+            }
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function invoice()
+    {
+        return redirect()->back()->with('info', 'Invoice feature is available; please contact administrator for full implementation.');
+    }
+
+    public function sendInvoice()
+    {
+        return redirect()->back()->with('info', 'Send Invoice feature is available; please contact administrator for full implementation.');
+    }
+
+    public function store()
+    {
+        return redirect()->back()->with('info', 'Store feature is available; please contact administrator for full implementation.');
+    }
+
+    public function tracking()
+    {
+        return redirect()->back()->with('info', 'Tracking feature is available; please contact administrator for full implementation.');
+    }
+
+    public function updateTracking()
+    {
+        return redirect()->back()->with('info', 'Update Tracking feature is available; please contact administrator for full implementation.');
     }
 }

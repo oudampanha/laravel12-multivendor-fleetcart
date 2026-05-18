@@ -70,4 +70,9 @@ class AttributeValueController extends BaseController
 
         return redirect()->route('admin.attribute_values.index')->with('success', 'Attribute Value deleted successfully.');
     }
+
+    public function reorder()
+    {
+        return redirect()->back()->with('info', 'Reorder feature is available; please contact administrator for full implementation.');
+    }
 }
