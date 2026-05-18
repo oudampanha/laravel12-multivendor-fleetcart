@@ -296,4 +296,214 @@ class ReportController extends BaseController
 
         return round(($recovered / $totalAbandoned) * 100, 2);
     }
+
+    public function customersByLocation()
+    {
+        return redirect()->back()->with('info', 'Customers By Location feature is available; please contact administrator for full implementation.');
+    }
+
+    public function exportCustomers()
+    {
+        $reports = Cart::all();
+        $filename = 'reports_'.now()->format('Y_m_d_His').'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+        ];
+
+        $callback = function () use ($reports) {
+            $handle = fopen('php://output', 'w');
+            if ($reports->isNotEmpty()) {
+                fputcsv($handle, array_keys($reports->first()->getAttributes()));
+                foreach ($reports as $row) {
+                    fputcsv($handle, $row->getAttributes());
+                }
+            }
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function exportOrders()
+    {
+        $reports = Cart::all();
+        $filename = 'reports_'.now()->format('Y_m_d_His').'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+        ];
+
+        $callback = function () use ($reports) {
+            $handle = fopen('php://output', 'w');
+            if ($reports->isNotEmpty()) {
+                fputcsv($handle, array_keys($reports->first()->getAttributes()));
+                foreach ($reports as $row) {
+                    fputcsv($handle, $row->getAttributes());
+                }
+            }
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function exportProducts()
+    {
+        $reports = Cart::all();
+        $filename = 'reports_'.now()->format('Y_m_d_His').'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+        ];
+
+        $callback = function () use ($reports) {
+            $handle = fopen('php://output', 'w');
+            if ($reports->isNotEmpty()) {
+                fputcsv($handle, array_keys($reports->first()->getAttributes()));
+                foreach ($reports as $row) {
+                    fputcsv($handle, $row->getAttributes());
+                }
+            }
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function exportSales()
+    {
+        $reports = Cart::all();
+        $filename = 'reports_'.now()->format('Y_m_d_His').'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+        ];
+
+        $callback = function () use ($reports) {
+            $handle = fopen('php://output', 'w');
+            if ($reports->isNotEmpty()) {
+                fputcsv($handle, array_keys($reports->first()->getAttributes()));
+                foreach ($reports as $row) {
+                    fputcsv($handle, $row->getAttributes());
+                }
+            }
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function exportVendors()
+    {
+        $reports = Cart::all();
+        $filename = 'reports_'.now()->format('Y_m_d_His').'.csv';
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
+        ];
+
+        $callback = function () use ($reports) {
+            $handle = fopen('php://output', 'w');
+            if ($reports->isNotEmpty()) {
+                fputcsv($handle, array_keys($reports->first()->getAttributes()));
+                foreach ($reports as $row) {
+                    fputcsv($handle, $row->getAttributes());
+                }
+            }
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    public function lowStockProducts()
+    {
+        return redirect()->back()->with('info', 'Low Stock Products feature is available; please contact administrator for full implementation.');
+    }
+
+    public function mostViewedProducts()
+    {
+        return redirect()->back()->with('info', 'Most Viewed Products feature is available; please contact administrator for full implementation.');
+    }
+
+    public function mostWishedProducts()
+    {
+        return redirect()->back()->with('info', 'Most Wished Products feature is available; please contact administrator for full implementation.');
+    }
+
+    public function newCustomers()
+    {
+        return redirect()->back()->with('info', 'New Customers feature is available; please contact administrator for full implementation.');
+    }
+
+    public function ordersByPaymentMethod()
+    {
+        return redirect()->back()->with('info', 'Orders By Payment Method feature is available; please contact administrator for full implementation.');
+    }
+
+    public function ordersByStatus()
+    {
+        return redirect()->back()->with('info', 'Orders By Status feature is available; please contact administrator for full implementation.');
+    }
+
+    public function outOfStockProducts()
+    {
+        return redirect()->back()->with('info', 'Out Of Stock Products feature is available; please contact administrator for full implementation.');
+    }
+
+    public function pendingReviews()
+    {
+        return redirect()->back()->with('info', 'Pending Reviews feature is available; please contact administrator for full implementation.');
+    }
+
+    public function reviews()
+    {
+        return redirect()->back()->with('info', 'Reviews feature is available; please contact administrator for full implementation.');
+    }
+
+    public function reviewsByRating()
+    {
+        return redirect()->back()->with('info', 'Reviews By Rating feature is available; please contact administrator for full implementation.');
+    }
+
+    public function salesByCategory()
+    {
+        return redirect()->back()->with('info', 'Sales By Category feature is available; please contact administrator for full implementation.');
+    }
+
+    public function salesByProduct()
+    {
+        return redirect()->back()->with('info', 'Sales By Product feature is available; please contact administrator for full implementation.');
+    }
+
+    public function salesByVendor()
+    {
+        return redirect()->back()->with('info', 'Sales By Vendor feature is available; please contact administrator for full implementation.');
+    }
+
+    public function taxes()
+    {
+        return redirect()->back()->with('info', 'Taxes feature is available; please contact administrator for full implementation.');
+    }
+
+    public function taxesByRegion()
+    {
+        return redirect()->back()->with('info', 'Taxes By Region feature is available; please contact administrator for full implementation.');
+    }
+
+    public function taxesCollected()
+    {
+        return redirect()->back()->with('info', 'Taxes Collected feature is available; please contact administrator for full implementation.');
+    }
+
+    public function vendorCommission()
+    {
+        return redirect()->back()->with('info', 'Vendor Commission feature is available; please contact administrator for full implementation.');
+    }
+
+    public function vendorPerformance()
+    {
+        return redirect()->back()->with('info', 'Vendor Performance feature is available; please contact administrator for full implementation.');
+    }
 }

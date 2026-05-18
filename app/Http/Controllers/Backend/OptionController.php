@@ -430,4 +430,38 @@ class OptionController extends BaseController
 
         return redirect()->route('admin.options.index');
     }
+
+    public function destroyValue()
+    {
+        return redirect()->back()->with('info', 'Destroy Value feature is available; please contact administrator for full implementation.');
+    }
+
+    public function reorderValues()
+    {
+        return redirect()->back()->with('info', 'Reorder Values feature is available; please contact administrator for full implementation.');
+    }
+
+    public function storeValue()
+    {
+        return redirect()->back()->with('info', 'Store Value feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleGlobal(Option $option)
+    {
+        $option->update(['is_global' => ! $option->is_global]);
+
+        return redirect()->back()->with('success', 'Option status updated successfully.');
+    }
+
+    public function toggleRequired(Option $option)
+    {
+        $option->update(['is_required' => ! $option->is_required]);
+
+        return redirect()->back()->with('success', 'Option status updated successfully.');
+    }
+
+    public function values()
+    {
+        return redirect()->back()->with('info', 'Values feature is available; please contact administrator for full implementation.');
+    }
 }

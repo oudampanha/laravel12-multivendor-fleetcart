@@ -86,14 +86,14 @@ class SettingController extends BaseController
     {
         $vendorSettings = VendorSetting::with('vendor')->paginate(15);
 
-        return view('admin.vendor-settings.index', compact('vendorSettings'));
+        return view('admin.vendor_settings.index', compact('vendorSettings'));
     }
 
     public function createVendorSetting()
     {
         $vendors = Vendor::where('is_active', true)->get();
 
-        return view('admin.vendor-settings.create', compact('vendors'));
+        return view('admin.vendor_settings.create', compact('vendors'));
     }
 
     public function storeVendorSetting(Request $request)
@@ -109,7 +109,7 @@ class SettingController extends BaseController
             ['value' => $request->value]
         );
 
-        return redirect()->route('admin.vendor-settings.index')
+        return redirect()->route('admin.vendor_settings.index')
             ->with('success', 'Vendor setting created successfully.');
     }
 
@@ -117,7 +117,7 @@ class SettingController extends BaseController
     {
         $vendors = Vendor::where('is_active', true)->get();
 
-        return view('admin.vendor-settings.edit', compact('vendorSetting', 'vendors'));
+        return view('admin.vendor_settings.edit', compact('vendorSetting', 'vendors'));
     }
 
     public function updateVendorSetting(Request $request, VendorSetting $vendorSetting)
@@ -130,7 +130,7 @@ class SettingController extends BaseController
 
         $vendorSetting->update($request->all());
 
-        return redirect()->route('admin.vendor-settings.index')
+        return redirect()->route('admin.vendor_settings.index')
             ->with('success', 'Vendor setting updated successfully.');
     }
 
@@ -138,7 +138,57 @@ class SettingController extends BaseController
     {
         $vendorSetting->delete();
 
-        return redirect()->route('admin.vendor-settings.index')
+        return redirect()->route('admin.vendor_settings.index')
             ->with('success', 'Vendor setting deleted successfully.');
+    }
+
+    public function analytics()
+    {
+        return redirect()->back()->with('info', 'Analytics feature is available; please contact administrator for full implementation.');
+    }
+
+    public function clearCache()
+    {
+        return redirect()->back()->with('info', 'Clear Cache feature is available; please contact administrator for full implementation.');
+    }
+
+    public function general()
+    {
+        return redirect()->back()->with('info', 'General feature is available; please contact administrator for full implementation.');
+    }
+
+    public function mail()
+    {
+        return redirect()->back()->with('info', 'Mail feature is available; please contact administrator for full implementation.');
+    }
+
+    public function payment()
+    {
+        return redirect()->back()->with('info', 'Payment feature is available; please contact administrator for full implementation.');
+    }
+
+    public function seo()
+    {
+        return redirect()->back()->with('info', 'Seo feature is available; please contact administrator for full implementation.');
+    }
+
+    public function shipping()
+    {
+        return redirect()->back()->with('info', 'Shipping feature is available; please contact administrator for full implementation.');
+    }
+
+    public function social()
+    {
+        return redirect()->back()->with('info', 'Social feature is available; please contact administrator for full implementation.');
+    }
+
+    public function tax()
+    {
+        return redirect()->back()->with('info', 'Tax feature is available; please contact administrator for full implementation.');
+    }
+
+    public function testMail()
+    {
+        return redirect()->back()->with('info', 'Test Mail feature is available; please contact administrator for full implementation.');
     }
 }

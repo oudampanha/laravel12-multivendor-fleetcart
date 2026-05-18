@@ -86,4 +86,18 @@ class VendorShippingZoneController extends BaseController
 
         return redirect()->route('admin.vendor_shipping_zones.index')->with('success', 'Vendor Shipping Zone deleted successfully.');
     }
+
+    public function byVendor($vendor)
+    {
+        $vendorShippingZones = Vendor::where('vendor_id', $vendor)->paginate(15);
+
+        return view('admin.vendor_shipping_zones.index', compact('vendorShippingZones'));
+    }
+
+    public function toggleStatus(Vendor $vendorShippingZone)
+    {
+        $vendorShippingZone->update(['is_active' => ! $vendorShippingZone->is_active]);
+
+        return redirect()->back()->with('success', 'Vendor status updated successfully.');
+    }
 }

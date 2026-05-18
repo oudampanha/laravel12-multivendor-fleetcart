@@ -27,7 +27,7 @@ class EntityMediaController extends BaseController
             ->orderBy('sort_order')
             ->paginate(15);
 
-        return view('admin.entity-media.index', compact('entityMedia', 'entityType', 'entityId'));
+        return view('admin.entity_media.index', compact('entityMedia', 'entityType', 'entityId'));
     }
 
     public function store(Request $request, string $entityType, int $entityId)
@@ -64,7 +64,7 @@ class EntityMediaController extends BaseController
             'sort_order' => $sortOrder,
         ]);
 
-        return redirect()->route('admin.entity-media.index', [$entityType, $entityId])
+        return redirect()->route('admin.entity_media.index', [$entityType, $entityId])
             ->with('success', 'Media attached successfully.');
     }
 
@@ -75,7 +75,7 @@ class EntityMediaController extends BaseController
 
         $entityMedia->delete();
 
-        return redirect()->route('admin.entity-media.index', [$entityType, $entityId])
+        return redirect()->route('admin.entity_media.index', [$entityType, $entityId])
             ->with('success', 'Media detached successfully.');
     }
 
@@ -162,7 +162,7 @@ class EntityMediaController extends BaseController
             }
         }
 
-        return redirect()->route('admin.entity-media.index', [$entityType, $entityId])
+        return redirect()->route('admin.entity_media.index', [$entityType, $entityId])
             ->with('success', "Attached {$attachedCount} media files successfully.");
     }
 
@@ -179,7 +179,7 @@ class EntityMediaController extends BaseController
             ->where('entity_id', $entityId)
             ->delete();
 
-        return redirect()->route('admin.entity-media.index', [$entityType, $entityId])
+        return redirect()->route('admin.entity_media.index', [$entityType, $entityId])
             ->with('success', "Removed {$count} media files successfully.");
     }
 }

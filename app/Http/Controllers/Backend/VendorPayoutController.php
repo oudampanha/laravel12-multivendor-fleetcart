@@ -26,7 +26,7 @@ class VendorPayoutController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-payouts.index', compact('payouts'));
+        return view('admin.vendor_payouts.index', compact('payouts'));
     }
 
     public function create()
@@ -35,7 +35,7 @@ class VendorPayoutController extends BaseController
             ->where('balance', '>', 0)
             ->get();
 
-        return view('admin.vendor-payouts.create', compact('vendors'));
+        return view('admin.vendor_payouts.create', compact('vendors'));
     }
 
     public function store(Request $request)
@@ -57,7 +57,7 @@ class VendorPayoutController extends BaseController
 
         VendorPayout::create($request->all());
 
-        return redirect()->route('admin.vendor-payouts.index')
+        return redirect()->route('admin.vendor_payouts.index')
             ->with('success', 'Vendor payout created successfully.');
     }
 
@@ -65,7 +65,7 @@ class VendorPayoutController extends BaseController
     {
         $vendorPayout->load('vendor');
 
-        return view('admin.vendor-payouts.show', compact('vendorPayout'));
+        return view('admin.vendor_payouts.show', compact('vendorPayout'));
     }
 
     public function edit(VendorPayout $vendorPayout)
@@ -75,7 +75,7 @@ class VendorPayoutController extends BaseController
                 ->with('error', 'Cannot edit completed or failed payouts.');
         }
 
-        return view('admin.vendor-payouts.edit', compact('vendorPayout'));
+        return view('admin.vendor_payouts.edit', compact('vendorPayout'));
     }
 
     public function update(Request $request, VendorPayout $vendorPayout)
@@ -101,7 +101,7 @@ class VendorPayoutController extends BaseController
 
         $vendorPayout->update($data);
 
-        return redirect()->route('admin.vendor-payouts.index')
+        return redirect()->route('admin.vendor_payouts.index')
             ->with('success', 'Vendor payout updated successfully.');
     }
 
@@ -114,7 +114,7 @@ class VendorPayoutController extends BaseController
 
         $vendorPayout->delete();
 
-        return redirect()->route('admin.vendor-payouts.index')
+        return redirect()->route('admin.vendor_payouts.index')
             ->with('success', 'Vendor payout deleted successfully.');
     }
 
@@ -150,5 +150,33 @@ class VendorPayoutController extends BaseController
 
         return redirect()->back()
             ->with('success', 'Payout completed successfully.');
+    }
+
+    public function completed()
+    {
+        $vendorPayouts = Vendor::where('status', 'completed')->paginate(15);
+
+        return view('admin.vendor_payouts.index', compact('vendorPayouts'));
+    }
+
+    public function markPaid(Vendor $vendorPayout)
+    {
+        $vendorPayout->update(['is_done' => true]);
+
+        return redirect()->back()->with('success', 'Marked successfully.');
+    }
+
+    public function pending()
+    {
+        $vendorPayouts = Vendor::where('status', 'pending')->paginate(15);
+
+        return view('admin.vendor_payouts.index', compact('vendorPayouts'));
+    }
+
+    public function reject(Vendor $vendorPayout)
+    {
+        $vendorPayout->update(['status' => 'rejected']);
+
+        return redirect()->back()->with('success', 'Vendor rejected successfully.');
     }
 }

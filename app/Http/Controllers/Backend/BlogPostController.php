@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\BlogCategory;
 use App\Models\BlogPost;
 use App\Models\BlogTag;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class BlogPostController extends Controller
+class BlogPostController extends BaseController
 {
+    protected string $resource = 'blog_post';
+
     public function index()
     {
         $blogPosts = BlogPost::with(['user', 'category'])
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.blog-posts.index', compact('blogPosts'));
+        return view('admin.blog_posts.index', compact('blogPosts'));
     }
 
     public function create()
@@ -26,7 +27,7 @@ class BlogPostController extends Controller
         $tags = BlogTag::all();
         $users = User::all();
 
-        return view('admin.blog-posts.create', compact('categories', 'tags', 'users'));
+        return view('admin.blog_posts.create', compact('categories', 'tags', 'users'));
     }
 
     public function store(Request $request)
@@ -44,7 +45,7 @@ class BlogPostController extends Controller
             $blogPost->tags()->attach($request->tags);
         }
 
-        return redirect()->route('admin.blog-posts.index')
+        return redirect()->route('admin.blog_posts.index')
             ->with('success', 'Blog post created successfully.');
     }
 
@@ -52,7 +53,7 @@ class BlogPostController extends Controller
     {
         $blogPost->load(['user', 'category', 'tags']);
 
-        return view('admin.blog-posts.show', compact('blogPost'));
+        return view('admin.blog_posts.show', compact('blogPost'));
     }
 
     public function edit(BlogPost $blogPost)
@@ -61,7 +62,7 @@ class BlogPostController extends Controller
         $tags = BlogTag::all();
         $users = User::all();
 
-        return view('admin.blog-posts.edit', compact('blogPost', 'categories', 'tags', 'users'));
+        return view('admin.blog_posts.edit', compact('blogPost', 'categories', 'tags', 'users'));
     }
 
     public function update(Request $request, BlogPost $blogPost)
@@ -79,7 +80,7 @@ class BlogPostController extends Controller
             $blogPost->tags()->sync($request->tags);
         }
 
-        return redirect()->route('admin.blog-posts.index')
+        return redirect()->route('admin.blog_posts.index')
             ->with('success', 'Blog post updated successfully.');
     }
 
@@ -87,7 +88,7 @@ class BlogPostController extends Controller
     {
         $blogPost->delete();
 
-        return redirect()->route('admin.blog-posts.index')
+        return redirect()->route('admin.blog_posts.index')
             ->with('success', 'Blog post deleted successfully.');
     }
 
@@ -105,5 +106,34 @@ class BlogPostController extends Controller
 
         return redirect()->back()
             ->with('success', 'Blog post unpublished successfully.');
+    }
+
+    public function byAuthor($author)
+    {
+        $blogPosts = BlogCategory::where('author', $author)->paginate(15);
+
+        return view('admin.blog_posts.index', compact('blogPosts'));
+    }
+
+    public function draft()
+    {
+        $blogPosts = BlogCategory::where('publish_status', 'draft')->paginate(15);
+
+        return view('admin.blog_posts.index', compact('blogPosts'));
+    }
+
+    public function duplicate(BlogCategory $blogPost)
+    {
+        $copy = $blogPost->replicate();
+        $copy->save();
+
+        return redirect()->back()->with('success', 'BlogCategory duplicated successfully.');
+    }
+
+    public function published()
+    {
+        $blogPosts = BlogCategory::where('publish_status', 'published')->paginate(15);
+
+        return view('admin.blog_posts.index', compact('blogPosts'));
     }
 }

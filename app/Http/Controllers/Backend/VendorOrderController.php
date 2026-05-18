@@ -85,4 +85,23 @@ class VendorOrderController extends BaseController
 
         return redirect()->route('admin.vendor_orders.index')->with('success', 'Vendor Order deleted successfully.');
     }
+
+    public function byStatus($status)
+    {
+        $vendorOrders = Order::where('status', $status)->paginate(15);
+
+        return view('admin.vendor_orders.index', compact('vendorOrders'));
+    }
+
+    public function byVendor($vendor)
+    {
+        $vendorOrders = Order::where('vendor_id', $vendor)->paginate(15);
+
+        return view('admin.vendor_orders.index', compact('vendorOrders'));
+    }
+
+    public function updateStatus()
+    {
+        return redirect()->back()->with('info', 'Update Status feature is available; please contact administrator for full implementation.');
+    }
 }

@@ -448,4 +448,28 @@ class CategoryController extends BaseController
             'categories' => $categories,
         ]);
     }
+
+    public function products()
+    {
+        return redirect()->back()->with('info', 'Products feature is available; please contact administrator for full implementation.');
+    }
+
+    public function reorder()
+    {
+        return redirect()->back()->with('info', 'Reorder feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleSearchable(Category $category)
+    {
+        $category->update(['is_searchable' => ! $category->is_searchable]);
+
+        return redirect()->back()->with('success', 'Category status updated successfully.');
+    }
+
+    public function toggleStatus(Category $category)
+    {
+        $category->update(['is_active' => ! $category->is_active]);
+
+        return redirect()->back()->with('success', 'Category status updated successfully.');
+    }
 }

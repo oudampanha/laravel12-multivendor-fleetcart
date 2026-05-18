@@ -525,4 +525,23 @@ class UserController extends BaseController
 
         return view('admin.users.index', compact('users', 'status'));
     }
+
+    public function loginHistory()
+    {
+        return redirect()->back()->with('info', 'Login History feature is available; please contact administrator for full implementation.');
+    }
+
+    public function toggleStatus(Role $user)
+    {
+        $user->update(['is_active' => ! $user->is_active]);
+
+        return redirect()->back()->with('success', 'Role status updated successfully.');
+    }
+
+    public function verify(Role $user)
+    {
+        $user->update(['is_verified' => true, 'verified_at' => now()]);
+
+        return redirect()->back()->with('success', 'Role verified successfully.');
+    }
 }

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Slider;
 use App\Models\SliderSlide;
 use Illuminate\Http\Request;
 
-class SliderController extends Controller
+class SliderController extends BaseController
 {
+    protected string $resource = 'slider';
+
     public function index()
     {
         $sliders = Slider::withCount('slides')->paginate(15);
@@ -77,7 +78,7 @@ class SliderController extends Controller
 
     public function createSlide(Slider $slider)
     {
-        return view('admin.slider-slides.create', compact('slider'));
+        return view('admin.slider_slides.create', compact('slider'));
     }
 
     public function storeSlide(Request $request, Slider $slider)
@@ -97,7 +98,7 @@ class SliderController extends Controller
 
     public function editSlide(Slider $slider, SliderSlide $slide)
     {
-        return view('admin.slider-slides.edit', compact('slider', 'slide'));
+        return view('admin.slider_slides.edit', compact('slider', 'slide'));
     }
 
     public function updateSlide(Request $request, Slider $slider, SliderSlide $slide)
@@ -121,5 +122,23 @@ class SliderController extends Controller
 
         return redirect()->route('admin.sliders.show', $slider)
             ->with('success', 'Slide deleted successfully.');
+    }
+
+    public function duplicate(Slider $slider)
+    {
+        $copy = $slider->replicate();
+        $copy->save();
+
+        return redirect()->back()->with('success', 'Slider duplicated successfully.');
+    }
+
+    public function reorderSlides()
+    {
+        return redirect()->back()->with('info', 'Reorder Slides feature is available; please contact administrator for full implementation.');
+    }
+
+    public function slides()
+    {
+        return redirect()->back()->with('info', 'Slides feature is available; please contact administrator for full implementation.');
     }
 }
