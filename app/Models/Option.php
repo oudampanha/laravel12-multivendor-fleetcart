@@ -17,8 +17,6 @@ class Option extends Model
         'is_required',
         'is_global',
         'position',
-        'price',
-        'price_type',
     ];
 
     protected array $translatable = ['name'];
