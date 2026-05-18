@@ -55,7 +55,7 @@
               <a href="{{ route('admin.entity_media.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Entity Media
               </a>
-              <form action="{{ route('admin.entity_media.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
+              <form action="{{ route('admin.entity-media.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">

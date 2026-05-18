@@ -34,6 +34,7 @@ use App\Http\Controllers\Backend\{
   VendorWithdrawalController,
   DashboardController,
   TranslationManagementController,
+  ProductAttributeController,
   // New controllers that now exist
   ActivationController,
   AddressController,
@@ -264,6 +265,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
   Route::resource('attribute-values', AttributeValueController::class)->except(['index', 'show']);
   Route::post('attribute-values/reorder', [AttributeValueController::class, 'reorder'])->name('attribute-values.reorder');
 
+  // Product Attributes
+  Route::get('product-attributes/by-product/{product}', [ProductAttributeController::class, 'byProduct'])->name('product-attributes.by-product');
+  Route::get('product-attributes/by-attribute/{attribute}', [ProductAttributeController::class, 'byAttribute'])->name('product-attributes.by-attribute');
+  Route::resource('product-attributes', ProductAttributeController::class);
+
   // Variations
   Route::resource('variations', VariationController::class);
   Route::post('variations/{variation}/toggle-global', [VariationController::class, 'toggleGlobal'])->name('variations.toggle-global');
@@ -333,6 +339,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
   Route::get('order-products/by-vendor/{vendor}', [OrderProductController::class, 'byVendor'])->name('order-products.by-vendor');
   Route::get('order-products/by-status/{status}', [OrderProductController::class, 'byStatus'])->name('order-products.by-status');
 
+  // Order Downloads
+  Route::resource('order-downloads', OrderDownloadController::class);
+
+  // Order Product Options
+  Route::resource('order-product-options', OrderProductOptionController::class);
+
+  // Order Product Variations
+  Route::resource('order-product-variations', OrderProductVariationController::class);
+
   // Transactions
   Route::resource('transactions', TransactionController::class)->except(['create', 'store', 'edit', 'update']);
   Route::get('transactions/{transaction}/details', [TransactionController::class, 'details'])->name('transactions.details');
@@ -362,6 +377,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
   Route::delete('flash-sales/{flashSale}/products/{product}', [FlashSaleController::class, 'removeProduct'])->name('flash-sales.products.remove');
   Route::post('flash-sales/{flashSale}/products/reorder', [FlashSaleController::class, 'reorderProducts'])->name('flash-sales.products.reorder');
   Route::get('flash-sales/{flashSale}/orders', [FlashSaleController::class, 'orders'])->name('flash-sales.orders');
+
+  // Flash Sale Products
+  Route::resource('flash-sale-products', FlashSaleProductController::class);
 
   // =============================================================================
   // TAX MANAGEMENT
@@ -548,6 +566,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
   Route::post('translations/sync', [TranslationController::class, 'sync'])->name('translations.sync');
   Route::get('translations/export', [TranslationController::class, 'export'])->name('translations.export');
   Route::post('translations/import', [TranslationController::class, 'import'])->name('translations.import');
+
+  // Translation Management (advanced UI backed by TranslationService)
+  Route::get('translation-management', [TranslationManagementController::class, 'index'])->name('translation-management.index');
+  Route::get('translation-management/create', [TranslationManagementController::class, 'create'])->name('translation-management.create');
+  Route::post('translation-management', [TranslationManagementController::class, 'store'])->name('translation-management.store');
+  Route::get('translation-management/stats', [TranslationManagementController::class, 'stats'])->name('translation-management.stats');
+  Route::get('translation-management/missing', [TranslationManagementController::class, 'missing'])->name('translation-management.missing');
+  Route::get('translation-management/import', [TranslationManagementController::class, 'import'])->name('translation-management.import');
+  Route::post('translation-management/import', [TranslationManagementController::class, 'processImport'])->name('translation-management.import.process');
+  Route::get('translation-management/export', [TranslationManagementController::class, 'export'])->name('translation-management.export');
+  Route::post('translation-management/bulk-update', [TranslationManagementController::class, 'bulkUpdate'])->name('translation-management.bulk-update');
+  Route::post('translation-management/cleanup', [TranslationManagementController::class, 'cleanup'])->name('translation-management.cleanup');
+  Route::post('translation-management/duplicate-locale', [TranslationManagementController::class, 'duplicateLocale'])->name('translation-management.duplicate-locale');
+  Route::get('translation-management/{translation}', [TranslationManagementController::class, 'show'])->name('translation-management.show');
+  Route::get('translation-management/{translation}/edit', [TranslationManagementController::class, 'edit'])->name('translation-management.edit');
+  Route::put('translation-management/{translation}', [TranslationManagementController::class, 'update'])->name('translation-management.update');
+  Route::delete('translation-management/{translation}', [TranslationManagementController::class, 'destroy'])->name('translation-management.destroy');
 
   // Language Lines
   Route::resource('language-lines', LanguageLineController::class);

@@ -19,7 +19,7 @@ class FlashSaleProductController extends BaseController
             ->orderBy('position', 'asc')
             ->paginate(15);
 
-        return view('admin.flash_sale_products.index', compact('flashSaleProducts'));
+        return view('admin.flash-sale-products.index', compact('flashSaleProducts'));
     }
 
     public function create()
@@ -43,7 +43,7 @@ class FlashSaleProductController extends BaseController
 
         FlashSaleProduct::create($validated);
 
-        return redirect()->route('admin.flash_sale_products.index')->with('success', 'Flash Sale Product created successfully.');
+        return redirect()->route('admin.flash-sale-products.index')->with('success', 'Flash Sale Product created successfully.');
     }
 
     public function show(FlashSaleProduct $flashSaleProduct)
@@ -74,13 +74,13 @@ class FlashSaleProductController extends BaseController
 
         $flashSaleProduct->update($validated);
 
-        return redirect()->route('admin.flash_sale_products.index')->with('success', 'Flash Sale Product updated successfully.');
+        return redirect()->route('admin.flash-sale-products.index')->with('success', 'Flash Sale Product updated successfully.');
     }
 
     public function destroy(FlashSaleProduct $flashSaleProduct)
     {
         $flashSaleProduct->delete();
 
-        return redirect()->route('admin.flash_sale_products.index')->with('success', 'Flash Sale Product deleted successfully.');
+        return redirect()->route('admin.flash-sale-products.index')->with('success', 'Flash Sale Product deleted successfully.');
     }
 }

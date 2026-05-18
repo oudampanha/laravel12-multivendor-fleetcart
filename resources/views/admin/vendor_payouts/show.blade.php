@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Vendor Payout Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor_payouts.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.vendor-payouts.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.vendor_payouts.edit'))

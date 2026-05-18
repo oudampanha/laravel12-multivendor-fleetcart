@@ -13,12 +13,12 @@ class BlogTagController extends BaseController
     {
         $blogTags = BlogTag::withCount('posts')->paginate(15);
 
-        return view('admin.blog_tags.index', compact('blogTags'));
+        return view('admin.blog-tags.index', compact('blogTags'));
     }
 
     public function create()
     {
-        return view('admin.blog_tags.create');
+        return view('admin.blog-tags.create');
     }
 
     public function store(Request $request)
@@ -29,7 +29,7 @@ class BlogTagController extends BaseController
 
         BlogTag::create($request->all());
 
-        return redirect()->route('admin.blog_tags.index')
+        return redirect()->route('admin.blog-tags.index')
             ->with('success', 'Blog tag created successfully.');
     }
 
@@ -37,12 +37,12 @@ class BlogTagController extends BaseController
     {
         $blogTag->load('posts');
 
-        return view('admin.blog_tags.show', compact('blogTag'));
+        return view('admin.blog-tags.show', compact('blogTag'));
     }
 
     public function edit(BlogTag $blogTag)
     {
-        return view('admin.blog_tags.edit', compact('blogTag'));
+        return view('admin.blog-tags.edit', compact('blogTag'));
     }
 
     public function update(Request $request, BlogTag $blogTag)
@@ -53,7 +53,7 @@ class BlogTagController extends BaseController
 
         $blogTag->update($request->all());
 
-        return redirect()->route('admin.blog_tags.index')
+        return redirect()->route('admin.blog-tags.index')
             ->with('success', 'Blog tag updated successfully.');
     }
 
@@ -61,7 +61,7 @@ class BlogTagController extends BaseController
     {
         $blogTag->delete();
 
-        return redirect()->route('admin.blog_tags.index')
+        return redirect()->route('admin.blog-tags.index')
             ->with('success', 'Blog tag deleted successfully.');
     }
 

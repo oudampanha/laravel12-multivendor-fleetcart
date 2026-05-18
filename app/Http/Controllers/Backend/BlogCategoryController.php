@@ -13,12 +13,12 @@ class BlogCategoryController extends BaseController
     {
         $blogCategories = BlogCategory::withCount('posts')->paginate(15);
 
-        return view('admin.blog_categories.index', compact('blogCategories'));
+        return view('admin.blog-categories.index', compact('blogCategories'));
     }
 
     public function create()
     {
-        return view('admin.blog_categories.create');
+        return view('admin.blog-categories.create');
     }
 
     public function store(Request $request)
@@ -29,7 +29,7 @@ class BlogCategoryController extends BaseController
 
         BlogCategory::create($request->all());
 
-        return redirect()->route('admin.blog_categories.index')
+        return redirect()->route('admin.blog-categories.index')
             ->with('success', 'Blog category created successfully.');
     }
 
@@ -53,7 +53,7 @@ class BlogCategoryController extends BaseController
 
         $blogCategory->update($request->all());
 
-        return redirect()->route('admin.blog_categories.index')
+        return redirect()->route('admin.blog-categories.index')
             ->with('success', 'Blog category updated successfully.');
     }
 
@@ -61,7 +61,7 @@ class BlogCategoryController extends BaseController
     {
         $blogCategory->delete();
 
-        return redirect()->route('admin.blog_categories.index')
+        return redirect()->route('admin.blog-categories.index')
             ->with('success', 'Blog category deleted successfully.');
     }
 

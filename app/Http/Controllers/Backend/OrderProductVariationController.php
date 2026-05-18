@@ -56,7 +56,7 @@ class OrderProductVariationController extends BaseController
         $orderProducts = OrderProduct::all();
         $variations = Variation::all();
 
-        return view('admin.order_product_variations.edit', compact('orderProductVariation', 'orderProducts', 'variations'));
+        return view('admin.order-product-variations.edit', compact('orderProductVariation', 'orderProducts', 'variations'));
     }
 
     public function update(Request $request, OrderProductVariation $orderProductVariation)

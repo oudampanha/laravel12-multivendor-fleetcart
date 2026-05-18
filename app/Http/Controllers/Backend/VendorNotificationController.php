@@ -18,7 +18,7 @@ class VendorNotificationController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_notifications.index', compact('vendorNotifications'));
+        return view('admin.vendor-notifications.index', compact('vendorNotifications'));
     }
 
     public function create()
@@ -42,7 +42,7 @@ class VendorNotificationController extends BaseController
 
         VendorNotification::create($validated);
 
-        return redirect()->route('admin.vendor_notifications.index')->with('success', 'Vendor Notification created successfully.');
+        return redirect()->route('admin.vendor-notifications.index')->with('success', 'Vendor Notification created successfully.');
     }
 
     public function show(VendorNotification $vendorNotification)
@@ -73,14 +73,14 @@ class VendorNotificationController extends BaseController
 
         $vendorNotification->update($validated);
 
-        return redirect()->route('admin.vendor_notifications.index')->with('success', 'Vendor Notification updated successfully.');
+        return redirect()->route('admin.vendor-notifications.index')->with('success', 'Vendor Notification updated successfully.');
     }
 
     public function destroy(VendorNotification $vendorNotification)
     {
         $vendorNotification->delete();
 
-        return redirect()->route('admin.vendor_notifications.index')->with('success', 'Vendor Notification deleted successfully.');
+        return redirect()->route('admin.vendor-notifications.index')->with('success', 'Vendor Notification deleted successfully.');
     }
 
     public function markAsRead(VendorNotification $vendorNotification)
@@ -90,7 +90,7 @@ class VendorNotificationController extends BaseController
             'read_at' => now(),
         ]);
 
-        return redirect()->route('admin.vendor_notifications.index')->with('success', 'Vendor Notification marked as read.');
+        return redirect()->route('admin.vendor-notifications.index')->with('success', 'Vendor Notification marked as read.');
     }
 
     public function markAsUnread(VendorNotification $vendorNotification)
@@ -100,14 +100,14 @@ class VendorNotificationController extends BaseController
             'read_at' => null,
         ]);
 
-        return redirect()->route('admin.vendor_notifications.index')->with('success', 'Vendor Notification marked as unread.');
+        return redirect()->route('admin.vendor-notifications.index')->with('success', 'Vendor Notification marked as unread.');
     }
 
     public function byVendor($vendor)
     {
         $vendorNotifications = Vendor::where('vendor_id', $vendor)->paginate(15);
 
-        return view('admin.vendor_notifications.index', compact('vendorNotifications'));
+        return view('admin.vendor-notifications.index', compact('vendorNotifications'));
     }
 
     public function markAllRead(Vendor $vendorNotification)

@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Default Address Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.default_addresses.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.default-addresses.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           <a href="{{ route('admin.default_addresses.edit', $item->id ?? 0) }}" class="btn btn-warning">

@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Order Download Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.order_downloads.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.order-downloads.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           <a href="{{ route('admin.order_downloads.edit', $item->id ?? 0) }}" class="btn btn-warning">

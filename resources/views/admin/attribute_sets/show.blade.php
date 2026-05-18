@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Attribute Set Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.attribute_sets.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.attribute-sets.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.attribute_sets.edit'))

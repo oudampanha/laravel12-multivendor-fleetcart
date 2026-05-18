@@ -9,10 +9,10 @@
       <div class="card-header">
         <h4 class="card-title">Blog Post Details: {{ $blogPost->title }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.blog_posts.edit', $blogPost->id) }}" class="btn btn-warning">
+          <a href="{{ route('admin.blog-posts.edit', $blogPost->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
-          <a href="{{ route('admin.blog_posts.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.blog-posts.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>

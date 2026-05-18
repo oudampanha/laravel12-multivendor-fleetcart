@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Related Product Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.related_products.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.related-products.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           <a href="{{ route('admin.related_products.edit', $item->id ?? 0) }}" class="btn btn-warning">

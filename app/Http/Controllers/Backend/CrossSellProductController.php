@@ -25,7 +25,7 @@ class CrossSellProductController extends BaseController
 
         $products = $query->orderBy('name')->paginate(15);
 
-        return view('admin.cross_sell_products.index', compact('products'));
+        return view('admin.cross-sell-products.index', compact('products'));
     }
 
     public function store(Request $request)
@@ -46,7 +46,7 @@ class CrossSellProductController extends BaseController
         // Attach the cross-sell product
         $product->crossSellProducts()->attach($crossSellProduct->id);
 
-        return redirect()->route('admin.cross_sell_products.index')
+        return redirect()->route('admin.cross-sell-products.index')
             ->with('success', 'Cross-sell product relationship created successfully.');
     }
 
@@ -55,7 +55,7 @@ class CrossSellProductController extends BaseController
         // Detach the cross-sell product relationship
         $product->crossSellProducts()->detach($crossSellProduct->id);
 
-        return redirect()->route('admin.cross_sell_products.index')
+        return redirect()->route('admin.cross-sell-products.index')
             ->with('success', 'Cross-sell product relationship removed successfully.');
     }
 
@@ -95,11 +95,11 @@ class CrossSellProductController extends BaseController
             $product->crossSellProducts()->attach($newIds);
             $count = count($newIds);
 
-            return redirect()->route('admin.cross_sell_products.index')
+            return redirect()->route('admin.cross-sell-products.index')
                 ->with('success', "Added {$count} cross-sell product relationships successfully.");
         }
 
-        return redirect()->route('admin.cross_sell_products.index')
+        return redirect()->route('admin.cross-sell-products.index')
             ->with('info', 'All selected cross-sell relationships already exist.');
     }
 
@@ -111,7 +111,7 @@ class CrossSellProductController extends BaseController
         $count = $product->crossSellProducts()->count();
         $product->crossSellProducts()->detach();
 
-        return redirect()->route('admin.cross_sell_products.index')
+        return redirect()->route('admin.cross-sell-products.index')
             ->with('success', "Removed {$count} cross-sell product relationships successfully.");
     }
 }

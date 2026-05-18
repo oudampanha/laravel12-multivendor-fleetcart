@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Vendor Withdrawal Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor_withdrawals.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.vendor-withdrawals.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.vendor_withdrawals.edit'))

@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Vendor Order Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor_orders.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.vendor-orders.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.vendor_orders.edit'))

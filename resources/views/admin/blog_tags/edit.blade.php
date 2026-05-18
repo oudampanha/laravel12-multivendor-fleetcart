@@ -9,13 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Edit Blog Tag: {{ $blogTag->name }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.blog_tags.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.blog-tags.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.blog_tags.update', $blogTag->id) }}" method="POST">
+        <form action="{{ route('admin.blog-tags.update', $blogTag->id) }}" method="POST">
           @csrf
           @method('PUT')
           
@@ -87,7 +87,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Update Tag
             </button>
-            <a href="{{ route('admin.blog_tags.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.blog-tags.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

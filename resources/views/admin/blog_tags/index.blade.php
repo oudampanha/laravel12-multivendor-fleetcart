@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Blog Tags Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.blog_tags.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.blog-tags.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Tag
           </a>
         </div>
@@ -65,13 +65,13 @@
                 </td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.blog_tags.show', $tag->id) }}" class="btn btn-sm btn-info">
+                    <a href="{{ route('admin.blog-tags.show', $tag->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.blog_tags.edit', $tag->id) }}" class="btn btn-sm btn-warning">
+                    <a href="{{ route('admin.blog-tags.edit', $tag->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.blog_tags.destroy', $tag->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('admin.blog-tags.destroy', $tag->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this tag?')">

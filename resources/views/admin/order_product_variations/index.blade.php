@@ -40,7 +40,7 @@
                     <a href="{{ route('admin.order_product_variations.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.order_product_variations.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                    <a href="{{ route('admin.order-product-variations.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
                     <form action="{{ route('admin.order_product_variations.destroy', $item->id) }}" method="POST" class="d-inline">

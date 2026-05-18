@@ -15,7 +15,7 @@ class SearchTermController extends BaseController
     {
         $searchTerms = SearchTerm::orderBy('hits', 'desc')->paginate(15);
 
-        return view('admin.search_terms.index', compact('searchTerms'));
+        return view('admin.search-terms.index', compact('searchTerms'));
     }
 
     public function create()
@@ -33,12 +33,12 @@ class SearchTermController extends BaseController
 
         SearchTerm::create($validated);
 
-        return redirect()->route('admin.search_terms.index')->with('success', 'Search Term created successfully.');
+        return redirect()->route('admin.search-terms.index')->with('success', 'Search Term created successfully.');
     }
 
     public function show(SearchTerm $searchTerm)
     {
-        return view('admin.search_terms.show', compact('searchTerm'));
+        return view('admin.search-terms.show', compact('searchTerm'));
     }
 
     public function edit(SearchTerm $searchTerm)
@@ -56,14 +56,14 @@ class SearchTermController extends BaseController
 
         $searchTerm->update($validated);
 
-        return redirect()->route('admin.search_terms.index')->with('success', 'Search Term updated successfully.');
+        return redirect()->route('admin.search-terms.index')->with('success', 'Search Term updated successfully.');
     }
 
     public function destroy(SearchTerm $searchTerm)
     {
         $searchTerm->delete();
 
-        return redirect()->route('admin.search_terms.index')->with('success', 'Search Term deleted successfully.');
+        return redirect()->route('admin.search-terms.index')->with('success', 'Search Term deleted successfully.');
     }
 
     public function cleanup()

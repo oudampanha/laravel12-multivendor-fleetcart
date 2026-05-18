@@ -18,14 +18,14 @@ class OrderDownloadController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.order_downloads.index', compact('orderDownloads'));
+        return view('admin.order-downloads.index', compact('orderDownloads'));
     }
 
     public function create()
     {
         $orders = Order::all();
 
-        return view('admin.order_downloads.create', compact('orders'));
+        return view('admin.order-downloads.create', compact('orders'));
     }
 
     public function store(Request $request)
@@ -37,7 +37,7 @@ class OrderDownloadController extends BaseController
 
         OrderDownload::create($validated);
 
-        return redirect()->route('admin.order_downloads.index')->with('success', 'Order Download created successfully.');
+        return redirect()->route('admin.order-downloads.index')->with('success', 'Order Download created successfully.');
     }
 
     public function show(OrderDownload $orderDownload)
@@ -63,13 +63,13 @@ class OrderDownloadController extends BaseController
 
         $orderDownload->update($validated);
 
-        return redirect()->route('admin.order_downloads.index')->with('success', 'Order Download updated successfully.');
+        return redirect()->route('admin.order-downloads.index')->with('success', 'Order Download updated successfully.');
     }
 
     public function destroy(OrderDownload $orderDownload)
     {
         $orderDownload->delete();
 
-        return redirect()->route('admin.order_downloads.index')->with('success', 'Order Download deleted successfully.');
+        return redirect()->route('admin.order-downloads.index')->with('success', 'Order Download deleted successfully.');
     }
 }

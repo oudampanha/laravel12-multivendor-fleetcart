@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Updater Script Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.updater_scripts.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.updater-scripts.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           <a href="{{ route('admin.updater_scripts.edit', $item->id ?? 0) }}" class="btn btn-warning">

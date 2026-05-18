@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Blog Categorie Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.blog_categories.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.blog-categories.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.blog_categories.edit'))

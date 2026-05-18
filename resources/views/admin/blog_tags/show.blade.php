@@ -9,10 +9,10 @@
       <div class="card-header">
         <h4 class="card-title">Blog Tag Details: {{ $blogTag->name }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.blog_tags.edit', $blogTag->id) }}" class="btn btn-warning">
+          <a href="{{ route('admin.blog-tags.edit', $blogTag->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
-          <a href="{{ route('admin.blog_tags.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.blog-tags.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
@@ -112,7 +112,7 @@
                   <div class="list-group-item">
                     <div class="d-flex w-100 justify-content-between">
                       <h6 class="mb-1">
-                        <a href="{{ route('admin.blog_posts.show', $post->id) }}" class="text-decoration-none">
+                        <a href="{{ route('admin.blog-posts.show', $post->id) }}" class="text-decoration-none">
                           {{ $post->title }}
                         </a>
                       </h6>

@@ -20,7 +20,7 @@ class VendorReviewController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function create()
@@ -46,7 +46,7 @@ class VendorReviewController extends BaseController
 
         VendorReview::create($validated);
 
-        return redirect()->route('admin.vendor_reviews.index')->with('success', 'Vendor Review created successfully.');
+        return redirect()->route('admin.vendor-reviews.index')->with('success', 'Vendor Review created successfully.');
     }
 
     public function show(VendorReview $vendorReview)
@@ -79,48 +79,48 @@ class VendorReviewController extends BaseController
 
         $vendorReview->update($validated);
 
-        return redirect()->route('admin.vendor_reviews.index')->with('success', 'Vendor Review updated successfully.');
+        return redirect()->route('admin.vendor-reviews.index')->with('success', 'Vendor Review updated successfully.');
     }
 
     public function destroy(VendorReview $vendorReview)
     {
         $vendorReview->delete();
 
-        return redirect()->route('admin.vendor_reviews.index')->with('success', 'Vendor Review deleted successfully.');
+        return redirect()->route('admin.vendor-reviews.index')->with('success', 'Vendor Review deleted successfully.');
     }
 
     public function approve(VendorReview $vendorReview)
     {
         $vendorReview->update(['is_approved' => true]);
 
-        return redirect()->route('admin.vendor_reviews.index')->with('success', 'Vendor Review approved successfully.');
+        return redirect()->route('admin.vendor-reviews.index')->with('success', 'Vendor Review approved successfully.');
     }
 
     public function reject(VendorReview $vendorReview)
     {
         $vendorReview->update(['is_approved' => false]);
 
-        return redirect()->route('admin.vendor_reviews.index')->with('success', 'Vendor Review rejected successfully.');
+        return redirect()->route('admin.vendor-reviews.index')->with('success', 'Vendor Review rejected successfully.');
     }
 
     public function approved()
     {
         $vendorReviews = Order::where('status', 'approved')->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function byVendor($vendor)
     {
         $vendorReviews = Order::where('vendor_id', $vendor)->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function pending()
     {
         $vendorReviews = Order::where('status', 'pending')->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 }

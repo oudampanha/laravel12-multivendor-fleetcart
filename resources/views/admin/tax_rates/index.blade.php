@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Tax Rates Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.tax_rates.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.tax-rates.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Tax Rate
           </a>
         </div>
@@ -46,13 +46,13 @@
                 <td>{{ $taxRate->created_at->format('Y-m-d H:i:s') }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.tax_rates.show', $taxRate->id) }}" class="btn btn-sm btn-info">
+                    <a href="{{ route('admin.tax-rates.show', $taxRate->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.tax_rates.edit', $taxRate->id) }}" class="btn btn-sm btn-warning">
+                    <a href="{{ route('admin.tax-rates.edit', $taxRate->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.tax_rates.destroy', $taxRate->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this tax rate?')">
+                    <form action="{{ route('admin.tax-rates.destroy', $taxRate->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this tax rate?')">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger">

@@ -25,7 +25,7 @@ class RelatedProductController extends BaseController
 
         $products = $query->orderBy('name')->paginate(15);
 
-        return view('admin.related_products.index', compact('products'));
+        return view('admin.related-products.index', compact('products'));
     }
 
     public function store(Request $request)
@@ -46,7 +46,7 @@ class RelatedProductController extends BaseController
         // Attach the related product
         $product->relatedProducts()->attach($relatedProduct->id);
 
-        return redirect()->route('admin.related_products.index')
+        return redirect()->route('admin.related-products.index')
             ->with('success', 'Related product relationship created successfully.');
     }
 
@@ -55,7 +55,7 @@ class RelatedProductController extends BaseController
         // Detach the related product relationship
         $product->relatedProducts()->detach($relatedProduct->id);
 
-        return redirect()->route('admin.related_products.index')
+        return redirect()->route('admin.related-products.index')
             ->with('success', 'Related product relationship removed successfully.');
     }
 
@@ -95,11 +95,11 @@ class RelatedProductController extends BaseController
             $product->relatedProducts()->attach($newIds);
             $count = count($newIds);
 
-            return redirect()->route('admin.related_products.index')
+            return redirect()->route('admin.related-products.index')
                 ->with('success', "Added {$count} related product relationships successfully.");
         }
 
-        return redirect()->route('admin.related_products.index')
+        return redirect()->route('admin.related-products.index')
             ->with('info', 'All selected related product relationships already exist.');
     }
 
@@ -111,7 +111,7 @@ class RelatedProductController extends BaseController
         $count = $product->relatedProducts()->count();
         $product->relatedProducts()->detach();
 
-        return redirect()->route('admin.related_products.index')
+        return redirect()->route('admin.related-products.index')
             ->with('success', "Removed {$count} related product relationships successfully.");
     }
 
@@ -143,11 +143,11 @@ class RelatedProductController extends BaseController
         }
 
         if ($attached > 0) {
-            return redirect()->route('admin.related_products.index')
+            return redirect()->route('admin.related-products.index')
                 ->with('success', "Created {$attached} mutual related product relationships successfully.");
         }
 
-        return redirect()->route('admin.related_products.index')
+        return redirect()->route('admin.related-products.index')
             ->with('info', 'Mutual related product relationships already exist.');
     }
 }

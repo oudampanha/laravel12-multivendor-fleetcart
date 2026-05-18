@@ -15,7 +15,7 @@ class OtpVerificationController extends BaseController
     {
         $otpVerifications = OtpVerification::orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.otp_verifications.index', compact('otpVerifications'));
+        return view('admin.otp-verifications.index', compact('otpVerifications'));
     }
 
     public function create()
@@ -34,7 +34,7 @@ class OtpVerificationController extends BaseController
 
         OtpVerification::create($validated);
 
-        return redirect()->route('admin.otp_verifications.index')->with('success', 'OTP Verification created successfully.');
+        return redirect()->route('admin.otp-verifications.index')->with('success', 'OTP Verification created successfully.');
     }
 
     public function show(OtpVerification $otpVerification)
@@ -58,14 +58,14 @@ class OtpVerificationController extends BaseController
 
         $otpVerification->update($validated);
 
-        return redirect()->route('admin.otp_verifications.index')->with('success', 'OTP Verification updated successfully.');
+        return redirect()->route('admin.otp-verifications.index')->with('success', 'OTP Verification updated successfully.');
     }
 
     public function destroy(OtpVerification $otpVerification)
     {
         $otpVerification->delete();
 
-        return redirect()->route('admin.otp_verifications.index')->with('success', 'OTP Verification deleted successfully.');
+        return redirect()->route('admin.otp-verifications.index')->with('success', 'OTP Verification deleted successfully.');
     }
 
     public function cleanup()

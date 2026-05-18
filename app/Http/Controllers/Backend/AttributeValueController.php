@@ -23,7 +23,7 @@ class AttributeValueController extends BaseController
     {
         $attributes = Attribute::all();
 
-        return view('admin.attribute_values.create', compact('attributes'));
+        return view('admin.attribute-values.create', compact('attributes'));
     }
 
     public function store(Request $request)

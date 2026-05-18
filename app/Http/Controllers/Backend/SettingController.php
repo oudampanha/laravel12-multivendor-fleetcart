@@ -86,7 +86,7 @@ class SettingController extends BaseController
     {
         $vendorSettings = VendorSetting::with('vendor')->paginate(15);
 
-        return view('admin.vendor_settings.index', compact('vendorSettings'));
+        return view('admin.vendor-settings.index', compact('vendorSettings'));
     }
 
     public function createVendorSetting()
@@ -109,7 +109,7 @@ class SettingController extends BaseController
             ['value' => $request->value]
         );
 
-        return redirect()->route('admin.vendor_settings.index')
+        return redirect()->route('admin.vendor-settings.index')
             ->with('success', 'Vendor setting created successfully.');
     }
 
@@ -130,7 +130,7 @@ class SettingController extends BaseController
 
         $vendorSetting->update($request->all());
 
-        return redirect()->route('admin.vendor_settings.index')
+        return redirect()->route('admin.vendor-settings.index')
             ->with('success', 'Vendor setting updated successfully.');
     }
 
@@ -138,7 +138,7 @@ class SettingController extends BaseController
     {
         $vendorSetting->delete();
 
-        return redirect()->route('admin.vendor_settings.index')
+        return redirect()->route('admin.vendor-settings.index')
             ->with('success', 'Vendor setting deleted successfully.');
     }
 
