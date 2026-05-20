@@ -15,7 +15,8 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.transactions.update', $transaction->id) }}" method="POST" enctype="multipart/form-data">
+        @if (Route::has('admin.transactions.update'))
+<form action="{{ route('admin.transactions.update', $transaction->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
 
@@ -51,6 +52,7 @@
             </a>
           </div>
         </form>
+@endif
       </div>
     </div>
   </div>

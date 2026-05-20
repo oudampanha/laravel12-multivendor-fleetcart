@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Order Product Variation Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.order_product_variations.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.order-product-variations.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           <a href="{{ route('admin.order-product-variations.edit', $item->id ?? 0) }}" class="btn btn-warning">
@@ -51,7 +51,7 @@
               <a href="{{ route('admin.order-product-variations.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Order Product Variation
               </a>
-              <form action="{{ route('admin.order_product_variations.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
+              <form action="{{ route('admin.order-product-variations.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">

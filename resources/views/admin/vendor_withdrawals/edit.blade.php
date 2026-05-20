@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.vendor_withdrawals.update', $vendorWithdrawal->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.vendor-withdrawals.update', $vendorWithdrawal->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
 

@@ -12,9 +12,11 @@
           <a href="{{ route('admin.reminders.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          <a href="{{ route('admin.reminders.edit', $item->id ?? 0) }}" class="btn btn-warning">
+          @if (Route::has('admin.reminders.edit'))
+<a href="{{ route('admin.reminders.edit', $item->id ?? 0) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit Reminder
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -52,9 +54,11 @@
         <div class="row mt-4">
           <div class="col-12">
             <div class="btn-group">
-              <a href="{{ route('admin.reminders.edit', $item->id ?? 0) }}" class="btn btn-warning">
+              @if (Route::has('admin.reminders.edit'))
+<a href="{{ route('admin.reminders.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Reminder
               </a>
+@endif
               <form action="{{ route('admin.reminders.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')

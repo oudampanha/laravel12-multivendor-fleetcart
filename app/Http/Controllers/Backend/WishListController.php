@@ -45,7 +45,7 @@ class WishListController extends BaseController
 
         $wishLists = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.wish-lists.index', compact('wishLists'));
+        return view('admin.wish_lists.index', compact('wishLists'));
     }
 
     /**

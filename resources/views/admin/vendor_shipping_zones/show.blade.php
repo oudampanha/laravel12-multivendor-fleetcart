@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Vendor Shipping Zone Details: {{ $vendor_shipping_zone->name ?? $vendor_shipping_zone->title ?? 'N/A' }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor-shipping-zones.edit', $vendor_shipping_zone->id) }}" class="btn btn-warning">
+          @if (Route::has('admin.vendor-shipping-zones.edit'))
+<a href="{{ route('admin.vendor-shipping-zones.edit', $vendor_shipping_zone->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
+@endif
           <a href="{{ route('admin.vendor-shipping-zones.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>

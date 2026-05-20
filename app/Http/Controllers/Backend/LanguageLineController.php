@@ -34,7 +34,7 @@ class LanguageLineController extends BaseController
         $languageLines = $query->paginate(15);
         $groups = LanguageLine::distinct('group')->pluck('group')->sort();
 
-        return view('admin.language-lines.index', compact('languageLines', 'groups'));
+        return view('admin.language_lines.index', compact('languageLines', 'groups'));
     }
 
     public function create()
@@ -42,7 +42,7 @@ class LanguageLineController extends BaseController
         $groups = LanguageLine::distinct('group')->pluck('group')->sort();
         $languages = config('app.supported_locales', ['en', 'es', 'fr', 'de']);
 
-        return view('admin.language-lines.create', compact('groups', 'languages'));
+        return view('admin.language_lines.create', compact('groups', 'languages'));
     }
 
     public function store(Request $request)
@@ -138,7 +138,7 @@ class LanguageLineController extends BaseController
 
         $groups = LanguageLine::distinct('group')->pluck('group')->sort();
 
-        return view('admin.language-lines.index', compact('languageLines', 'groups', 'group'));
+        return view('admin.language_lines.index', compact('languageLines', 'groups', 'group'));
     }
 
     /**

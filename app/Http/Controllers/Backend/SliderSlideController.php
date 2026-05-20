@@ -18,14 +18,14 @@ class SliderSlideController extends BaseController
             ->orderBy('position', 'asc')
             ->paginate(15);
 
-        return view('admin.slider-slides.index', compact('sliderSlides'));
+        return view('admin.slider_slides.index', compact('sliderSlides'));
     }
 
     public function create()
     {
         $sliders = Slider::all();
 
-        return view('admin.slider-slides.create', compact('sliders'));
+        return view('admin.slider_slides.create', compact('sliders'));
     }
 
     public function store(Request $request)
@@ -47,7 +47,7 @@ class SliderSlideController extends BaseController
     {
         $sliderSlide->load('slider');
 
-        return view('admin.slider-slides.show', compact('sliderSlide'));
+        return view('admin.slider_slides.show', compact('sliderSlide'));
     }
 
     public function edit(SliderSlide $sliderSlide)
@@ -83,7 +83,7 @@ class SliderSlideController extends BaseController
     {
         $sliderSlides = Slider::where('slider', $slider)->paginate(15);
 
-        return view('admin.slider-slides.index', compact('sliderSlides'));
+        return view('admin.slider_slides.index', compact('sliderSlides'));
     }
 
     public function reorder()

@@ -12,9 +12,11 @@
           <a href="{{ route('admin.variation-values.edit', $variation_value->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
-          <a href="{{ route('admin.variation-values.index') }}" class="btn btn-secondary">
+          @if (Route::has('admin.variation-values.index'))
+<a href="{{ route('admin.variation-values.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">

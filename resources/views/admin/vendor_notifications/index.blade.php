@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Vendor Notifications Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor-notifications.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.vendor-notifications.create'))
+<a href="{{ route('admin.vendor-notifications.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">

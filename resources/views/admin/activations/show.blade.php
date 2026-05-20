@@ -13,9 +13,11 @@
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.activations.edit'))
-            <a href="{{ route('admin.activations.edit', $activation->id) }}" class="btn btn-warning">
+            @if (Route::has('admin.activations.edit'))
+<a href="{{ route('admin.activations.edit', $activation->id) }}" class="btn btn-warning">
               <i class="fas fa-edit"></i> Edit
             </a>
+@endif
           @endif
         </div>
       </div>

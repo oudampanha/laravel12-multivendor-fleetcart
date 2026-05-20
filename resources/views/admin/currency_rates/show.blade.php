@@ -9,7 +9,7 @@
       <div class="card-header">
         <h4 class="card-title">Currency Rate Details: {{ $currencyRate->currency_name }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.currency_rates.edit', $currencyRate->id) }}" class="btn btn-warning">
+          <a href="{{ route('admin.currency-rates.edit', $currencyRate->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
           <a href="{{ route('admin.currency-rates.index') }}" class="btn btn-secondary">

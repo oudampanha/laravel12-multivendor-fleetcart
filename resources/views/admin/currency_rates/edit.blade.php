@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.currency_rates.update', $currencyRate->id) }}" method="POST">
+        <form action="{{ route('admin.currency-rates.update', $currencyRate->id) }}" method="POST">
           @csrf
           @method('PUT')
           

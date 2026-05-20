@@ -15,7 +15,8 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.updater_scripts.store') }}" method="POST" enctype="multipart/form-data">
+        @if (Route::has('admin.updater_scripts.store'))
+<form action="{{ route('admin.updater_scripts.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="form-group">
@@ -72,6 +73,7 @@
             </a>
           </div>
         </form>
+@endif
       </div>
     </div>
   </div>

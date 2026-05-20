@@ -23,7 +23,7 @@ class VariationValueController extends BaseController
     {
         $variations = Variation::all();
 
-        return view('admin.variation-values.create', compact('variations'));
+        return view('admin.variation_values.create', compact('variations'));
     }
 
     public function store(Request $request)
@@ -37,7 +37,7 @@ class VariationValueController extends BaseController
 
         VariationValue::create($validated);
 
-        return redirect()->route('admin.variation_values.index')->with('success', 'Variation Value created successfully.');
+        return back()->with('success', 'Variation Value created successfully.');
     }
 
     public function show(VariationValue $variationValue)
@@ -65,14 +65,14 @@ class VariationValueController extends BaseController
 
         $variationValue->update($validated);
 
-        return redirect()->route('admin.variation_values.index')->with('success', 'Variation Value updated successfully.');
+        return back()->with('success', 'Variation Value updated successfully.');
     }
 
     public function destroy(VariationValue $variationValue)
     {
         $variationValue->delete();
 
-        return redirect()->route('admin.variation_values.index')->with('success', 'Variation Value deleted successfully.');
+        return back()->with('success', 'Variation Value deleted successfully.');
     }
 
     public function reorder()

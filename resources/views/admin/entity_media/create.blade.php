@@ -9,13 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Create New Entity Media</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.entity_media.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.entity-media.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.entity_media.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.entity-media.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="form-group">
@@ -67,7 +67,7 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Create Entity Media
             </button>
-            <a href="{{ route('admin.entity_media.index') }}" class="btn btn-secondary ml-2">
+            <a href="{{ route('admin.entity-media.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
           </div>

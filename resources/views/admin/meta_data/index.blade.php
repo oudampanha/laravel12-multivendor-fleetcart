@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Meta Data Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.meta-data.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.meta-data.create'))
+<a href="{{ route('admin.meta-data.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -46,9 +48,11 @@
                     <a href="{{ route('admin.meta-data.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.meta-data.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                    @if (Route::has('admin.meta-data.edit'))
+<a href="{{ route('admin.meta-data.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
+@endif
                     <form action="{{ route('admin.meta-data.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')

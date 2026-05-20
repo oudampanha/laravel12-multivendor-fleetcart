@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Search Term Details: {{ $search_term->name ?? $search_term->title ?? 'N/A' }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.search-terms.edit', $search_term->id) }}" class="btn btn-warning">
+          @if (Route::has('admin.search-terms.edit'))
+<a href="{{ route('admin.search-terms.edit', $search_term->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
+@endif
           <a href="{{ route('admin.search-terms.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>

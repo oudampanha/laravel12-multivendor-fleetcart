@@ -39,13 +39,13 @@
                 <td>{{ $item->expires_at ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.order_downloads.show', $item->id) }}" class="btn btn-sm btn-info">
+                    <a href="{{ route('admin.order-downloads.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.order_downloads.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                    <a href="{{ route('admin.order-downloads.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.order_downloads.destroy', $item->id) }}" method="POST" class="d-inline">
+                    <form action="{{ route('admin.order-downloads.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">

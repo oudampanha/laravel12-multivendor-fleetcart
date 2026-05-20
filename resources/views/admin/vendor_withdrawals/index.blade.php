@@ -63,11 +63,11 @@
                 </td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.vendor_withdrawals.show', $withdrawal->id) }}" class="btn btn-sm btn-info">
+                    <a href="{{ route('admin.vendor-withdrawals.show', $withdrawal->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
                     @if($withdrawal->status === 'pending')
-                    <a href="{{ route('admin.vendor_withdrawals.edit', $withdrawal->id) }}" class="btn btn-sm btn-warning">
+                    <a href="{{ route('admin.vendor-withdrawals.edit', $withdrawal->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
                     @endif

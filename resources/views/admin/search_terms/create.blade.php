@@ -15,7 +15,8 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.search-terms.store') }}" method="POST" enctype="multipart/form-data">
+        @if (Route::has('admin.search-terms.store'))
+<form action="{{ route('admin.search-terms.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="row">
@@ -62,6 +63,7 @@
             </a>
           </div>
         </form>
+@endif
       </div>
     </div>
   </div>

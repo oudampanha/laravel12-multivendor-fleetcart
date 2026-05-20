@@ -101,19 +101,21 @@
                 <td>{{ $payout->payout_date ? $payout->payout_date->format('Y-m-d') : $payout->created_at->format('Y-m-d') }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.vendor_payouts.show', $payout->id) }}" class="btn btn-sm btn-info">
+                    <a href="{{ route('admin.vendor-payouts.show', $payout->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.vendor_payouts.edit', $payout->id) }}" class="btn btn-sm btn-warning">
+                    <a href="{{ route('admin.vendor-payouts.edit', $payout->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
                     @if($payout->status === 'pending')
-                    <form action="{{ route('admin.vendor_payouts.process', $payout->id) }}" method="POST" class="d-inline">
+                    @if (Route::has('admin.vendor_payouts.process'))
+<form action="{{ route('admin.vendor_payouts.process', $payout->id) }}" method="POST" class="d-inline">
                       @csrf
                       <button type="submit" class="btn btn-sm btn-success" onclick="return confirm('Process this payout?')">
                         <i class="fas fa-check"></i>
                       </button>
                     </form>
+@endif
                     @endif
                   </div>
                 </td>

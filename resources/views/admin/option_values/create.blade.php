@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Create New Option Value</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.option-values.index') }}" class="btn btn-secondary">
+          @if (Route::has('admin.option-values.index'))
+<a href="{{ route('admin.option-values.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -57,9 +59,11 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Create Option Value
             </button>
-            <a href="{{ route('admin.option-values.index') }}" class="btn btn-secondary ml-2">
+            @if (Route::has('admin.option-values.index'))
+<a href="{{ route('admin.option-values.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
+@endif
           </div>
         </form>
       </div>

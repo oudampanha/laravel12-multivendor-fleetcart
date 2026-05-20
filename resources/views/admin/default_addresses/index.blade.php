@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Default Addresses Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.default_addresses.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.default_addresses.create'))
+<a href="{{ route('admin.default_addresses.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Default Address
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -41,13 +43,17 @@
                 <td>{{ $item->postal_code ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.default_addresses.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.default_addresses.show'))
+<a href="{{ route('admin.default_addresses.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.default_addresses.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.default_addresses.edit'))
+<a href="{{ route('admin.default_addresses.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.default_addresses.destroy', $item->id) }}" method="POST" class="d-inline">
+@endif
+                    <form action="{{ route('admin.default-addresses.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">

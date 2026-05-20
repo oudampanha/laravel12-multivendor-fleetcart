@@ -37,13 +37,15 @@
                 <td>{{ $attributeValue->created_at->format('Y-m-d H:i:s') }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.attribute_values.show', $attributeValue->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.attribute_values.show'))
+<a href="{{ route('admin.attribute_values.show', $attributeValue->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.attribute_values.edit', $attributeValue->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    <a href="{{ route('admin.attribute-values.edit', $attributeValue->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.attribute_values.destroy', $attributeValue->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this attribute value?')">
+                    <form action="{{ route('admin.attribute-values.destroy', $attributeValue->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this attribute value?')">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger">
