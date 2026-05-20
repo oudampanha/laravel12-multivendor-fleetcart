@@ -19,6 +19,8 @@ use App\Http\Controllers\Backend\DefaultAddressController;
 use App\Http\Controllers\Backend\EntityMediaController;
 use App\Http\Controllers\Backend\FlashSaleController;
 use App\Http\Controllers\Backend\FlashSaleProductController;
+use App\Http\Controllers\Backend\GoodsReceiptController;
+use App\Http\Controllers\Backend\InventoryDashboardController;
 use App\Http\Controllers\Backend\LanguageLineController;
 use App\Http\Controllers\Backend\MediaController;
 use App\Http\Controllers\Backend\MenuController;
@@ -37,7 +39,9 @@ use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\PersistenceController;
 use App\Http\Controllers\Backend\ProductAttributeController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\ProductStockController;
 use App\Http\Controllers\Backend\ProductVariantController;
+use App\Http\Controllers\Backend\PurchaseOrderController;
 use App\Http\Controllers\Backend\RelatedProductController;
 use App\Http\Controllers\Backend\ReminderController;
 use App\Http\Controllers\Backend\ReportController;
@@ -47,6 +51,11 @@ use App\Http\Controllers\Backend\SearchTermController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SliderSlideController;
+use App\Http\Controllers\Backend\StockAdjustmentController;
+use App\Http\Controllers\Backend\StockMovementController;
+use App\Http\Controllers\Backend\StockTakeController;
+use App\Http\Controllers\Backend\StockTransferController;
+use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\TaxClassController;
 use App\Http\Controllers\Backend\TaxRateController;
@@ -67,6 +76,7 @@ use App\Http\Controllers\Backend\VendorReviewController;
 use App\Http\Controllers\Backend\VendorSettingController;
 use App\Http\Controllers\Backend\VendorShippingZoneController;
 use App\Http\Controllers\Backend\VendorWithdrawalController;
+use App\Http\Controllers\Backend\WarehouseController;
 use App\Http\Controllers\Backend\WishListController;
 use Illuminate\Support\Facades\Route;
 
@@ -701,4 +711,56 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('reports/export/customers', [ReportController::class, 'exportCustomers'])->name('reports.export.customers');
     Route::post('reports/export/vendors', [ReportController::class, 'exportVendors'])->name('reports.export.vendors');
     Route::post('reports/export/orders', [ReportController::class, 'exportOrders'])->name('reports.export.orders');
+
+    // =============================================================================
+    // INVENTORY / STOCK MANAGEMENT
+    // =============================================================================
+
+    // Inventory Dashboard
+    Route::get('inventory', [InventoryDashboardController::class, 'index'])->name('inventory.dashboard');
+
+    // Warehouses
+    Route::resource('warehouses', WarehouseController::class);
+
+    // Suppliers
+    Route::resource('suppliers', SupplierController::class);
+
+    // Product Stocks (on-hand)
+    Route::get('product-stocks/low-stock', [ProductStockController::class, 'lowStock'])->name('product-stocks.low-stock');
+    Route::get('product-stocks/out-of-stock', [ProductStockController::class, 'outOfStock'])->name('product-stocks.out-of-stock');
+    Route::get('product-stocks', [ProductStockController::class, 'index'])->name('product-stocks.index');
+    Route::get('product-stocks/{productStock}', [ProductStockController::class, 'show'])->name('product-stocks.show');
+    Route::get('product-stocks/{productStock}/edit', [ProductStockController::class, 'edit'])->name('product-stocks.edit');
+    Route::put('product-stocks/{productStock}', [ProductStockController::class, 'update'])->name('product-stocks.update');
+
+    // Stock Movements (read-only ledger)
+    Route::get('stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
+    Route::get('stock-movements/{stockMovement}', [StockMovementController::class, 'show'])->name('stock-movements.show');
+
+    // Stock Adjustments
+    Route::post('stock-adjustments/{stockAdjustment}/post', [StockAdjustmentController::class, 'post'])->name('stock-adjustments.post');
+    Route::post('stock-adjustments/{stockAdjustment}/cancel', [StockAdjustmentController::class, 'cancel'])->name('stock-adjustments.cancel');
+    Route::resource('stock-adjustments', StockAdjustmentController::class);
+
+    // Stock Transfers
+    Route::post('stock-transfers/{stockTransfer}/ship', [StockTransferController::class, 'ship'])->name('stock-transfers.ship');
+    Route::post('stock-transfers/{stockTransfer}/receive', [StockTransferController::class, 'receive'])->name('stock-transfers.receive');
+    Route::post('stock-transfers/{stockTransfer}/cancel', [StockTransferController::class, 'cancel'])->name('stock-transfers.cancel');
+    Route::resource('stock-transfers', StockTransferController::class);
+
+    // Purchase Orders
+    Route::post('purchase-orders/{purchaseOrder}/send', [PurchaseOrderController::class, 'send'])->name('purchase-orders.send');
+    Route::post('purchase-orders/{purchaseOrder}/approve', [PurchaseOrderController::class, 'approve'])->name('purchase-orders.approve');
+    Route::post('purchase-orders/{purchaseOrder}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
+    Route::resource('purchase-orders', PurchaseOrderController::class);
+
+    // Goods Receipts (GRN)
+    Route::post('goods-receipts/{goodsReceipt}/post', [GoodsReceiptController::class, 'post'])->name('goods-receipts.post');
+    Route::post('goods-receipts/{goodsReceipt}/cancel', [GoodsReceiptController::class, 'cancel'])->name('goods-receipts.cancel');
+    Route::resource('goods-receipts', GoodsReceiptController::class);
+
+    // Stock Takes / Cycle Counts
+    Route::post('stock-takes/{stockTake}/complete', [StockTakeController::class, 'complete'])->name('stock-takes.complete');
+    Route::post('stock-takes/{stockTake}/cancel', [StockTakeController::class, 'cancel'])->name('stock-takes.cancel');
+    Route::resource('stock-takes', StockTakeController::class);
 });
