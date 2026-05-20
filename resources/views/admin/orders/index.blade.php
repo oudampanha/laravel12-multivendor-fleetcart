@@ -151,9 +151,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="8" class="text-center">No orders found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

@@ -71,9 +71,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="6" class="text-center">No menus found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

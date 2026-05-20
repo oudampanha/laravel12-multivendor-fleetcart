@@ -66,9 +66,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="5" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

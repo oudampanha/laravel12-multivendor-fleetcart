@@ -105,9 +105,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="8" class="text-center">No flash sales found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

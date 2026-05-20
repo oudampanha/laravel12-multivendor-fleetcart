@@ -63,9 +63,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="7" class="text-center">No tax rates found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

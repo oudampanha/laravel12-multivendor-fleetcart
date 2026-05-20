@@ -56,9 +56,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="6" class="text-center">No attribute values found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

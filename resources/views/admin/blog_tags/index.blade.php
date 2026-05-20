@@ -82,9 +82,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="8" class="text-center">No blog tags found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

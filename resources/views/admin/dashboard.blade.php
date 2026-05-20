@@ -106,10 +106,7 @@
                                                     </td>
                                                 </tr>
                                             @empty
-                                                <tr>
-                                                    <td colspan="4" class="text-center">No recent orders</td>
-                                                </tr>
-                                            @endforelse
+              @endforelse
                                         </tbody>
                                     </table>
                                 </div>
@@ -145,10 +142,7 @@
                                                     </td>
                                                 </tr>
                                             @empty
-                                                <tr>
-                                                    <td colspan="3" class="text-center">No recent vendors</td>
-                                                </tr>
-                                            @endforelse
+              @endforelse
                                         </tbody>
                                     </table>
                                 </div>
