@@ -139,6 +139,64 @@
         </li>
       @endpermission
 
+      <!-- Inventory Management -->
+      @permission('inventory_management_access')
+        <li
+          class="{{ request()->is('admin/inventory*') || request()->is('admin/warehouses*') || request()->is('admin/suppliers*') || request()->is('admin/product-stocks*') || request()->is('admin/stock-*') || request()->is('admin/purchase-orders*') || request()->is('admin/goods-receipts*') ? 'mm-active' : '' }}">
+          <a href="#"
+            aria-expanded="{{ request()->is('admin/inventory*') || request()->is('admin/warehouses*') || request()->is('admin/suppliers*') || request()->is('admin/product-stocks*') || request()->is('admin/stock-*') || request()->is('admin/purchase-orders*') || request()->is('admin/goods-receipts*') ? 'true' : 'false' }}">
+            <i class="fas fa-warehouse"></i>
+            <span>Inventory</span>
+            <i class="fas fa-chevron-down" style="margin-left: auto;"></i>
+          </a>
+          <ul
+            class="{{ request()->is('admin/inventory*') || request()->is('admin/warehouses*') || request()->is('admin/suppliers*') || request()->is('admin/product-stocks*') || request()->is('admin/stock-*') || request()->is('admin/purchase-orders*') || request()->is('admin/goods-receipts*') ? 'mm-show' : '' }}">
+            <li class="{{ request()->is('admin/inventory') ? 'mm-active' : '' }}"><a
+                href="{{ route('admin.inventory.dashboard') }}">Dashboard</a></li>
+            @permission('warehouse_access')
+              <li class="{{ request()->is('admin/warehouses*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.warehouses.index') }}">Warehouses</a></li>
+            @endpermission
+            @permission('supplier_access')
+              <li class="{{ request()->is('admin/suppliers*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.suppliers.index') }}">Suppliers</a></li>
+            @endpermission
+            @permission('product_stock_access')
+              <li class="{{ request()->is('admin/product-stocks') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.product-stocks.index') }}">Stock On Hand</a></li>
+              <li class="{{ request()->is('admin/product-stocks/low-stock') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.product-stocks.low-stock') }}">Low Stock</a></li>
+              <li class="{{ request()->is('admin/product-stocks/out-of-stock') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.product-stocks.out-of-stock') }}">Out of Stock</a></li>
+            @endpermission
+            @permission('stock_movement_access')
+              <li class="{{ request()->is('admin/stock-movements*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.stock-movements.index') }}">Stock Movements</a></li>
+            @endpermission
+            @permission('purchase_order_access')
+              <li class="{{ request()->is('admin/purchase-orders*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.purchase-orders.index') }}">Purchase Orders</a></li>
+            @endpermission
+            @permission('goods_receipt_access')
+              <li class="{{ request()->is('admin/goods-receipts*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.goods-receipts.index') }}">Goods Receipts</a></li>
+            @endpermission
+            @permission('stock_adjustment_access')
+              <li class="{{ request()->is('admin/stock-adjustments*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.stock-adjustments.index') }}">Stock Adjustments</a></li>
+            @endpermission
+            @permission('stock_transfer_access')
+              <li class="{{ request()->is('admin/stock-transfers*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.stock-transfers.index') }}">Stock Transfers</a></li>
+            @endpermission
+            @permission('stock_take_access')
+              <li class="{{ request()->is('admin/stock-takes*') ? 'mm-active' : '' }}"><a
+                  href="{{ route('admin.stock-takes.index') }}">Stock Takes</a></li>
+            @endpermission
+          </ul>
+        </li>
+      @endpermission
+
       <!-- Order Management -->
       @permission('order_management_access')
         <li class="{{ request()->is('admin/orders*') || request()->is('admin/transactions*') ? 'mm-active' : '' }}">
