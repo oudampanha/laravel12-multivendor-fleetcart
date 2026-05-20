@@ -82,6 +82,11 @@
                         <input type="text" class="form-control" id="categoryName" name="name" required>
                       </div>
 
+                      <div class="mb-3">
+                        <label for="categoryDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="categoryDescription" name="description" rows="4"></textarea>
+                      </div>
+
                       <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" id="isSearchable" name="is_searchable"
                           value="1">
@@ -91,8 +96,8 @@
                       </div>
 
                       <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="isActive" name="is_active" value="1"
-                          checked>
+                        <input class="form-check-input" type="checkbox" id="isActive" name="is_active"
+                          value="1" checked>
                         <label class="form-check-label" for="isActive">
                           Enable the category
                         </label>
@@ -102,37 +107,19 @@
                       <div class="mb-3">
                         <div class="image-upload-section">
                           <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                               <div class="card">
                                 <div class="card-header">
                                   <h5 class="card-title">
                                     <i class="fas fa-images mr-2"></i>
-                                    Logo
+                                    Category Image
                                   </h5>
                                 </div>
                                 <div class="card-body">
-                                  <x-media-selector name="logo" label="" :required="false"
-                                    preview_height="200px" placeholder_text="Click to choose from gallery"
+                                  <x-media-selector name="image" label="" :required="false"
+                                    preview_height="220px" placeholder_text="Click to choose a category image"
                                     upload_text="upload new image" :show_gallery="true" :show_upload="true"
                                     :show_remove="true" />
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6">
-                              <div class="single-image-wrapper">
-                                <div class="card">
-                                  <div class="card-header">
-                                    <h5 class="card-title">
-                                      <i class="fas fa-images mr-2"></i>
-                                      Banner
-                                    </h5>
-                                  </div>
-                                  <div class="card-body">
-                                    <x-media-selector name="banner" label="" :required="false"
-                                      preview_height="200px" placeholder_text="Click to choose from gallery"
-                                      upload_text="upload new image" :show_gallery="true" :show_upload="true"
-                                      :show_remove="true" />
-                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -377,9 +364,37 @@
       function loadCategoryForm(categoryData) {
         $('#categoryId').val(categoryData.id);
         $('#categoryName').val(categoryData.name);
+        $('#categoryDescription').val(categoryData.description || '');
         $('#parentId').val(categoryData.parent_id || '');
         $('#isSearchable').prop('checked', categoryData.is_searchable == 1 || categoryData.is_searchable === true);
         $('#isActive').prop('checked', categoryData.is_active == 1 || categoryData.is_active === true);
+
+        const imageSelector = document.querySelector('#categoryForm [name="image"]')?.closest(
+          '.media-selector-component');
+        if (imageSelector) {
+          const componentId = imageSelector.id;
+          const urlInput = document.getElementById(componentId + '_url_input');
+          const oldInput = document.getElementById(componentId + '_old_input');
+          const idInput = document.getElementById(componentId + '_id_input');
+
+          if (urlInput) {
+            urlInput.value = categoryData.image || '';
+          }
+          if (oldInput) {
+            oldInput.value = categoryData.image || '';
+          }
+          if (idInput) {
+            idInput.value = categoryData.image || '';
+          }
+
+          if (typeof MediaSelector !== 'undefined') {
+            if (categoryData.image) {
+              MediaSelector.setImagePreview(componentId, categoryData.image);
+            } else {
+              MediaSelector.clearImage(componentId);
+            }
+          }
+        }
 
         if (isEditMode) {
           $('#formMethod').val('PUT');
@@ -415,6 +430,12 @@
         isEditMode = false;
         $('#saveBtn').text('Save');
         $('#deleteBtn').hide();
+
+        const imageSelector = document.querySelector('#categoryForm [name="image"]')?.closest(
+          '.media-selector-component');
+        if (imageSelector && typeof MediaSelector !== 'undefined') {
+          MediaSelector.clearImage(imageSelector.id);
+        }
       }
 
       function saveCategory() {

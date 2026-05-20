@@ -29,11 +29,7 @@ trait HasMetaData
             return;
         }
 
-        // Create or get the meta data record
-        $meta = $this->meta;
-        if (! $meta->exists) {
-            $meta = $this->meta()->create([]);
-        }
+        $meta = $this->resolveMetaData();
 
         $locale = app()->getLocale();
 
@@ -133,11 +129,7 @@ trait HasMetaData
             $locale = app()->getLocale();
         }
 
-        // Get or create meta data
-        $metaData = $this->meta;
-        if (! $metaData->exists) {
-            $metaData = $this->meta()->create([]);
-        }
+        $metaData = $this->resolveMetaData();
 
         // Map common field names to the Translation field names
         $fieldMap = [
@@ -157,5 +149,26 @@ trait HasMetaData
                 $value
             );
         }
+    }
+
+    protected function resolveMetaData(): MetaData
+    {
+        if ($this->relationLoaded('meta')) {
+            $loadedMeta = $this->getRelation('meta');
+
+            if ($loadedMeta instanceof MetaData && $loadedMeta->exists) {
+                return $loadedMeta;
+            }
+        }
+
+        $metaData = $this->meta()->first();
+
+        if (! $metaData) {
+            $metaData = $this->meta()->create([]);
+        }
+
+        $this->setRelation('meta', $metaData);
+
+        return $metaData;
     }
 }

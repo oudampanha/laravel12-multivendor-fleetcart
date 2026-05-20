@@ -129,9 +129,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
 
     // Permissions
+    Route::get('permissions/groups', [PermissionController::class, 'groups'])->name('permissions.groups');
     Route::resource('permissions', PermissionController::class);
     Route::post('permissions/{permission}/toggle-status', [PermissionController::class, 'toggleStatus'])->name('permissions.toggle-status');
-    Route::get('permissions/groups', [PermissionController::class, 'groups'])->name('permissions.groups');
 
     // OTP Verifications
     Route::get('otp-verifications', [OtpVerificationController::class, 'index'])->name('otp-verifications.index');
@@ -162,20 +162,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('vendor-settings/{vendor}', [VendorSettingController::class, 'update'])->name('vendor-settings.update');
 
     // Vendor Payouts
+    Route::get('vendor-payouts/pending', [VendorPayoutController::class, 'pending'])->name('vendor-payouts.pending');
+    Route::get('vendor-payouts/completed', [VendorPayoutController::class, 'completed'])->name('vendor-payouts.completed');
     Route::resource('vendor-payouts', VendorPayoutController::class);
     Route::post('vendor-payouts/{vendorPayout}/approve', [VendorPayoutController::class, 'approve'])->name('vendor-payouts.approve');
     Route::post('vendor-payouts/{vendorPayout}/reject', [VendorPayoutController::class, 'reject'])->name('vendor-payouts.reject');
     Route::post('vendor-payouts/{vendorPayout}/mark-paid', [VendorPayoutController::class, 'markPaid'])->name('vendor-payouts.mark-paid');
-    Route::get('vendor-payouts/pending', [VendorPayoutController::class, 'pending'])->name('vendor-payouts.pending');
-    Route::get('vendor-payouts/completed', [VendorPayoutController::class, 'completed'])->name('vendor-payouts.completed');
 
     // Vendor Withdrawals
+    Route::get('vendor-withdrawals/pending', [VendorWithdrawalController::class, 'pending'])->name('vendor-withdrawals.pending');
+    Route::get('vendor-withdrawals/processed', [VendorWithdrawalController::class, 'processed'])->name('vendor-withdrawals.processed');
     Route::resource('vendor-withdrawals', VendorWithdrawalController::class)->except(['create', 'store']);
     Route::post('vendor-withdrawals/{vendorWithdrawal}/approve', [VendorWithdrawalController::class, 'approve'])->name('vendor-withdrawals.approve');
     Route::post('vendor-withdrawals/{vendorWithdrawal}/reject', [VendorWithdrawalController::class, 'reject'])->name('vendor-withdrawals.reject');
     Route::post('vendor-withdrawals/{vendorWithdrawal}/process', [VendorWithdrawalController::class, 'process'])->name('vendor-withdrawals.process');
-    Route::get('vendor-withdrawals/pending', [VendorWithdrawalController::class, 'pending'])->name('vendor-withdrawals.pending');
-    Route::get('vendor-withdrawals/processed', [VendorWithdrawalController::class, 'processed'])->name('vendor-withdrawals.processed');
 
     // Vendor Orders
     Route::get('vendor-orders', [VendorOrderController::class, 'index'])->name('vendor-orders.index');
@@ -197,11 +197,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::get('vendor-shipping-zones/by-vendor/{vendor}', [VendorShippingZoneController::class, 'byVendor'])->name('vendor-shipping-zones.by-vendor');
 
     // Vendor Reviews
+    Route::get('vendor-reviews/pending', [VendorReviewController::class, 'pending'])->name('vendor-reviews.pending');
+    Route::get('vendor-reviews/approved', [VendorReviewController::class, 'approved'])->name('vendor-reviews.approved');
     Route::resource('vendor-reviews', VendorReviewController::class)->except(['create', 'store']);
     Route::post('vendor-reviews/{vendorReview}/approve', [VendorReviewController::class, 'approve'])->name('vendor-reviews.approve');
     Route::post('vendor-reviews/{vendorReview}/reject', [VendorReviewController::class, 'reject'])->name('vendor-reviews.reject');
-    Route::get('vendor-reviews/pending', [VendorReviewController::class, 'pending'])->name('vendor-reviews.pending');
-    Route::get('vendor-reviews/approved', [VendorReviewController::class, 'approved'])->name('vendor-reviews.approved');
     Route::get('vendor-reviews/by-vendor/{vendor}', [VendorReviewController::class, 'byVendor'])->name('vendor-reviews.by-vendor');
 
     // =============================================================================
@@ -209,21 +209,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     // =============================================================================
 
     // Products
-    Route::resource('products', ProductController::class);
     Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
+    Route::get('products/pending-approval', [ProductController::class, 'pendingApproval'])->name('products.pending-approval');
+    Route::get('products/approved', [ProductController::class, 'approved'])->name('products.approved');
+    Route::get('products/rejected', [ProductController::class, 'rejected'])->name('products.rejected');
     Route::post('products/{product}/approve', [ProductController::class, 'approve'])->name('products.approve');
     Route::post('products/{product}/reject', [ProductController::class, 'reject'])->name('products.reject');
     Route::post('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
     Route::post('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate');
-    Route::get('products/pending-approval', [ProductController::class, 'pendingApproval'])->name('products.pending-approval');
-    Route::get('products/approved', [ProductController::class, 'approved'])->name('products.approved');
-    Route::get('products/rejected', [ProductController::class, 'rejected'])->name('products.rejected');
     Route::get('products/{product}/variants', [ProductController::class, 'variants'])->name('products.variants');
     Route::get('products/{product}/attributes', [ProductController::class, 'attributes'])->name('products.attributes');
     Route::get('products/{product}/options', [ProductController::class, 'options'])->name('products.options');
     Route::get('products/{product}/media', [ProductController::class, 'media'])->name('products.media');
     Route::post('products/{product}/media', [ProductController::class, 'uploadMedia'])->name('products.media.upload');
     Route::delete('products/{product}/media/{media}', [ProductController::class, 'deleteMedia'])->name('products.media.delete');
+    Route::resource('products', ProductController::class);
 
     // Product Variants
     Route::resource('product-variants', ProductVariantController::class)->except(['index']);
@@ -231,12 +231,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('product-variants/{productVariant}/set-default', [ProductVariantController::class, 'setDefault'])->name('product-variants.set-default');
 
     // Categories
+    Route::get('categories/tree', [CategoryController::class, 'tree'])->name('categories.tree');
+    Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
+    Route::post('categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
+    Route::get('categories/{category}/products', [CategoryController::class, 'products'])->name('categories.products');
     Route::resource('categories', CategoryController::class);
     Route::post('categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
     Route::post('categories/{category}/toggle-searchable', [CategoryController::class, 'toggleSearchable'])->name('categories.toggle-searchable');
-    Route::get('categories/tree', [CategoryController::class, 'tree'])->name('categories.tree');
-    Route::post('categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
-    Route::get('categories/{category}/products', [CategoryController::class, 'products'])->name('categories.products');
 
     // Brands
     Route::resource('brands', BrandController::class);
@@ -346,24 +347,24 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::resource('order-product-variations', OrderProductVariationController::class);
 
     // Transactions
+    Route::get('transactions/failed', [TransactionController::class, 'failed'])->name('transactions.failed');
+    Route::get('transactions/refunded', [TransactionController::class, 'refunded'])->name('transactions.refunded');
     Route::resource('transactions', TransactionController::class)->except(['create', 'store', 'edit', 'update']);
     Route::get('transactions/{transaction}/details', [TransactionController::class, 'details'])->name('transactions.details');
     Route::post('transactions/{transaction}/refund', [TransactionController::class, 'refund'])->name('transactions.refund');
     Route::get('transactions/by-payment-method/{method}', [TransactionController::class, 'byPaymentMethod'])->name('transactions.by-payment-method');
-    Route::get('transactions/failed', [TransactionController::class, 'failed'])->name('transactions.failed');
-    Route::get('transactions/refunded', [TransactionController::class, 'refunded'])->name('transactions.refunded');
 
     // =============================================================================
     // DISCOUNT & COUPON MANAGEMENT
     // =============================================================================
 
     // Coupons
+    Route::get('coupons/expired', [CouponController::class, 'expired'])->name('coupons.expired');
+    Route::get('coupons/active', [CouponController::class, 'active'])->name('coupons.active');
     Route::resource('coupons', CouponController::class);
     Route::post('coupons/{coupon}/toggle-status', [CouponController::class, 'toggleStatus'])->name('coupons.toggle-status');
     Route::get('coupons/{coupon}/usage', [CouponController::class, 'usage'])->name('coupons.usage');
     Route::post('coupons/{coupon}/reset-usage', [CouponController::class, 'resetUsage'])->name('coupons.reset-usage');
-    Route::get('coupons/expired', [CouponController::class, 'expired'])->name('coupons.expired');
-    Route::get('coupons/active', [CouponController::class, 'active'])->name('coupons.active');
     Route::get('coupons/by-vendor/{vendor}', [CouponController::class, 'byVendor'])->name('coupons.by-vendor');
     Route::post('coupons/{coupon}/duplicate', [CouponController::class, 'duplicate'])->name('coupons.duplicate');
 
@@ -388,10 +389,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('tax-classes/{taxClass}/rates', [TaxClassController::class, 'addRate'])->name('tax-classes.rates.add');
 
     // Tax Rates
+    Route::get('tax-rates/calculator', [TaxRateController::class, 'calculator'])->name('tax-rates.calculator');
     Route::resource('tax-rates', TaxRateController::class);
     Route::post('tax-rates/reorder', [TaxRateController::class, 'reorder'])->name('tax-rates.reorder');
     Route::get('tax-rates/by-country/{country}', [TaxRateController::class, 'byCountry'])->name('tax-rates.by-country');
-    Route::get('tax-rates/calculator', [TaxRateController::class, 'calculator'])->name('tax-rates.calculator');
     Route::post('tax-rates/calculate', [TaxRateController::class, 'calculate'])->name('tax-rates.calculate');
 
     // =============================================================================
@@ -399,11 +400,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     // =============================================================================
 
     // Product Reviews
+    Route::get('reviews/pending', [ReviewController::class, 'pending'])->name('reviews.pending');
+    Route::get('reviews/approved', [ReviewController::class, 'approved'])->name('reviews.approved');
     Route::resource('reviews', ReviewController::class)->except(['create', 'store']);
     Route::post('reviews/{review}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
     Route::post('reviews/{review}/reject', [ReviewController::class, 'reject'])->name('reviews.reject');
-    Route::get('reviews/pending', [ReviewController::class, 'pending'])->name('reviews.pending');
-    Route::get('reviews/approved', [ReviewController::class, 'approved'])->name('reviews.approved');
     Route::get('reviews/by-product/{product}', [ReviewController::class, 'byProduct'])->name('reviews.by-product');
     Route::get('reviews/by-rating/{rating}', [ReviewController::class, 'byRating'])->name('reviews.by-rating');
     Route::post('reviews/bulk-approve', [ReviewController::class, 'bulkApprove'])->name('reviews.bulk-approve');
@@ -423,20 +424,20 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('blog-tags/merge', [BlogTagController::class, 'merge'])->name('blog-tags.merge');
 
     // Blog Posts
+    Route::get('blog-posts/published', [BlogPostController::class, 'published'])->name('blog-posts.published');
+    Route::get('blog-posts/draft', [BlogPostController::class, 'draft'])->name('blog-posts.draft');
     Route::resource('blog-posts', BlogPostController::class);
     Route::post('blog-posts/{blogPost}/publish', [BlogPostController::class, 'publish'])->name('blog-posts.publish');
     Route::post('blog-posts/{blogPost}/unpublish', [BlogPostController::class, 'unpublish'])->name('blog-posts.unpublish');
     Route::post('blog-posts/{blogPost}/duplicate', [BlogPostController::class, 'duplicate'])->name('blog-posts.duplicate');
-    Route::get('blog-posts/published', [BlogPostController::class, 'published'])->name('blog-posts.published');
-    Route::get('blog-posts/draft', [BlogPostController::class, 'draft'])->name('blog-posts.draft');
     Route::get('blog-posts/by-author/{user}', [BlogPostController::class, 'byAuthor'])->name('blog-posts.by-author');
 
     // Pages
+    Route::get('pages/active', [PageController::class, 'active'])->name('pages.active');
+    Route::get('pages/inactive', [PageController::class, 'inactive'])->name('pages.inactive');
     Route::resource('pages', PageController::class);
     Route::post('pages/{page}/toggle-status', [PageController::class, 'toggleStatus'])->name('pages.toggle-status');
     Route::post('pages/{page}/duplicate', [PageController::class, 'duplicate'])->name('pages.duplicate');
-    Route::get('pages/active', [PageController::class, 'active'])->name('pages.active');
-    Route::get('pages/inactive', [PageController::class, 'inactive'])->name('pages.inactive');
 
     // =============================================================================
     // NAVIGATION MANAGEMENT
@@ -607,10 +608,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
 
     // Activations
     Route::get('activations', [ActivationController::class, 'index'])->name('activations.index');
-    Route::get('activations/{activation}', [ActivationController::class, 'show'])->name('activations.show');
-    Route::delete('activations/{activation}', [ActivationController::class, 'destroy'])->name('activations.destroy');
     Route::get('activations/pending', [ActivationController::class, 'pending'])->name('activations.pending');
     Route::get('activations/completed', [ActivationController::class, 'completed'])->name('activations.completed');
+    Route::get('activations/{activation}', [ActivationController::class, 'show'])->name('activations.show');
+    Route::delete('activations/{activation}', [ActivationController::class, 'destroy'])->name('activations.destroy');
     Route::post('activations/cleanup', [ActivationController::class, 'cleanup'])->name('activations.cleanup');
 
     // Persistences

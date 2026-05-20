@@ -21,11 +21,11 @@ class VendorWithdrawalController extends BaseController
 
     public function index()
     {
-        $withdrawals = VendorWithdrawal::with('vendor')
+        $vendorWithdrawals = VendorWithdrawal::with('vendor')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_withdrawals.index', compact('withdrawals'));
+        return view('admin.vendor_withdrawals.index', compact('vendorWithdrawals'));
     }
 
     public function show(VendorWithdrawal $vendorWithdrawal)
@@ -151,7 +151,10 @@ class VendorWithdrawalController extends BaseController
 
     public function pending()
     {
-        $vendorWithdrawals = VendorWithdrawal::where('status', 'pending')->paginate(15);
+        $vendorWithdrawals = VendorWithdrawal::with('vendor')
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
         return view('admin.vendor_withdrawals.index', compact('vendorWithdrawals'));
     }
@@ -163,7 +166,10 @@ class VendorWithdrawalController extends BaseController
 
     public function processed()
     {
-        $vendorWithdrawals = VendorWithdrawal::where('status', 'processed')->paginate(15);
+        $vendorWithdrawals = VendorWithdrawal::with('vendor')
+            ->whereIn('status', ['processing', 'completed', 'rejected'])
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
         return view('admin.vendor_withdrawals.index', compact('vendorWithdrawals'));
     }
