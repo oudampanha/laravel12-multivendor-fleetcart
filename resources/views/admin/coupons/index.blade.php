@@ -88,9 +88,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="10" class="text-center">No coupons found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

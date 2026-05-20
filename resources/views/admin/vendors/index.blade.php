@@ -107,9 +107,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="9" class="text-center">No vendors found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>
