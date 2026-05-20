@@ -15,7 +15,8 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.reminders.update', $item->id ?? 0) }}" method="POST" enctype="multipart/form-data">
+        @if (Route::has('admin.reminders.update'))
+<form action="{{ route('admin.reminders.update', $item->id ?? 0) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           
@@ -64,6 +65,7 @@
             </a>
           </div>
         </form>
+@endif
       </div>
     </div>
   </div>

@@ -44,7 +44,7 @@ class VendorShippingZoneController extends BaseController
 
         VendorShippingZone::create($validated);
 
-        return redirect()->route('admin.vendor_shipping_zones.index')->with('success', 'Vendor Shipping Zone created successfully.');
+        return redirect()->route('admin.vendor-shipping-zones.index')->with('success', 'Vendor Shipping Zone created successfully.');
     }
 
     public function show(VendorShippingZone $vendorShippingZone)
@@ -77,14 +77,14 @@ class VendorShippingZoneController extends BaseController
 
         $vendorShippingZone->update($validated);
 
-        return redirect()->route('admin.vendor_shipping_zones.index')->with('success', 'Vendor Shipping Zone updated successfully.');
+        return redirect()->route('admin.vendor-shipping-zones.index')->with('success', 'Vendor Shipping Zone updated successfully.');
     }
 
     public function destroy(VendorShippingZone $vendorShippingZone)
     {
         $vendorShippingZone->delete();
 
-        return redirect()->route('admin.vendor_shipping_zones.index')->with('success', 'Vendor Shipping Zone deleted successfully.');
+        return redirect()->route('admin.vendor-shipping-zones.index')->with('success', 'Vendor Shipping Zone deleted successfully.');
     }
 
     public function byVendor($vendor)

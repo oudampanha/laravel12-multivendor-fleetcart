@@ -18,7 +18,7 @@ class VendorSettingController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-settings.index', compact('vendorSettings'));
+        return view('admin.vendor_settings.index', compact('vendorSettings'));
     }
 
     public function create()
@@ -45,7 +45,7 @@ class VendorSettingController extends BaseController
     {
         $vendorSetting->load('vendor');
 
-        return view('admin.vendor-settings.show', compact('vendorSetting'));
+        return view('admin.vendor_settings.show', compact('vendorSetting'));
     }
 
     public function edit(VendorSetting $vendorSetting)

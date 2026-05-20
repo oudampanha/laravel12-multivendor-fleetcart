@@ -34,7 +34,7 @@ class AttributeSetController extends BaseController
             return response()->json($paginator);
         }
 
-        return view('admin.attribute-sets.index');
+        return view('admin.attribute_sets.index');
     }
 
     /**
@@ -42,7 +42,7 @@ class AttributeSetController extends BaseController
      */
     public function create()
     {
-        return view('admin.attribute-sets.create');
+        return view('admin.attribute_sets.create');
     }
 
     /**
@@ -212,7 +212,7 @@ class AttributeSetController extends BaseController
 
         $attributeSets = $paginator;
 
-        return view('admin.attribute-sets.index', compact('attributeSets', 'query'));
+        return view('admin.attribute_sets.index', compact('attributeSets', 'query'));
     }
 
     public function attachAttribute(Request $request, AttributeSet $attributeSet)

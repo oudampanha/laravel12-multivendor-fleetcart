@@ -12,9 +12,11 @@
           <a href="{{ route('admin.cross-sell-products.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          <a href="{{ route('admin.cross_sell_products.edit', $item->id ?? 0) }}" class="btn btn-warning">
+          @if (Route::has('admin.cross_sell_products.edit'))
+<a href="{{ route('admin.cross_sell_products.edit', $item->id ?? 0) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit Cross Sell Product
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -48,10 +50,12 @@
         <div class="row mt-4">
           <div class="col-12">
             <div class="btn-group">
-              <a href="{{ route('admin.cross_sell_products.edit', $item->id ?? 0) }}" class="btn btn-warning">
+              @if (Route::has('admin.cross_sell_products.edit'))
+<a href="{{ route('admin.cross_sell_products.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Cross Sell Product
               </a>
-              <form action="{{ route('admin.cross_sell_products.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
+@endif
+              <form action="{{ route('admin.cross-sell-products.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">

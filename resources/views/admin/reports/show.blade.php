@@ -9,12 +9,16 @@
       <div class="card-header">
         <h4 class="card-title">Report Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.reports.index') }}" class="btn btn-secondary">
+          @if (Route::has('admin.reports.index'))
+<a href="{{ route('admin.reports.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          <a href="{{ route('admin.reports.edit', $item->id ?? 0) }}" class="btn btn-warning">
+@endif
+          @if (Route::has('admin.reports.edit'))
+<a href="{{ route('admin.reports.edit', $item->id ?? 0) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit Report
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -52,16 +56,20 @@
         <div class="row mt-4">
           <div class="col-12">
             <div class="btn-group">
-              <a href="{{ route('admin.reports.edit', $item->id ?? 0) }}" class="btn btn-warning">
+              @if (Route::has('admin.reports.edit'))
+<a href="{{ route('admin.reports.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Report
               </a>
-              <form action="{{ route('admin.reports.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
+@endif
+              @if (Route::has('admin.reports.destroy'))
+<form action="{{ route('admin.reports.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">
                   <i class="fas fa-trash"></i> Delete Report
                 </button>
               </form>
+@endif
             </div>
           </div>
         </div>

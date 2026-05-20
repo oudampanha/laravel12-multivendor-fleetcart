@@ -28,14 +28,14 @@ class ThrottleController extends BaseController
 
         $throttles = $query->paginate(15);
 
-        return view('admin.throttles.index', compact('throttles'));
+        return view('admin.throttle.index', compact('throttles'));
     }
 
     public function destroy(Throttle $throttle)
     {
         $throttle->delete();
 
-        return redirect()->route('admin.throttles.index')->with('success', 'Throttle record deleted successfully.');
+        return redirect()->route('admin.throttle.index')->with('success', 'Throttle record deleted successfully.');
     }
 
     /**
@@ -73,7 +73,7 @@ class ThrottleController extends BaseController
 
         $deleted = Throttle::where('created_at', '<', $cutoffDate)->delete();
 
-        return redirect()->route('admin.throttles.index')
+        return redirect()->route('admin.throttle.index')
             ->with('success', "Cleaned up {$deleted} old throttle records.");
     }
 
@@ -85,7 +85,7 @@ class ThrottleController extends BaseController
         $count = Throttle::where('user_id', $user->id)->count();
         Throttle::where('user_id', $user->id)->delete();
 
-        return redirect()->route('admin.throttles.index')
+        return redirect()->route('admin.throttle.index')
             ->with('success', "Reset {$count} throttle attempts for user: {$user->full_name}.");
     }
 
@@ -101,7 +101,7 @@ class ThrottleController extends BaseController
         $count = Throttle::where('ip', $request->ip)->count();
         Throttle::where('ip', $request->ip)->delete();
 
-        return redirect()->route('admin.throttles.index')
+        return redirect()->route('admin.throttle.index')
             ->with('success', "Reset {$count} throttle attempts for IP: {$request->ip}.");
     }
 
@@ -166,7 +166,7 @@ class ThrottleController extends BaseController
             'reason' => $request->reason ?? 'Manually blocked by admin',
         ]);
 
-        return redirect()->route('admin.throttles.index')
+        return redirect()->route('admin.throttle.index')
             ->with('success', "IP address {$request->ip} has been blocked.");
     }
 

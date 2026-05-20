@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.attribute_sets.update', $attributeSet->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.attribute-sets.update', $attributeSet->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
 

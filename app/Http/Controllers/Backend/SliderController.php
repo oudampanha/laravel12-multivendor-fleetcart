@@ -78,7 +78,7 @@ class SliderController extends BaseController
 
     public function createSlide(Slider $slider)
     {
-        return view('admin.slider-slides.create', compact('slider'));
+        return view('admin.slider_slides.create', compact('slider'));
     }
 
     public function storeSlide(Request $request, Slider $slider)

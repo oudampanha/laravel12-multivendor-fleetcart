@@ -12,7 +12,7 @@
           <a href="{{ route('admin.order-downloads.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          <a href="{{ route('admin.order_downloads.edit', $item->id ?? 0) }}" class="btn btn-warning">
+          <a href="{{ route('admin.order-downloads.edit', $item->id ?? 0) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit Order Download
           </a>
         </div>
@@ -52,10 +52,10 @@
         <div class="row mt-4">
           <div class="col-12">
             <div class="btn-group">
-              <a href="{{ route('admin.order_downloads.edit', $item->id ?? 0) }}" class="btn btn-warning">
+              <a href="{{ route('admin.order-downloads.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Order Download
               </a>
-              <form action="{{ route('admin.order_downloads.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
+              <form action="{{ route('admin.order-downloads.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">

@@ -70,9 +70,11 @@
                     <a href="{{ route('admin.vendor-orders.show', $vendorOrder->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.vendor_orders.edit', $vendorOrder->id) }}" class="btn btn-sm btn-warning">
+                    @if (Route::has('admin.vendor_orders.edit'))
+<a href="{{ route('admin.vendor_orders.edit', $vendorOrder->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
+@endif
                   </div>
                 </td>
               </tr>

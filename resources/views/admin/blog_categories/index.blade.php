@@ -35,13 +35,13 @@
                 <td>{{ $blogCategory->created_at->format('Y-m-d H:i:s') }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.blog_categories.show', $blogCategory->id) }}" class="btn btn-sm btn-info">
+                    <a href="{{ route('admin.blog-categories.show', $blogCategory->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.blog_categories.edit', $blogCategory->id) }}" class="btn btn-sm btn-warning">
+                    <a href="{{ route('admin.blog-categories.edit', $blogCategory->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.blog_categories.destroy', $blogCategory->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this blog category?')">
+                    <form action="{{ route('admin.blog-categories.destroy', $blogCategory->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this blog category?')">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger">

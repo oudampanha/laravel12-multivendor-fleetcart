@@ -43,9 +43,11 @@
                 <td>{{ $item->created_at->format('Y-m-d H:i') }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.option-values.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.option-values.show'))
+<a href="{{ route('admin.option-values.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
+@endif
                     <a href="{{ route('admin.option-values.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>

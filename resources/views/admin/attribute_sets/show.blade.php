@@ -13,7 +13,7 @@
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.attribute_sets.edit'))
-            <a href="{{ route('admin.attribute_sets.edit', $attributeSet->id) }}" class="btn btn-warning">
+            <a href="{{ route('admin.attribute-sets.edit', $attributeSet->id) }}" class="btn btn-warning">
               <i class="fas fa-edit"></i> Edit
             </a>
           @endif

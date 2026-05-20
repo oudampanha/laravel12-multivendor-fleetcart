@@ -13,7 +13,7 @@
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.vendor_withdrawals.edit'))
-            <a href="{{ route('admin.vendor_withdrawals.edit', $vendorWithdrawal->id) }}" class="btn btn-warning">
+            <a href="{{ route('admin.vendor-withdrawals.edit', $vendorWithdrawal->id) }}" class="btn btn-warning">
               <i class="fas fa-edit"></i> Edit
             </a>
           @endif

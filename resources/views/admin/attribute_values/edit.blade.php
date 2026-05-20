@@ -9,13 +9,15 @@
       <div class="card-header">
         <h4 class="card-title">Edit Attribute Value</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.attribute_values.index') }}" class="btn btn-secondary">
+          @if (Route::has('admin.attribute_values.index'))
+<a href="{{ route('admin.attribute_values.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.attribute_values.update', $attributeValue->id) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.attribute-values.update', $attributeValue->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
 
@@ -46,9 +48,11 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Update
             </button>
-            <a href="{{ route('admin.attribute_values.index') }}" class="btn btn-secondary ml-2">
+            @if (Route::has('admin.attribute_values.index'))
+<a href="{{ route('admin.attribute_values.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
+@endif
           </div>
         </form>
       </div>

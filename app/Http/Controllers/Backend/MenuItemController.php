@@ -20,7 +20,7 @@ class MenuItemController extends BaseController
             ->orderBy('position', 'asc')
             ->paginate(15);
 
-        return view('admin.menu-items.index', compact('menuItems'));
+        return view('admin.menu_items.index', compact('menuItems'));
     }
 
     public function create()
@@ -30,7 +30,7 @@ class MenuItemController extends BaseController
         $categories = Category::all();
         $pages = Page::all();
 
-        return view('admin.menu-items.create', compact('menus', 'menuItems', 'categories', 'pages'));
+        return view('admin.menu_items.create', compact('menus', 'menuItems', 'categories', 'pages'));
     }
 
     public function store(Request $request)
@@ -59,7 +59,7 @@ class MenuItemController extends BaseController
     {
         $menuItem->load(['menu', 'parent', 'category', 'page']);
 
-        return view('admin.menu-items.show', compact('menuItem'));
+        return view('admin.menu_items.show', compact('menuItem'));
     }
 
     public function edit(MenuItem $menuItem)
@@ -69,7 +69,7 @@ class MenuItemController extends BaseController
         $categories = Category::all();
         $pages = Page::all();
 
-        return view('admin.menu-items.edit', compact('menuItem', 'menus', 'menuItems', 'categories', 'pages'));
+        return view('admin.menu_items.edit', compact('menuItem', 'menus', 'menuItems', 'categories', 'pages'));
     }
 
     public function update(Request $request, MenuItem $menuItem)
@@ -105,7 +105,7 @@ class MenuItemController extends BaseController
     {
         $menuItems = Category::where('menu', $menu)->paginate(15);
 
-        return view('admin.menu-items.index', compact('menuItems'));
+        return view('admin.menu_items.index', compact('menuItems'));
     }
 
     public function reorder()

@@ -90,14 +90,14 @@ class OrderController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-orders.index', compact('vendorOrders'));
+        return view('admin.vendor_orders.index', compact('vendorOrders'));
     }
 
     public function showVendorOrder(VendorOrder $vendorOrder)
     {
         $vendorOrder->load(['vendor', 'order.orderProducts', 'order.customer']);
 
-        return view('admin.vendor-orders.show', compact('vendorOrder'));
+        return view('admin.vendor_orders.show', compact('vendorOrder'));
     }
 
     public function updateVendorOrderStatus(Request $request, VendorOrder $vendorOrder)

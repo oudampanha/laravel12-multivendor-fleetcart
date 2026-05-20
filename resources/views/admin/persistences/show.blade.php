@@ -12,9 +12,11 @@
           <a href="{{ route('admin.persistences.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          <a href="{{ route('admin.persistences.edit', $item->id ?? 0) }}" class="btn btn-warning">
+          @if (Route::has('admin.persistences.edit'))
+<a href="{{ route('admin.persistences.edit', $item->id ?? 0) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit Persistence
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -48,9 +50,11 @@
         <div class="row mt-4">
           <div class="col-12">
             <div class="btn-group">
-              <a href="{{ route('admin.persistences.edit', $item->id ?? 0) }}" class="btn btn-warning">
+              @if (Route::has('admin.persistences.edit'))
+<a href="{{ route('admin.persistences.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Persistence
               </a>
+@endif
               <form action="{{ route('admin.persistences.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')

@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Cross Sell Products Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.cross_sell_products.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.cross_sell_products.create'))
+<a href="{{ route('admin.cross_sell_products.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Cross Sell Product
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -37,13 +39,17 @@
                 <td>{{ $item->status ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.cross_sell_products.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.cross_sell_products.show'))
+<a href="{{ route('admin.cross_sell_products.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.cross_sell_products.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.cross_sell_products.edit'))
+<a href="{{ route('admin.cross_sell_products.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.cross_sell_products.destroy', $item->id) }}" method="POST" class="d-inline">
+@endif
+                    <form action="{{ route('admin.cross-sell-products.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">

@@ -9,13 +9,16 @@
       <div class="card-header">
         <h4 class="card-title">Edit Report</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.reports.index') }}" class="btn btn-secondary">
+          @if (Route::has('admin.reports.index'))
+<a href="{{ route('admin.reports.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.reports.update', $item->id ?? 0) }}" method="POST" enctype="multipart/form-data">
+        @if (Route::has('admin.reports.update'))
+<form action="{{ route('admin.reports.update', $item->id ?? 0) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           
@@ -68,11 +71,14 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Update Report
             </button>
-            <a href="{{ route('admin.reports.index') }}" class="btn btn-secondary ml-2">
+            @if (Route::has('admin.reports.index'))
+<a href="{{ route('admin.reports.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
+@endif
           </div>
         </form>
+@endif
       </div>
     </div>
   </div>
