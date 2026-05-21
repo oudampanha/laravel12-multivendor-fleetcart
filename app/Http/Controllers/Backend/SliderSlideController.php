@@ -54,7 +54,7 @@ class SliderSlideController extends BaseController
     {
         $sliders = Slider::all();
 
-        return view('admin.slider_slides.edit', compact('sliderSlide', 'sliders'));
+        return view('admin.slider-slides.edit', compact('sliderSlide', 'sliders'));
     }
 
     public function update(Request $request, SliderSlide $sliderSlide)

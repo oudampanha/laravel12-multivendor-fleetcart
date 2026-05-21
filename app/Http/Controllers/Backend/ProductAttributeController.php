@@ -29,7 +29,7 @@ class ProductAttributeController extends BaseController
         $attributes = Attribute::orderBy('id', 'desc')->get();
         $attributeValues = AttributeValue::orderBy('position')->get();
 
-        return view('admin.product_attributes.create', compact('products', 'attributes', 'attributeValues'));
+        return view('admin.product-attributes.create', compact('products', 'attributes', 'attributeValues'));
     }
 
     public function store(Request $request)
@@ -58,7 +58,7 @@ class ProductAttributeController extends BaseController
     {
         $productAttribute->load(['product', 'attribute', 'attributeValues']);
 
-        return view('admin.product_attributes.show', compact('productAttribute'));
+        return view('admin.product-attributes.show', compact('productAttribute'));
     }
 
     public function edit(ProductAttribute $productAttribute)
@@ -68,7 +68,7 @@ class ProductAttributeController extends BaseController
         $attributes = Attribute::orderBy('id', 'desc')->get();
         $attributeValues = AttributeValue::orderBy('position')->get();
 
-        return view('admin.product_attributes.edit', compact('productAttribute', 'products', 'attributes', 'attributeValues'));
+        return view('admin.product-attributes.edit', compact('productAttribute', 'products', 'attributes', 'attributeValues'));
     }
 
     public function update(Request $request, ProductAttribute $productAttribute)

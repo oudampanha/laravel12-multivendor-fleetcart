@@ -98,7 +98,7 @@ class SliderController extends BaseController
 
     public function editSlide(Slider $slider, SliderSlide $slide)
     {
-        return view('admin.slider_slides.edit', compact('slider', 'slide'));
+        return view('admin.slider-slides.edit', compact('slider', 'slide'));
     }
 
     public function updateSlide(Request $request, Slider $slider, SliderSlide $slide)

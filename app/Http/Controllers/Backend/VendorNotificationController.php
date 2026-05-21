@@ -25,7 +25,7 @@ class VendorNotificationController extends BaseController
     {
         $vendors = Vendor::all();
 
-        return view('admin.vendor_notifications.create', compact('vendors'));
+        return view('admin.vendor-notifications.create', compact('vendors'));
     }
 
     public function store(Request $request)
@@ -49,14 +49,14 @@ class VendorNotificationController extends BaseController
     {
         $vendorNotification->load('vendor');
 
-        return view('admin.vendor_notifications.show', compact('vendorNotification'));
+        return view('admin.vendor-notifications.show', compact('vendorNotification'));
     }
 
     public function edit(VendorNotification $vendorNotification)
     {
         $vendors = Vendor::all();
 
-        return view('admin.vendor_notifications.edit', compact('vendorNotification', 'vendors'));
+        return view('admin.vendor-notifications.edit', compact('vendorNotification', 'vendors'));
     }
 
     public function update(Request $request, VendorNotification $vendorNotification)

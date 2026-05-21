@@ -18,14 +18,14 @@ class VendorShippingZoneController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_shipping_zones.index', compact('vendorShippingZones'));
+        return view('admin.vendor-shipping-zones.index', compact('vendorShippingZones'));
     }
 
     public function create()
     {
         $vendors = Vendor::all();
 
-        return view('admin.vendor_shipping_zones.create', compact('vendors'));
+        return view('admin.vendor-shipping-zones.create', compact('vendors'));
     }
 
     public function store(Request $request)
@@ -51,14 +51,14 @@ class VendorShippingZoneController extends BaseController
     {
         $vendorShippingZone->load('vendor');
 
-        return view('admin.vendor_shipping_zones.show', compact('vendorShippingZone'));
+        return view('admin.vendor-shipping-zones.show', compact('vendorShippingZone'));
     }
 
     public function edit(VendorShippingZone $vendorShippingZone)
     {
         $vendors = Vendor::all();
 
-        return view('admin.vendor_shipping_zones.edit', compact('vendorShippingZone', 'vendors'));
+        return view('admin.vendor-shipping-zones.edit', compact('vendorShippingZone', 'vendors'));
     }
 
     public function update(Request $request, VendorShippingZone $vendorShippingZone)
@@ -91,7 +91,7 @@ class VendorShippingZoneController extends BaseController
     {
         $vendorShippingZones = Vendor::where('vendor_id', $vendor)->paginate(15);
 
-        return view('admin.vendor_shipping_zones.index', compact('vendorShippingZones'));
+        return view('admin.vendor-shipping-zones.index', compact('vendorShippingZones'));
     }
 
     public function toggleStatus(Vendor $vendorShippingZone)

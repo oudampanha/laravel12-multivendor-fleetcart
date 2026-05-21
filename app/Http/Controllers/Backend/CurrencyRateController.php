@@ -36,12 +36,12 @@ class CurrencyRateController extends BaseController
 
     public function show(CurrencyRate $currencyRate)
     {
-        return view('admin.currency_rates.show', compact('currencyRate'));
+        return view('admin.currency-rates.show', compact('currencyRate'));
     }
 
     public function edit(CurrencyRate $currencyRate)
     {
-        return view('admin.currency_rates.edit', compact('currencyRate'));
+        return view('admin.currency-rates.edit', compact('currencyRate'));
     }
 
     public function update(Request $request, CurrencyRate $currencyRate)

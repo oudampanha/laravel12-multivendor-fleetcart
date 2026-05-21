@@ -21,18 +21,18 @@ class VendorWithdrawalController extends BaseController
 
     public function index()
     {
-        $withdrawals = VendorWithdrawal::with('vendor')
+        $vendorWithdrawals = VendorWithdrawal::with('vendor')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-withdrawals.index', compact('withdrawals'));
+        return view('admin.vendor-withdrawals.index', compact('vendorWithdrawals'));
     }
 
     public function show(VendorWithdrawal $vendorWithdrawal)
     {
         $vendorWithdrawal->load('vendor');
 
-        return view('admin.vendor_withdrawals.show', compact('vendorWithdrawal'));
+        return view('admin.vendor-withdrawals.show', compact('vendorWithdrawal'));
     }
 
     public function edit(VendorWithdrawal $vendorWithdrawal)
@@ -42,7 +42,7 @@ class VendorWithdrawalController extends BaseController
                 ->with('error', 'Cannot edit completed or rejected withdrawals.');
         }
 
-        return view('admin.vendor_withdrawals.edit', compact('vendorWithdrawal'));
+        return view('admin.vendor-withdrawals.edit', compact('vendorWithdrawal'));
     }
 
     public function update(Request $request, VendorWithdrawal $vendorWithdrawal)

@@ -16,7 +16,7 @@ class VariationValueController extends BaseController
     {
         $variationValues = VariationValue::with('variation')->orderBy('position', 'asc')->paginate(15);
 
-        return view('admin.variation_values.index', compact('variationValues'));
+        return view('admin.variation-values.index', compact('variationValues'));
     }
 
     public function create()
@@ -44,14 +44,14 @@ class VariationValueController extends BaseController
     {
         $variationValue->load('variation');
 
-        return view('admin.variation_values.show', compact('variationValue'));
+        return view('admin.variation-values.show', compact('variationValue'));
     }
 
     public function edit(VariationValue $variationValue)
     {
         $variations = Variation::all();
 
-        return view('admin.variation_values.edit', compact('variationValue', 'variations'));
+        return view('admin.variation-values.edit', compact('variationValue', 'variations'));
     }
 
     public function update(Request $request, VariationValue $variationValue)

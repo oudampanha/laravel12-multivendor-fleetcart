@@ -159,9 +159,16 @@ class TranslationService
 
         $stats['by_model'] = $modelStats;
 
-        // Calculate completion rates for each locale
+        // Calculate completion rates for each locale.
+        // SQLite does not support count(distinct col1, col2, col3), so wrap the
+        // distinct selection in a subquery and count that instead.
+        $totalPossible = Translation::query()
+            ->distinct()
+            ->select('translatable_type', 'translatable_id', 'field')
+            ->get()
+            ->count();
+
         foreach ($this->supportedLocales as $locale) {
-            $totalPossible = Translation::distinct('translatable_type', 'translatable_id', 'field')->count();
             $actualCount = Translation::where('locale', $locale)->count();
 
             $stats['completion_rates'][$locale] = $totalPossible > 0

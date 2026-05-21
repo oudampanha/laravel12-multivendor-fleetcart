@@ -44,14 +44,14 @@ class OrderDownloadController extends BaseController
     {
         $orderDownload->load(['order']);
 
-        return view('admin.order_downloads.show', compact('orderDownload'));
+        return view('admin.order-downloads.show', compact('orderDownload'));
     }
 
     public function edit(OrderDownload $orderDownload)
     {
         $orders = Order::all();
 
-        return view('admin.order_downloads.edit', compact('orderDownload', 'orders'));
+        return view('admin.order-downloads.edit', compact('orderDownload', 'orders'));
     }
 
     public function update(Request $request, OrderDownload $orderDownload)

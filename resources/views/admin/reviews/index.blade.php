@@ -229,7 +229,7 @@ function showReview(reviewId) {
   $('#reviewContent').html('<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</div>');
   
   // Load review details via AJAX
-  $.get(`{{ route('admin.reviews.show', '') }}/${reviewId}`, function(data) {
+  $.get(`{{ url('admin/reviews') }}/${reviewId}`, function(data) {
     $('#reviewContent').html(data);
   }).fail(function() {
     $('#reviewContent').html('<div class="alert alert-danger">Failed to load review details.</div>');

@@ -20,7 +20,7 @@ class OtpVerificationController extends BaseController
 
     public function create()
     {
-        return view('admin.otp_verifications.create');
+        return view('admin.otp-verifications.create');
     }
 
     public function store(Request $request)
@@ -39,12 +39,12 @@ class OtpVerificationController extends BaseController
 
     public function show(OtpVerification $otpVerification)
     {
-        return view('admin.otp_verifications.show', compact('otpVerification'));
+        return view('admin.otp-verifications.show', compact('otpVerification'));
     }
 
     public function edit(OtpVerification $otpVerification)
     {
-        return view('admin.otp_verifications.edit', compact('otpVerification'));
+        return view('admin.otp-verifications.edit', compact('otpVerification'));
     }
 
     public function update(Request $request, OtpVerification $otpVerification)

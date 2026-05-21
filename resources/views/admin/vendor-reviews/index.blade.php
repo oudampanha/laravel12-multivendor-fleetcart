@@ -8,11 +8,6 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">Vendor Reviews Management</h4>
-        <div class="card-tools">
-          <a href="{{ route('admin.vendor-reviews.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New
-          </a>
-        </div>
       </div>
       <div class="card-body">
         <div class="table-responsive">

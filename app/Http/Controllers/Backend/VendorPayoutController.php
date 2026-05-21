@@ -65,7 +65,7 @@ class VendorPayoutController extends BaseController
     {
         $vendorPayout->load('vendor');
 
-        return view('admin.vendor_payouts.show', compact('vendorPayout'));
+        return view('admin.vendor-payouts.show', compact('vendorPayout'));
     }
 
     public function edit(VendorPayout $vendorPayout)
@@ -75,7 +75,7 @@ class VendorPayoutController extends BaseController
                 ->with('error', 'Cannot edit completed or failed payouts.');
         }
 
-        return view('admin.vendor_payouts.edit', compact('vendorPayout'));
+        return view('admin.vendor-payouts.edit', compact('vendorPayout'));
     }
 
     public function update(Request $request, VendorPayout $vendorPayout)

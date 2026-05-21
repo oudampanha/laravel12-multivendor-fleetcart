@@ -143,7 +143,7 @@ class UpdaterScriptController extends BaseController
             ->orderBy('started_at', 'desc')
             ->paginate(15);
 
-        return view('admin.updater_scripts.logs', compact('logs'));
+        return view('admin.updater-scripts.logs', compact('logs'));
     }
 
     /**
@@ -172,7 +172,7 @@ class UpdaterScriptController extends BaseController
             ->orderBy('version', 'asc')
             ->paginate(15);
 
-        return view('admin.updater_scripts.pending', compact('pendingScripts'));
+        return view('admin.updater-scripts.pending', compact('pendingScripts'));
     }
 
     /**
@@ -184,7 +184,7 @@ class UpdaterScriptController extends BaseController
             ->orderBy('completed_at', 'desc')
             ->paginate(15);
 
-        return view('admin.updater_scripts.completed', compact('completedScripts'));
+        return view('admin.updater-scripts.completed', compact('completedScripts'));
     }
 
     /**
@@ -196,7 +196,7 @@ class UpdaterScriptController extends BaseController
             ->orderBy('started_at', 'desc')
             ->paginate(15);
 
-        return view('admin.updater_scripts.failed', compact('failedScripts'));
+        return view('admin.updater-scripts.failed', compact('failedScripts'));
     }
 
     /**

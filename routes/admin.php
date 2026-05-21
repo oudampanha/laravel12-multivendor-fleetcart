@@ -161,21 +161,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::get('vendor-settings/{vendor}', [VendorSettingController::class, 'show'])->name('vendor-settings.show');
     Route::post('vendor-settings/{vendor}', [VendorSettingController::class, 'update'])->name('vendor-settings.update');
 
-    // Vendor Payouts
+    // Vendor Payouts (static GETs declared first so they win over resource show route)
+    Route::get('vendor-payouts/pending', [VendorPayoutController::class, 'pending'])->name('vendor-payouts.pending');
+    Route::get('vendor-payouts/completed', [VendorPayoutController::class, 'completed'])->name('vendor-payouts.completed');
     Route::resource('vendor-payouts', VendorPayoutController::class);
     Route::post('vendor-payouts/{vendorPayout}/approve', [VendorPayoutController::class, 'approve'])->name('vendor-payouts.approve');
     Route::post('vendor-payouts/{vendorPayout}/reject', [VendorPayoutController::class, 'reject'])->name('vendor-payouts.reject');
     Route::post('vendor-payouts/{vendorPayout}/mark-paid', [VendorPayoutController::class, 'markPaid'])->name('vendor-payouts.mark-paid');
-    Route::get('vendor-payouts/pending', [VendorPayoutController::class, 'pending'])->name('vendor-payouts.pending');
-    Route::get('vendor-payouts/completed', [VendorPayoutController::class, 'completed'])->name('vendor-payouts.completed');
 
-    // Vendor Withdrawals
+    // Vendor Withdrawals (static GETs declared first so they win over resource show route)
+    Route::get('vendor-withdrawals/pending', [VendorWithdrawalController::class, 'pending'])->name('vendor-withdrawals.pending');
+    Route::get('vendor-withdrawals/processed', [VendorWithdrawalController::class, 'processed'])->name('vendor-withdrawals.processed');
     Route::resource('vendor-withdrawals', VendorWithdrawalController::class)->except(['create', 'store']);
     Route::post('vendor-withdrawals/{vendorWithdrawal}/approve', [VendorWithdrawalController::class, 'approve'])->name('vendor-withdrawals.approve');
     Route::post('vendor-withdrawals/{vendorWithdrawal}/reject', [VendorWithdrawalController::class, 'reject'])->name('vendor-withdrawals.reject');
     Route::post('vendor-withdrawals/{vendorWithdrawal}/process', [VendorWithdrawalController::class, 'process'])->name('vendor-withdrawals.process');
-    Route::get('vendor-withdrawals/pending', [VendorWithdrawalController::class, 'pending'])->name('vendor-withdrawals.pending');
-    Route::get('vendor-withdrawals/processed', [VendorWithdrawalController::class, 'processed'])->name('vendor-withdrawals.processed');
 
     // Vendor Orders
     Route::get('vendor-orders', [VendorOrderController::class, 'index'])->name('vendor-orders.index');
@@ -196,28 +196,28 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('vendor-shipping-zones/{vendorShippingZone}/toggle-status', [VendorShippingZoneController::class, 'toggleStatus'])->name('vendor-shipping-zones.toggle-status');
     Route::get('vendor-shipping-zones/by-vendor/{vendor}', [VendorShippingZoneController::class, 'byVendor'])->name('vendor-shipping-zones.by-vendor');
 
-    // Vendor Reviews
+    // Vendor Reviews (static GETs declared first so they win over resource show route)
+    Route::get('vendor-reviews/pending', [VendorReviewController::class, 'pending'])->name('vendor-reviews.pending');
+    Route::get('vendor-reviews/approved', [VendorReviewController::class, 'approved'])->name('vendor-reviews.approved');
     Route::resource('vendor-reviews', VendorReviewController::class)->except(['create', 'store']);
     Route::post('vendor-reviews/{vendorReview}/approve', [VendorReviewController::class, 'approve'])->name('vendor-reviews.approve');
     Route::post('vendor-reviews/{vendorReview}/reject', [VendorReviewController::class, 'reject'])->name('vendor-reviews.reject');
-    Route::get('vendor-reviews/pending', [VendorReviewController::class, 'pending'])->name('vendor-reviews.pending');
-    Route::get('vendor-reviews/approved', [VendorReviewController::class, 'approved'])->name('vendor-reviews.approved');
     Route::get('vendor-reviews/by-vendor/{vendor}', [VendorReviewController::class, 'byVendor'])->name('vendor-reviews.by-vendor');
 
     // =============================================================================
     // PRODUCT MANAGEMENT
     // =============================================================================
 
-    // Products
-    Route::resource('products', ProductController::class);
+    // Products (static GETs declared first so they win over resource show route)
     Route::get('products/search', [ProductController::class, 'search'])->name('products.search');
+    Route::get('products/pending-approval', [ProductController::class, 'pendingApproval'])->name('products.pending-approval');
+    Route::get('products/approved', [ProductController::class, 'approved'])->name('products.approved');
+    Route::get('products/rejected', [ProductController::class, 'rejected'])->name('products.rejected');
+    Route::resource('products', ProductController::class);
     Route::post('products/{product}/approve', [ProductController::class, 'approve'])->name('products.approve');
     Route::post('products/{product}/reject', [ProductController::class, 'reject'])->name('products.reject');
     Route::post('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
     Route::post('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate');
-    Route::get('products/pending-approval', [ProductController::class, 'pendingApproval'])->name('products.pending-approval');
-    Route::get('products/approved', [ProductController::class, 'approved'])->name('products.approved');
-    Route::get('products/rejected', [ProductController::class, 'rejected'])->name('products.rejected');
     Route::get('products/{product}/variants', [ProductController::class, 'variants'])->name('products.variants');
     Route::get('products/{product}/attributes', [ProductController::class, 'attributes'])->name('products.attributes');
     Route::get('products/{product}/options', [ProductController::class, 'options'])->name('products.options');
@@ -316,7 +316,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     // ORDER MANAGEMENT
     // =============================================================================
 
-    // Orders
+    // Orders (static GETs declared first so they win over resource show route)
+    Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
     Route::resource('orders', OrderController::class);
     Route::post('orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
     Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
@@ -326,7 +327,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('orders/{order}/tracking', [OrderController::class, 'updateTracking'])->name('orders.tracking.update');
     Route::get('orders/by-status/{status}', [OrderController::class, 'byStatus'])->name('orders.by-status');
     Route::get('orders/by-payment-method/{method}', [OrderController::class, 'byPaymentMethod'])->name('orders.by-payment-method');
-    Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
     Route::post('orders/bulk-update-status', [OrderController::class, 'bulkUpdateStatus'])->name('orders.bulk-update-status');
 
     // Order Products
@@ -345,25 +345,25 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     // Order Product Variations
     Route::resource('order-product-variations', OrderProductVariationController::class);
 
-    // Transactions
+    // Transactions (static GETs declared first so they win over resource show route)
+    Route::get('transactions/failed', [TransactionController::class, 'failed'])->name('transactions.failed');
+    Route::get('transactions/refunded', [TransactionController::class, 'refunded'])->name('transactions.refunded');
     Route::resource('transactions', TransactionController::class)->except(['create', 'store', 'edit', 'update']);
     Route::get('transactions/{transaction}/details', [TransactionController::class, 'details'])->name('transactions.details');
     Route::post('transactions/{transaction}/refund', [TransactionController::class, 'refund'])->name('transactions.refund');
     Route::get('transactions/by-payment-method/{method}', [TransactionController::class, 'byPaymentMethod'])->name('transactions.by-payment-method');
-    Route::get('transactions/failed', [TransactionController::class, 'failed'])->name('transactions.failed');
-    Route::get('transactions/refunded', [TransactionController::class, 'refunded'])->name('transactions.refunded');
 
     // =============================================================================
     // DISCOUNT & COUPON MANAGEMENT
     // =============================================================================
 
-    // Coupons
+    // Coupons (static GETs declared first so they win over resource show route)
+    Route::get('coupons/expired', [CouponController::class, 'expired'])->name('coupons.expired');
+    Route::get('coupons/active', [CouponController::class, 'active'])->name('coupons.active');
     Route::resource('coupons', CouponController::class);
     Route::post('coupons/{coupon}/toggle-status', [CouponController::class, 'toggleStatus'])->name('coupons.toggle-status');
     Route::get('coupons/{coupon}/usage', [CouponController::class, 'usage'])->name('coupons.usage');
     Route::post('coupons/{coupon}/reset-usage', [CouponController::class, 'resetUsage'])->name('coupons.reset-usage');
-    Route::get('coupons/expired', [CouponController::class, 'expired'])->name('coupons.expired');
-    Route::get('coupons/active', [CouponController::class, 'active'])->name('coupons.active');
     Route::get('coupons/by-vendor/{vendor}', [CouponController::class, 'byVendor'])->name('coupons.by-vendor');
     Route::post('coupons/{coupon}/duplicate', [CouponController::class, 'duplicate'])->name('coupons.duplicate');
 
@@ -387,23 +387,23 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::get('tax-classes/{taxClass}/rates', [TaxClassController::class, 'rates'])->name('tax-classes.rates');
     Route::post('tax-classes/{taxClass}/rates', [TaxClassController::class, 'addRate'])->name('tax-classes.rates.add');
 
-    // Tax Rates
+    // Tax Rates (static GETs declared first so they win over resource show route)
+    Route::get('tax-rates/calculator', [TaxRateController::class, 'calculator'])->name('tax-rates.calculator');
     Route::resource('tax-rates', TaxRateController::class);
     Route::post('tax-rates/reorder', [TaxRateController::class, 'reorder'])->name('tax-rates.reorder');
     Route::get('tax-rates/by-country/{country}', [TaxRateController::class, 'byCountry'])->name('tax-rates.by-country');
-    Route::get('tax-rates/calculator', [TaxRateController::class, 'calculator'])->name('tax-rates.calculator');
     Route::post('tax-rates/calculate', [TaxRateController::class, 'calculate'])->name('tax-rates.calculate');
 
     // =============================================================================
     // REVIEW MANAGEMENT
     // =============================================================================
 
-    // Product Reviews
+    // Product Reviews (static GETs declared first so they win over resource show route)
+    Route::get('reviews/pending', [ReviewController::class, 'pending'])->name('reviews.pending');
+    Route::get('reviews/approved', [ReviewController::class, 'approved'])->name('reviews.approved');
     Route::resource('reviews', ReviewController::class)->except(['create', 'store']);
     Route::post('reviews/{review}/approve', [ReviewController::class, 'approve'])->name('reviews.approve');
     Route::post('reviews/{review}/reject', [ReviewController::class, 'reject'])->name('reviews.reject');
-    Route::get('reviews/pending', [ReviewController::class, 'pending'])->name('reviews.pending');
-    Route::get('reviews/approved', [ReviewController::class, 'approved'])->name('reviews.approved');
     Route::get('reviews/by-product/{product}', [ReviewController::class, 'byProduct'])->name('reviews.by-product');
     Route::get('reviews/by-rating/{rating}', [ReviewController::class, 'byRating'])->name('reviews.by-rating');
     Route::post('reviews/bulk-approve', [ReviewController::class, 'bulkApprove'])->name('reviews.bulk-approve');
@@ -422,21 +422,21 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::get('blog-tags/{blogTag}/posts', [BlogTagController::class, 'posts'])->name('blog-tags.posts');
     Route::post('blog-tags/merge', [BlogTagController::class, 'merge'])->name('blog-tags.merge');
 
-    // Blog Posts
+    // Blog Posts (static GETs declared first so they win over resource show route)
+    Route::get('blog-posts/published', [BlogPostController::class, 'published'])->name('blog-posts.published');
+    Route::get('blog-posts/draft', [BlogPostController::class, 'draft'])->name('blog-posts.draft');
     Route::resource('blog-posts', BlogPostController::class);
     Route::post('blog-posts/{blogPost}/publish', [BlogPostController::class, 'publish'])->name('blog-posts.publish');
     Route::post('blog-posts/{blogPost}/unpublish', [BlogPostController::class, 'unpublish'])->name('blog-posts.unpublish');
     Route::post('blog-posts/{blogPost}/duplicate', [BlogPostController::class, 'duplicate'])->name('blog-posts.duplicate');
-    Route::get('blog-posts/published', [BlogPostController::class, 'published'])->name('blog-posts.published');
-    Route::get('blog-posts/draft', [BlogPostController::class, 'draft'])->name('blog-posts.draft');
     Route::get('blog-posts/by-author/{user}', [BlogPostController::class, 'byAuthor'])->name('blog-posts.by-author');
 
-    // Pages
+    // Pages (static GETs declared first so they win over resource show route)
+    Route::get('pages/active', [PageController::class, 'active'])->name('pages.active');
+    Route::get('pages/inactive', [PageController::class, 'inactive'])->name('pages.inactive');
     Route::resource('pages', PageController::class);
     Route::post('pages/{page}/toggle-status', [PageController::class, 'toggleStatus'])->name('pages.toggle-status');
     Route::post('pages/{page}/duplicate', [PageController::class, 'duplicate'])->name('pages.duplicate');
-    Route::get('pages/active', [PageController::class, 'active'])->name('pages.active');
-    Route::get('pages/inactive', [PageController::class, 'inactive'])->name('pages.inactive');
 
     // =============================================================================
     // NAVIGATION MANAGEMENT
@@ -526,6 +526,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     // Settings
     Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
     Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
+    Route::post('settings/update-single', [SettingController::class, 'updateSingle'])->name('settings.update-single');
     Route::get('settings/general', [SettingController::class, 'general'])->name('settings.general');
     Route::get('settings/mail', [SettingController::class, 'mail'])->name('settings.mail');
     Route::get('settings/payment', [SettingController::class, 'payment'])->name('settings.payment');
@@ -537,11 +538,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('settings/clear-cache', [SettingController::class, 'clearCache'])->name('settings.clear-cache');
     Route::post('settings/test-mail', [SettingController::class, 'testMail'])->name('settings.test-mail');
 
-    // Currency Rates
+    // Currency Rates (static GETs declared first so they win over resource show route)
+    Route::get('currency-rates/history', [CurrencyRateController::class, 'history'])->name('currency-rates.history');
     Route::resource('currency-rates', CurrencyRateController::class);
     Route::post('currency-rates/update-rates', [CurrencyRateController::class, 'updateRates'])->name('currency-rates.update-rates');
     Route::post('currency-rates/auto-update', [CurrencyRateController::class, 'autoUpdate'])->name('currency-rates.auto-update');
-    Route::get('currency-rates/history', [CurrencyRateController::class, 'history'])->name('currency-rates.history');
 
     // Meta Data
     Route::get('meta-data/{entityType}/{entityId}', [MetaDataController::class, 'show'])->name('meta-data.show');

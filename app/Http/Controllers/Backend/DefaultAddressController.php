@@ -85,7 +85,7 @@ class DefaultAddressController extends BaseController
             ->orderBy('type')
             ->get();
 
-        return view('admin.default_addresses.by-customer', compact('defaultAddresses', 'customer'));
+        return view('admin.default-addresses.by-customer', compact('defaultAddresses', 'customer'));
     }
 
     /**

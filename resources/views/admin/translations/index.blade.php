@@ -8,11 +8,13 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">Translations Management</h4>
+        @if(Route::has('admin.translation-management.create'))
         <div class="card-tools">
-          <a href="{{ route('admin.translations.create') }}" class="btn btn-primary">
+          <a href="{{ route('admin.translation-management.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Translation
           </a>
         </div>
+        @endif
       </div>
       <div class="card-body">
         <div class="table-responsive">

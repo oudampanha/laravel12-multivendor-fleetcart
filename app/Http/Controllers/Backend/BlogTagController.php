@@ -11,7 +11,7 @@ class BlogTagController extends BaseController
 
     public function index()
     {
-        $blogTags = BlogTag::withCount('posts')->paginate(15);
+        $blogTags = BlogTag::withCount('blogPosts')->paginate(15);
 
         return view('admin.blog-tags.index', compact('blogTags'));
     }
@@ -35,7 +35,7 @@ class BlogTagController extends BaseController
 
     public function show(BlogTag $blogTag)
     {
-        $blogTag->load('posts');
+        $blogTag->load('blogPosts');
 
         return view('admin.blog-tags.show', compact('blogTag'));
     }

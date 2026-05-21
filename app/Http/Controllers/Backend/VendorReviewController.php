@@ -29,7 +29,7 @@ class VendorReviewController extends BaseController
         $customers = User::all();
         $orders = Order::all();
 
-        return view('admin.vendor_reviews.create', compact('vendors', 'customers', 'orders'));
+        return view('admin.vendor-reviews.create', compact('vendors', 'customers', 'orders'));
     }
 
     public function store(Request $request)
@@ -53,7 +53,7 @@ class VendorReviewController extends BaseController
     {
         $vendorReview->load(['vendor', 'customer', 'order']);
 
-        return view('admin.vendor_reviews.show', compact('vendorReview'));
+        return view('admin.vendor-reviews.show', compact('vendorReview'));
     }
 
     public function edit(VendorReview $vendorReview)
@@ -62,7 +62,7 @@ class VendorReviewController extends BaseController
         $customers = User::all();
         $orders = Order::all();
 
-        return view('admin.vendor_reviews.edit', compact('vendorReview', 'vendors', 'customers', 'orders'));
+        return view('admin.vendor-reviews.edit', compact('vendorReview', 'vendors', 'customers', 'orders'));
     }
 
     public function update(Request $request, VendorReview $vendorReview)

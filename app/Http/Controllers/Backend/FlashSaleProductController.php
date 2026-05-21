@@ -27,7 +27,7 @@ class FlashSaleProductController extends BaseController
         $flashSales = FlashSale::all();
         $products = Product::all();
 
-        return view('admin.flash_sale_products.create', compact('flashSales', 'products'));
+        return view('admin.flash-sale-products.create', compact('flashSales', 'products'));
     }
 
     public function store(Request $request)
@@ -50,7 +50,7 @@ class FlashSaleProductController extends BaseController
     {
         $flashSaleProduct->load(['flashSale', 'product']);
 
-        return view('admin.flash_sale_products.show', compact('flashSaleProduct'));
+        return view('admin.flash-sale-products.show', compact('flashSaleProduct'));
     }
 
     public function edit(FlashSaleProduct $flashSaleProduct)
@@ -58,7 +58,7 @@ class FlashSaleProductController extends BaseController
         $flashSales = FlashSale::all();
         $products = Product::all();
 
-        return view('admin.flash_sale_products.edit', compact('flashSaleProduct', 'flashSales', 'products'));
+        return view('admin.flash-sale-products.edit', compact('flashSaleProduct', 'flashSales', 'products'));
     }
 
     public function update(Request $request, FlashSaleProduct $flashSaleProduct)

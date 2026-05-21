@@ -20,7 +20,7 @@ class SearchTermController extends BaseController
 
     public function create()
     {
-        return view('admin.search_terms.create');
+        return view('admin.search-terms.create');
     }
 
     public function store(Request $request)
@@ -43,7 +43,7 @@ class SearchTermController extends BaseController
 
     public function edit(SearchTerm $searchTerm)
     {
-        return view('admin.search_terms.edit', compact('searchTerm'));
+        return view('admin.search-terms.edit', compact('searchTerm'));
     }
 
     public function update(Request $request, SearchTerm $searchTerm)
