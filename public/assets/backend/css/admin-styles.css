@@ -34,25 +34,24 @@ body {
   top: 0;
   left: 0;
   height: 100vh;
+  height: 100dvh;
   width: 250px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  transition: all 0.3s ease;
+  transition: width 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
   z-index: 1000;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-  overflow-x: hidden;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .sidebar.collapsed {
   width: 60px;
-  overflow: hidden;
 }
 
 /* Auto-expand sidebar on hover when collapsed */
 .sidebar.collapsed:hover {
   width: 250px;
-  overflow-y: auto;
-  overflow-x: hidden;
   box-shadow: 5px 0 20px rgba(0, 0, 0, 0.2);
 }
 
@@ -95,6 +94,12 @@ body {
   padding: 0;
   margin: 0;
   list-style: none;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .sidebar-menu .metismenu {
@@ -713,22 +718,36 @@ textarea {
   }
 }
 
-/* Custom scrollbar for sidebar */
-.sidebar::-webkit-scrollbar {
+/* Custom scrollbar for sidebar menu */
+.sidebar-menu {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-menu::-webkit-scrollbar {
   width: 6px;
 }
 
-.sidebar::-webkit-scrollbar-track {
+.sidebar-menu::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.sidebar::-webkit-scrollbar-thumb {
+.sidebar-menu::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.3);
   border-radius: 3px;
 }
 
-.sidebar::-webkit-scrollbar-thumb:hover {
+.sidebar-menu::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.5);
+}
+
+/* Hide scrollbar when sidebar is collapsed (only icons visible) */
+.sidebar.collapsed:not(:hover) .sidebar-menu {
+  scrollbar-width: none;
+}
+
+.sidebar.collapsed:not(:hover) .sidebar-menu::-webkit-scrollbar {
+  display: none;
 }
 
 /* Stats Cards */
