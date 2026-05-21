@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Search Terms Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.search-terms.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.search-terms.create'))
+<a href="{{ route('admin.search-terms.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -46,9 +48,11 @@
                     <a href="{{ route('admin.search-terms.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.search-terms.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                    @if (Route::has('admin.search-terms.edit'))
+<a href="{{ route('admin.search-terms.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
+@endif
                     <form action="{{ route('admin.search-terms.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
@@ -60,9 +64,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="5" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

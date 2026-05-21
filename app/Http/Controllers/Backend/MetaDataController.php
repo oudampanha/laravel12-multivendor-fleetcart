@@ -32,7 +32,7 @@ class MetaDataController extends BaseController
 
         MetaData::create($validated);
 
-        return redirect()->route('admin.meta_data.index')->with('success', 'Meta Data created successfully.');
+        return back()->with('success', 'Meta Data created successfully.');
     }
 
     public function show(MetaData $metaData)
@@ -54,13 +54,13 @@ class MetaDataController extends BaseController
 
         $metaData->update($validated);
 
-        return redirect()->route('admin.meta_data.index')->with('success', 'Meta Data updated successfully.');
+        return back()->with('success', 'Meta Data updated successfully.');
     }
 
     public function destroy(MetaData $metaData)
     {
         $metaData->delete();
 
-        return redirect()->route('admin.meta_data.index')->with('success', 'Meta Data deleted successfully.');
+        return back()->with('success', 'Meta Data deleted successfully.');
     }
 }

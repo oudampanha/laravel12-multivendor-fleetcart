@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Customer Addresses Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.addresses.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.addresses.create'))
+<a href="{{ route('admin.addresses.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Address
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -71,9 +73,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="10" class="text-center">No addresses found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Wish Lists Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.wish_lists.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.wish_lists.create'))
+<a href="{{ route('admin.wish_lists.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Wish List
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -37,13 +39,17 @@
                 <td>{{ $item->updated_at ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.wish_lists.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.wish_lists.show'))
+<a href="{{ route('admin.wish_lists.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.wish_lists.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.wish_lists.edit'))
+<a href="{{ route('admin.wish_lists.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.wish_lists.destroy', $item->id) }}" method="POST" class="d-inline">
+@endif
+                    <form action="{{ route('admin.wish-lists.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
@@ -54,9 +60,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="6" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

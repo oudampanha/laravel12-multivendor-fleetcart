@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Related Products Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.related_products.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.related_products.create'))
+<a href="{{ route('admin.related_products.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Related Product
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -37,13 +39,17 @@
                 <td>{{ $item->status ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.related_products.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.related_products.show'))
+<a href="{{ route('admin.related_products.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.related_products.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.related_products.edit'))
+<a href="{{ route('admin.related_products.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.related_products.destroy', $item->id) }}" method="POST" class="d-inline">
+@endif
+                    <form action="{{ route('admin.related-products.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
@@ -54,9 +60,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="6" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

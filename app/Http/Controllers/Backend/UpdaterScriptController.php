@@ -29,7 +29,7 @@ class UpdaterScriptController extends BaseController
 
         $updaterScripts = $query->paginate(15);
 
-        return view('admin.updater-scripts.index', compact('updaterScripts'));
+        return view('admin.updater_scripts.index', compact('updaterScripts'));
     }
 
     public function run(Request $request, UpdaterScript $updaterScript)
@@ -159,7 +159,7 @@ class UpdaterScriptController extends BaseController
             ->whereNotNull('output')
             ->update(['output' => null]);
 
-        return redirect()->route('admin.updater_scripts.logs')
+        return redirect()->route('admin.updater-scripts.logs')
             ->with('success', "Cleaned up logs for {$deleted} completed scripts.");
     }
 

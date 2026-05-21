@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Reports Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.reports.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.reports.create'))
+<a href="{{ route('admin.reports.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Report
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -39,26 +41,29 @@
                 <td>{{ $item->status ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.reports.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.reports.show'))
+<a href="{{ route('admin.reports.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.reports.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.reports.edit'))
+<a href="{{ route('admin.reports.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.reports.destroy', $item->id) }}" method="POST" class="d-inline">
+@endif
+                    @if (Route::has('admin.reports.destroy'))
+<form action="{{ route('admin.reports.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                         <i class="fas fa-trash"></i>
                       </button>
                     </form>
+@endif
                   </div>
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="7" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

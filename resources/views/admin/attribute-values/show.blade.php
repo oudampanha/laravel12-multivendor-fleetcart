@@ -9,11 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Attribute Value Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.attribute_values.index') }}" class="btn btn-secondary">
+          @if (Route::has('admin.attribute_values.index'))
+<a href="{{ route('admin.attribute_values.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
+@endif
           @if(Route::has('admin.attribute_values.edit'))
-            <a href="{{ route('admin.attribute_values.edit', $attributeValue->id) }}" class="btn btn-warning">
+            <a href="{{ route('admin.attribute-values.edit', $attributeValue->id) }}" class="btn btn-warning">
               <i class="fas fa-edit"></i> Edit
             </a>
           @endif

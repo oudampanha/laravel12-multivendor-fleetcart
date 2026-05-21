@@ -41,7 +41,7 @@ class OrderProductVariationController extends BaseController
 
         OrderProductVariation::create($validated);
 
-        return redirect()->route('admin.order_product_variations.index')->with('success', 'Order Product Variation created successfully.');
+        return redirect()->route('admin.order-product-variations.index')->with('success', 'Order Product Variation created successfully.');
     }
 
     public function show(OrderProductVariation $orderProductVariation)
@@ -56,7 +56,7 @@ class OrderProductVariationController extends BaseController
         $orderProducts = OrderProduct::all();
         $variations = Variation::all();
 
-        return view('admin.order-product-variations.edit', compact('orderProductVariation', 'orderProducts', 'variations'));
+        return view('admin.order_product_variations.edit', compact('orderProductVariation', 'orderProducts', 'variations'));
     }
 
     public function update(Request $request, OrderProductVariation $orderProductVariation)
@@ -70,13 +70,13 @@ class OrderProductVariationController extends BaseController
 
         $orderProductVariation->update($validated);
 
-        return redirect()->route('admin.order_product_variations.index')->with('success', 'Order Product Variation updated successfully.');
+        return redirect()->route('admin.order-product-variations.index')->with('success', 'Order Product Variation updated successfully.');
     }
 
     public function destroy(OrderProductVariation $orderProductVariation)
     {
         $orderProductVariation->delete();
 
-        return redirect()->route('admin.order_product_variations.index')->with('success', 'Order Product Variation deleted successfully.');
+        return redirect()->route('admin.order-product-variations.index')->with('success', 'Order Product Variation deleted successfully.');
     }
 }

@@ -6,8 +6,10 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\TaxClass;
+use App\Models\Translation;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProductController extends BaseController
 {
@@ -46,6 +48,12 @@ class ProductController extends BaseController
     public function store(Request $request)
     {
         $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'short_description' => 'nullable|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
             'vendor_id' => 'nullable|exists:vendors,id',
             'brand_id' => 'nullable|exists:brands,id',
             'tax_class_id' => 'nullable|exists:tax_classes,id',
@@ -67,10 +75,16 @@ class ProductController extends BaseController
             'vendor_rejection_reason' => 'nullable|string',
         ]);
 
-        $product = Product::create($request->all());
+        $product = Product::create($this->productData($request));
+
+        $this->syncProductTranslations($product, $request);
 
         if ($request->has('categories')) {
-            $product->categories()->attach($request->categories);
+            $categoryIds = $this->normalizeCategoryIds($request->input('categories'));
+
+            if (! empty($categoryIds)) {
+                $product->categories()->attach($categoryIds);
+            }
         }
 
         return redirect()->route('admin.products.index')
@@ -97,6 +111,12 @@ class ProductController extends BaseController
     public function update(Request $request, Product $product)
     {
         $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'short_description' => 'nullable|string',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
             'vendor_id' => 'nullable|exists:vendors,id',
             'brand_id' => 'nullable|exists:brands,id',
             'tax_class_id' => 'nullable|exists:tax_classes,id',
@@ -118,10 +138,12 @@ class ProductController extends BaseController
             'vendor_rejection_reason' => 'nullable|string',
         ]);
 
-        $product->update($request->all());
+        $product->update($this->productData($request));
+
+        $this->syncProductTranslations($product, $request);
 
         if ($request->has('categories')) {
-            $product->categories()->sync($request->categories);
+            $product->categories()->sync($this->normalizeCategoryIds($request->input('categories')));
         }
 
         return redirect()->route('admin.products.index')
@@ -172,12 +194,17 @@ class ProductController extends BaseController
             ]);
         }
 
-        $products = Product::where('name', 'LIKE', "%{$query}%")
-            ->orWhere('sku', 'LIKE', "%{$query}%")
+        $products = Product::where(function ($productQuery) use ($query) {
+            $productQuery->where('sku', 'LIKE', "%{$query}%")
+                ->orWhereHas('translations', function ($translationQuery) use ($query) {
+                    $translationQuery->where('field', 'name')
+                        ->where('value', 'LIKE', "%{$query}%");
+                });
+        })
             ->where('is_active', true)
             ->where('vendor_status', 'approved')
             ->with(['vendor'])
-            ->orderBy('name')
+            ->orderByDesc('created_at')
             ->paginate($perPage, ['*'], 'page', $page);
 
         $items = $products->items();
@@ -203,7 +230,10 @@ class ProductController extends BaseController
 
     public function approved()
     {
-        $products = Brand::where('status', 'approved')->paginate(15);
+        $products = Product::with(['vendor', 'brand', 'categories'])
+            ->where('vendor_status', 'approved')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
         return view('admin.products.index', compact('products'));
     }
@@ -218,12 +248,22 @@ class ProductController extends BaseController
         return redirect()->back()->with('info', 'Delete Media feature is available; please contact administrator for full implementation.');
     }
 
-    public function duplicate(Brand $product)
+    public function duplicate(Product $product)
     {
-        $copy = $product->replicate();
-        $copy->save();
+        $categoryIds = $product->categories()->pluck('categories.id')->all();
+        $translations = Translation::forModel(Product::class, $product->getKey())
+            ->get(['locale', 'field', 'value']);
 
-        return redirect()->back()->with('success', 'Brand duplicated successfully.');
+        $copy = $product->replicate();
+        $copy->slug = Str::finish($product->slug, '-copy').Str::lower(Str::random(6));
+        $copy->save();
+        $copy->categories()->sync($categoryIds);
+
+        $translations->each(function (Translation $translation) use ($copy) {
+            $copy->setTranslation($translation->field, $translation->value, $translation->locale);
+        });
+
+        return redirect()->back()->with('success', 'Product duplicated successfully.');
     }
 
     public function media()
@@ -238,21 +278,29 @@ class ProductController extends BaseController
 
     public function pendingApproval()
     {
-        return redirect()->back()->with('info', 'Pending Approval feature is available; please contact administrator for full implementation.');
-    }
-
-    public function rejected()
-    {
-        $products = Brand::where('status', 'rejected')->paginate(15);
+        $products = Product::with(['vendor', 'brand', 'categories'])
+            ->where('vendor_status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
         return view('admin.products.index', compact('products'));
     }
 
-    public function toggleStatus(Brand $product)
+    public function rejected()
+    {
+        $products = Product::with(['vendor', 'brand', 'categories'])
+            ->where('vendor_status', 'rejected')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
+
+        return view('admin.products.index', compact('products'));
+    }
+
+    public function toggleStatus(Product $product)
     {
         $product->update(['is_active' => ! $product->is_active]);
 
-        return redirect()->back()->with('success', 'Brand status updated successfully.');
+        return redirect()->back()->with('success', 'Product status updated successfully.');
     }
 
     public function uploadMedia()
@@ -263,5 +311,66 @@ class ProductController extends BaseController
     public function variants()
     {
         return redirect()->back()->with('info', 'Variants feature is available; please contact administrator for full implementation.');
+    }
+
+    protected function productData(Request $request): array
+    {
+        return [
+            'vendor_id' => $request->input('vendor_id'),
+            'brand_id' => $request->input('brand_id'),
+            'tax_class_id' => $request->input('tax_class_id'),
+            'slug' => $request->input('slug'),
+            'price' => $request->input('price'),
+            'special_price' => $request->input('special_price'),
+            'special_price_type' => $request->input('special_price_type'),
+            'special_price_start' => $request->input('special_price_start'),
+            'special_price_end' => $request->input('special_price_end'),
+            'selling_price' => $request->input('selling_price'),
+            'sku' => $request->input('sku'),
+            'manage_stock' => $request->boolean('manage_stock'),
+            'qty' => $request->input('qty'),
+            'in_stock' => $request->boolean('in_stock'),
+            'is_active' => $request->boolean('is_active'),
+            'is_virtual' => $request->boolean('is_virtual'),
+            'new_from' => $request->input('new_from'),
+            'new_to' => $request->input('new_to'),
+            'vendor_status' => $request->input('vendor_status'),
+            'vendor_rejection_reason' => $request->input('vendor_rejection_reason'),
+        ];
+    }
+
+    protected function syncProductTranslations(Product $product, Request $request): void
+    {
+        foreach (['name', 'description', 'short_description', 'meta_title', 'meta_description', 'meta_keywords'] as $field) {
+            if ($request->filled($field)) {
+                $product->setTranslation($field, (string) $request->input($field));
+            }
+        }
+    }
+
+    protected function normalizeCategoryIds($categories): array
+    {
+        if (is_array($categories)) {
+            return collect($categories)
+                ->filter()
+                ->map(fn ($categoryId) => (int) $categoryId)
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
+        }
+
+        if (is_string($categories)) {
+            return collect(explode(',', $categories))
+                ->map(fn ($categoryId) => trim($categoryId))
+                ->filter()
+                ->map(fn ($categoryId) => (int) $categoryId)
+                ->filter()
+                ->unique()
+                ->values()
+                ->all();
+        }
+
+        return [];
     }
 }

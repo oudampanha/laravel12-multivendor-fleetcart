@@ -9,12 +9,14 @@
       <div class="card-header">
         <h4 class="card-title">Entity Media Details</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.entity_media.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.entity-media.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          <a href="{{ route('admin.entity_media.edit', $item->id ?? 0) }}" class="btn btn-warning">
+          @if (Route::has('admin.entity_media.edit'))
+<a href="{{ route('admin.entity_media.edit', $item->id ?? 0) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit Entity Media
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -52,9 +54,11 @@
         <div class="row mt-4">
           <div class="col-12">
             <div class="btn-group">
-              <a href="{{ route('admin.entity_media.edit', $item->id ?? 0) }}" class="btn btn-warning">
+              @if (Route::has('admin.entity_media.edit'))
+<a href="{{ route('admin.entity_media.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Entity Media
               </a>
+@endif
               <form action="{{ route('admin.entity-media.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')

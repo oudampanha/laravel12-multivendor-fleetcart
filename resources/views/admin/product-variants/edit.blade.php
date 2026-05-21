@@ -9,13 +9,15 @@
       <div class="card-header">
         <h4 class="card-title">Edit Product Variant</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.product_variants.index') }}" class="btn btn-secondary">
+          @if (Route::has('admin.product_variants.index'))
+<a href="{{ route('admin.product_variants.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.product_variants.update', $item->id ?? 0) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.product-variants.update', $item->id ?? 0) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           
@@ -68,9 +70,11 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Update Product Variant
             </button>
-            <a href="{{ route('admin.product_variants.index') }}" class="btn btn-secondary ml-2">
+            @if (Route::has('admin.product_variants.index'))
+<a href="{{ route('admin.product_variants.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
+@endif
           </div>
         </form>
       </div>

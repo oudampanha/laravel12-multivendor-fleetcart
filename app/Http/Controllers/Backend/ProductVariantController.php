@@ -23,7 +23,7 @@ class ProductVariantController extends BaseController
     {
         $products = Product::all();
 
-        return view('admin.product-variants.create', compact('products'));
+        return view('admin.product_variants.create', compact('products'));
     }
 
     public function store(Request $request)
@@ -50,7 +50,7 @@ class ProductVariantController extends BaseController
 
         ProductVariant::create($validated);
 
-        return redirect()->route('admin.product_variants.index')->with('success', 'Product Variant created successfully.');
+        return back()->with('success', 'Product Variant created successfully.');
     }
 
     public function show(ProductVariant $productVariant)
@@ -91,14 +91,14 @@ class ProductVariantController extends BaseController
 
         $productVariant->update($validated);
 
-        return redirect()->route('admin.product_variants.index')->with('success', 'Product Variant updated successfully.');
+        return back()->with('success', 'Product Variant updated successfully.');
     }
 
     public function destroy(ProductVariant $productVariant)
     {
         $productVariant->delete();
 
-        return redirect()->route('admin.product_variants.index')->with('success', 'Product Variant deleted successfully.');
+        return back()->with('success', 'Product Variant deleted successfully.');
     }
 
     public function setDefault()

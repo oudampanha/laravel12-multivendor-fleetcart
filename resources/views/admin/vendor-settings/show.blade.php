@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Vendor Setting Details: {{ $vendor_setting->name ?? $vendor_setting->title ?? 'N/A' }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor-settings.edit', $vendor_setting->id) }}" class="btn btn-warning">
+          @if (Route::has('admin.vendor-settings.edit'))
+<a href="{{ route('admin.vendor-settings.edit', $vendor_setting->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
+@endif
           <a href="{{ route('admin.vendor-settings.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>

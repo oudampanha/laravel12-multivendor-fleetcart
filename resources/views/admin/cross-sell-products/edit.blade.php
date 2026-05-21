@@ -15,7 +15,8 @@
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.cross_sell_products.update', $item->id ?? 0) }}" method="POST" enctype="multipart/form-data">
+        @if (Route::has('admin.cross_sell_products.update'))
+<form action="{{ route('admin.cross_sell_products.update', $item->id ?? 0) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           
@@ -64,6 +65,7 @@
             </a>
           </div>
         </form>
+@endif
       </div>
     </div>
   </div>

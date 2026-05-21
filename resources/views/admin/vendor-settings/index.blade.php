@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Vendor Settings Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.vendor-settings.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.vendor-settings.create'))
+<a href="{{ route('admin.vendor-settings.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -46,23 +48,24 @@
                     <a href="{{ route('admin.vendor-settings.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.vendor-settings.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                    @if (Route::has('admin.vendor-settings.edit'))
+<a href="{{ route('admin.vendor-settings.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.vendor-settings.destroy', $item->id) }}" method="POST" class="d-inline">
+@endif
+                    @if (Route::has('admin.vendor-settings.destroy'))
+<form action="{{ route('admin.vendor-settings.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this item?')">
                         <i class="fas fa-trash"></i>
                       </button>
                     </form>
+@endif
                   </div>
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="5" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

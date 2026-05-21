@@ -18,7 +18,7 @@ class VendorNotificationController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-notifications.index', compact('vendorNotifications'));
+        return view('admin.vendor_notifications.index', compact('vendorNotifications'));
     }
 
     public function create()
@@ -107,7 +107,7 @@ class VendorNotificationController extends BaseController
     {
         $vendorNotifications = Vendor::where('vendor_id', $vendor)->paginate(15);
 
-        return view('admin.vendor-notifications.index', compact('vendorNotifications'));
+        return view('admin.vendor_notifications.index', compact('vendorNotifications'));
     }
 
     public function markAllRead(Vendor $vendorNotification)

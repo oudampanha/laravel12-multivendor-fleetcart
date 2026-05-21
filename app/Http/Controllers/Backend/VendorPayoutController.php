@@ -22,11 +22,11 @@ class VendorPayoutController extends BaseController
 
     public function index()
     {
-        $payouts = VendorPayout::with('vendor')
+        $vendorPayouts = VendorPayout::with('vendor')
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor-payouts.index', compact('payouts'));
+        return view('admin.vendor_payouts.index', compact('vendorPayouts'));
     }
 
     public function create()
@@ -35,7 +35,7 @@ class VendorPayoutController extends BaseController
             ->where('balance', '>', 0)
             ->get();
 
-        return view('admin.vendor-payouts.create', compact('vendors'));
+        return view('admin.vendor_payouts.create', compact('vendors'));
     }
 
     public function store(Request $request)
@@ -154,29 +154,42 @@ class VendorPayoutController extends BaseController
 
     public function completed()
     {
-        $vendorPayouts = Vendor::where('status', 'completed')->paginate(15);
+        $vendorPayouts = VendorPayout::with('vendor')
+            ->where('status', 'completed')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
-        return view('admin.vendor-payouts.index', compact('vendorPayouts'));
+        return view('admin.vendor_payouts.index', compact('vendorPayouts'));
     }
 
-    public function markPaid(Vendor $vendorPayout)
+    public function markPaid(VendorPayout $vendorPayout)
     {
-        $vendorPayout->update(['is_done' => true]);
+        if ($vendorPayout->status === 'completed') {
+            return redirect()->back()->with('error', 'This payout is already completed.');
+        }
 
-        return redirect()->back()->with('success', 'Marked successfully.');
+        $vendorPayout->update([
+            'status' => 'completed',
+            'paid_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Payout marked as paid successfully.');
     }
 
     public function pending()
     {
-        $vendorPayouts = Vendor::where('status', 'pending')->paginate(15);
+        $vendorPayouts = VendorPayout::with('vendor')
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
-        return view('admin.vendor-payouts.index', compact('vendorPayouts'));
+        return view('admin.vendor_payouts.index', compact('vendorPayouts'));
     }
 
-    public function reject(Vendor $vendorPayout)
+    public function reject(VendorPayout $vendorPayout)
     {
-        $vendorPayout->update(['status' => 'rejected']);
+        $vendorPayout->update(['status' => 'failed']);
 
-        return redirect()->back()->with('success', 'Vendor rejected successfully.');
+        return redirect()->back()->with('success', 'Vendor payout rejected successfully.');
     }
 }

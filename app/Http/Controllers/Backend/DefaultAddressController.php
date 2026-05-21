@@ -29,7 +29,7 @@ class DefaultAddressController extends BaseController
 
         $defaultAddresses = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.default-addresses.index', compact('defaultAddresses'));
+        return view('admin.default_addresses.index', compact('defaultAddresses'));
     }
 
     public function store(Request $request, User $customer)

@@ -40,7 +40,7 @@ class OrderProductOptionController extends BaseController
 
         OrderProductOption::create($validated);
 
-        return redirect()->route('admin.order_product_options.index')->with('success', 'Order Product Option created successfully.');
+        return redirect()->route('admin.order-product-options.index')->with('success', 'Order Product Option created successfully.');
     }
 
     public function show(OrderProductOption $orderProductOption)
@@ -68,13 +68,13 @@ class OrderProductOptionController extends BaseController
 
         $orderProductOption->update($validated);
 
-        return redirect()->route('admin.order_product_options.index')->with('success', 'Order Product Option updated successfully.');
+        return redirect()->route('admin.order-product-options.index')->with('success', 'Order Product Option updated successfully.');
     }
 
     public function destroy(OrderProductOption $orderProductOption)
     {
         $orderProductOption->delete();
 
-        return redirect()->route('admin.order_product_options.index')->with('success', 'Order Product Option deleted successfully.');
+        return redirect()->route('admin.order-product-options.index')->with('success', 'Order Product Option deleted successfully.');
     }
 }

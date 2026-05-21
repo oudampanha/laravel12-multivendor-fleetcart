@@ -528,6 +528,58 @@ class PermissionTableSeeder extends Seeder
             ['title' => 'order_product_variation_delete', 'group' => 'Order Product Variation'],
             ['title' => 'order_product_variation_access', 'group' => 'Order Product Variation'],
 
+            // Inventory / Stock Management
+            ['title' => 'inventory_management_access', 'group' => 'Inventory Management'],
+
+            ['title' => 'warehouse_create', 'group' => 'Warehouse'],
+            ['title' => 'warehouse_edit', 'group' => 'Warehouse'],
+            ['title' => 'warehouse_show', 'group' => 'Warehouse'],
+            ['title' => 'warehouse_delete', 'group' => 'Warehouse'],
+            ['title' => 'warehouse_access', 'group' => 'Warehouse'],
+
+            ['title' => 'supplier_create', 'group' => 'Supplier'],
+            ['title' => 'supplier_edit', 'group' => 'Supplier'],
+            ['title' => 'supplier_show', 'group' => 'Supplier'],
+            ['title' => 'supplier_delete', 'group' => 'Supplier'],
+            ['title' => 'supplier_access', 'group' => 'Supplier'],
+
+            ['title' => 'product_stock_edit', 'group' => 'Product Stock'],
+            ['title' => 'product_stock_show', 'group' => 'Product Stock'],
+            ['title' => 'product_stock_access', 'group' => 'Product Stock'],
+
+            ['title' => 'stock_movement_show', 'group' => 'Stock Movement'],
+            ['title' => 'stock_movement_access', 'group' => 'Stock Movement'],
+
+            ['title' => 'stock_adjustment_create', 'group' => 'Stock Adjustment'],
+            ['title' => 'stock_adjustment_edit', 'group' => 'Stock Adjustment'],
+            ['title' => 'stock_adjustment_show', 'group' => 'Stock Adjustment'],
+            ['title' => 'stock_adjustment_delete', 'group' => 'Stock Adjustment'],
+            ['title' => 'stock_adjustment_access', 'group' => 'Stock Adjustment'],
+
+            ['title' => 'stock_transfer_create', 'group' => 'Stock Transfer'],
+            ['title' => 'stock_transfer_edit', 'group' => 'Stock Transfer'],
+            ['title' => 'stock_transfer_show', 'group' => 'Stock Transfer'],
+            ['title' => 'stock_transfer_delete', 'group' => 'Stock Transfer'],
+            ['title' => 'stock_transfer_access', 'group' => 'Stock Transfer'],
+
+            ['title' => 'purchase_order_create', 'group' => 'Purchase Order'],
+            ['title' => 'purchase_order_edit', 'group' => 'Purchase Order'],
+            ['title' => 'purchase_order_show', 'group' => 'Purchase Order'],
+            ['title' => 'purchase_order_delete', 'group' => 'Purchase Order'],
+            ['title' => 'purchase_order_access', 'group' => 'Purchase Order'],
+
+            ['title' => 'goods_receipt_create', 'group' => 'Goods Receipt'],
+            ['title' => 'goods_receipt_edit', 'group' => 'Goods Receipt'],
+            ['title' => 'goods_receipt_show', 'group' => 'Goods Receipt'],
+            ['title' => 'goods_receipt_delete', 'group' => 'Goods Receipt'],
+            ['title' => 'goods_receipt_access', 'group' => 'Goods Receipt'],
+
+            ['title' => 'stock_take_create', 'group' => 'Stock Take'],
+            ['title' => 'stock_take_edit', 'group' => 'Stock Take'],
+            ['title' => 'stock_take_show', 'group' => 'Stock Take'],
+            ['title' => 'stock_take_delete', 'group' => 'Stock Take'],
+            ['title' => 'stock_take_access', 'group' => 'Stock Take'],
+
             // Special Permissions for Advanced Features
             ['title' => 'can_approve_vendors', 'group' => 'Vendor Management'],
             ['title' => 'can_approve_products', 'group' => 'Product Management'],

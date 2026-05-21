@@ -12,9 +12,11 @@
           <a href="{{ route('admin.order-products.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
-          <a href="{{ route('admin.order_products.edit', $item->id ?? 0) }}" class="btn btn-warning">
+          @if (Route::has('admin.order_products.edit'))
+<a href="{{ route('admin.order_products.edit', $item->id ?? 0) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit Order Product
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -52,16 +54,20 @@
         <div class="row mt-4">
           <div class="col-12">
             <div class="btn-group">
-              <a href="{{ route('admin.order_products.edit', $item->id ?? 0) }}" class="btn btn-warning">
+              @if (Route::has('admin.order_products.edit'))
+<a href="{{ route('admin.order_products.edit', $item->id ?? 0) }}" class="btn btn-warning">
                 <i class="fas fa-edit"></i> Edit Order Product
               </a>
-              <form action="{{ route('admin.order_products.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
+@endif
+              @if (Route::has('admin.order_products.destroy'))
+<form action="{{ route('admin.order_products.destroy', $item->id ?? 0) }}" method="POST" class="d-inline ml-2">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this record?')">
                   <i class="fas fa-trash"></i> Delete Order Product
                 </button>
               </form>
+@endif
             </div>
           </div>
         </div>

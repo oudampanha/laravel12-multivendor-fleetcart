@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Reminders Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.reminders.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.reminders.create'))
+<a href="{{ route('admin.reminders.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Reminder
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -39,12 +41,16 @@
                 <td>{{ $item->created_at ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.reminders.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.reminders.show'))
+<a href="{{ route('admin.reminders.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.reminders.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.reminders.edit'))
+<a href="{{ route('admin.reminders.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
+@endif
                     <form action="{{ route('admin.reminders.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
@@ -56,9 +62,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="7" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

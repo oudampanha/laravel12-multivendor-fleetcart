@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Updater Scripts Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.updater_scripts.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.updater_scripts.create'))
+<a href="{{ route('admin.updater_scripts.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Updater Script
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -39,26 +41,29 @@
                 <td>{{ $item->output ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.updater_scripts.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.updater_scripts.show'))
+<a href="{{ route('admin.updater_scripts.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.updater_scripts.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.updater_scripts.edit'))
+<a href="{{ route('admin.updater_scripts.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.updater_scripts.destroy', $item->id) }}" method="POST" class="d-inline">
+@endif
+                    @if (Route::has('admin.updater_scripts.destroy'))
+<form action="{{ route('admin.updater_scripts.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                         <i class="fas fa-trash"></i>
                       </button>
                     </form>
+@endif
                   </div>
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="7" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

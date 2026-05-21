@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Throttles Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.throttles.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.throttles.create'))
+<a href="{{ route('admin.throttles.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Throttle
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -39,26 +41,29 @@
                 <td>{{ $item->last_activity_at ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.throttles.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.throttles.show'))
+<a href="{{ route('admin.throttles.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.throttles.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.throttles.edit'))
+<a href="{{ route('admin.throttles.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
-                    <form action="{{ route('admin.throttles.destroy', $item->id) }}" method="POST" class="d-inline">
+@endif
+                    @if (Route::has('admin.throttles.destroy'))
+<form action="{{ route('admin.throttles.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
                       <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
                         <i class="fas fa-trash"></i>
                       </button>
                     </form>
+@endif
                   </div>
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="7" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

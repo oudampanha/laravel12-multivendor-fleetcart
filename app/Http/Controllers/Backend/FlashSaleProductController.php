@@ -19,7 +19,7 @@ class FlashSaleProductController extends BaseController
             ->orderBy('position', 'asc')
             ->paginate(15);
 
-        return view('admin.flash-sale-products.index', compact('flashSaleProducts'));
+        return view('admin.flash_sale_products.index', compact('flashSaleProducts'));
     }
 
     public function create()

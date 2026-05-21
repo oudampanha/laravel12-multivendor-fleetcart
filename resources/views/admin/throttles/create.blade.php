@@ -9,13 +9,16 @@
       <div class="card-header">
         <h4 class="card-title">Create New Throttle</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.throttles.index') }}" class="btn btn-secondary">
+          @if (Route::has('admin.throttles.index'))
+<a href="{{ route('admin.throttles.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.throttles.store') }}" method="POST" enctype="multipart/form-data">
+        @if (Route::has('admin.throttles.store'))
+<form action="{{ route('admin.throttles.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="form-group">
@@ -58,11 +61,14 @@
             <button type="submit" class="btn btn-primary">
               <i class="fas fa-save"></i> Create Throttle
             </button>
-            <a href="{{ route('admin.throttles.index') }}" class="btn btn-secondary ml-2">
+            @if (Route::has('admin.throttles.index'))
+<a href="{{ route('admin.throttles.index') }}" class="btn btn-secondary ml-2">
               <i class="fas fa-times"></i> Cancel
             </a>
+@endif
           </div>
         </form>
+@endif
       </div>
     </div>
   </div>

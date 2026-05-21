@@ -15,7 +15,7 @@ class OtpVerificationController extends BaseController
     {
         $otpVerifications = OtpVerification::orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.otp-verifications.index', compact('otpVerifications'));
+        return view('admin.otp_verifications.index', compact('otpVerifications'));
     }
 
     public function create()

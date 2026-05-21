@@ -2,43 +2,31 @@
 
 use App\Http\Controllers\Backend\ActivationController;
 use App\Http\Controllers\Backend\AddressController;
-use App\Http\Controllers\Backend\AttributeController;
-use App\Http\Controllers\Backend\AttributeSetController;
-use App\Http\Controllers\Backend\AttributeValueController;
 use App\Http\Controllers\Backend\BlogCategoryController;
 use App\Http\Controllers\Backend\BlogPostController;
 use App\Http\Controllers\Backend\BlogTagController;
-use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CartController;
-use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CouponController;
-use App\Http\Controllers\Backend\CrossSellProductController;
 use App\Http\Controllers\Backend\CurrencyRateController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\DefaultAddressController;
 use App\Http\Controllers\Backend\EntityMediaController;
 use App\Http\Controllers\Backend\FlashSaleController;
 use App\Http\Controllers\Backend\FlashSaleProductController;
+use App\Http\Controllers\Backend\GoodsReceiptController;
+use App\Http\Controllers\Backend\InventoryDashboardController;
 use App\Http\Controllers\Backend\LanguageLineController;
 use App\Http\Controllers\Backend\MediaController;
 use App\Http\Controllers\Backend\MenuController;
 use App\Http\Controllers\Backend\MenuItemController;
 use App\Http\Controllers\Backend\MetaDataController;
-use App\Http\Controllers\Backend\OptionController;
-use App\Http\Controllers\Backend\OptionValueController;
-use App\Http\Controllers\Backend\OrderController;
-use App\Http\Controllers\Backend\OrderDownloadController;
-use App\Http\Controllers\Backend\OrderProductController;
-use App\Http\Controllers\Backend\OrderProductOptionController;
-use App\Http\Controllers\Backend\OrderProductVariationController;
 use App\Http\Controllers\Backend\OtpVerificationController;
 use App\Http\Controllers\Backend\PageController;
 use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\PersistenceController;
-use App\Http\Controllers\Backend\ProductAttributeController;
 use App\Http\Controllers\Backend\ProductController;
-use App\Http\Controllers\Backend\ProductVariantController;
-use App\Http\Controllers\Backend\RelatedProductController;
+use App\Http\Controllers\Backend\ProductStockController;
+use App\Http\Controllers\Backend\PurchaseOrderController;
 use App\Http\Controllers\Backend\ReminderController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\ReviewController;
@@ -47,7 +35,11 @@ use App\Http\Controllers\Backend\SearchTermController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\SliderSlideController;
-use App\Http\Controllers\Backend\TagController;
+use App\Http\Controllers\Backend\StockAdjustmentController;
+use App\Http\Controllers\Backend\StockMovementController;
+use App\Http\Controllers\Backend\StockTakeController;
+use App\Http\Controllers\Backend\StockTransferController;
+use App\Http\Controllers\Backend\SupplierController;
 use App\Http\Controllers\Backend\TaxClassController;
 use App\Http\Controllers\Backend\TaxRateController;
 use App\Http\Controllers\Backend\ThrottleController;
@@ -55,10 +47,7 @@ use App\Http\Controllers\Backend\TransactionController;
 use App\Http\Controllers\Backend\TranslationController;
 use App\Http\Controllers\Backend\TranslationManagementController;
 use App\Http\Controllers\Backend\UpdaterScriptController;
-use App\Http\Controllers\Backend\UpSellProductController;
 use App\Http\Controllers\Backend\UserController;
-use App\Http\Controllers\Backend\VariationController;
-use App\Http\Controllers\Backend\VariationValueController;
 use App\Http\Controllers\Backend\VendorController;
 use App\Http\Controllers\Backend\VendorNotificationController;
 use App\Http\Controllers\Backend\VendorOrderController;
@@ -67,6 +56,7 @@ use App\Http\Controllers\Backend\VendorReviewController;
 use App\Http\Controllers\Backend\VendorSettingController;
 use App\Http\Controllers\Backend\VendorShippingZoneController;
 use App\Http\Controllers\Backend\VendorWithdrawalController;
+use App\Http\Controllers\Backend\WarehouseController;
 use App\Http\Controllers\Backend\WishListController;
 use Illuminate\Support\Facades\Route;
 
@@ -129,9 +119,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
 
     // Permissions
+    Route::get('permissions/groups', [PermissionController::class, 'groups'])->name('permissions.groups');
     Route::resource('permissions', PermissionController::class);
     Route::post('permissions/{permission}/toggle-status', [PermissionController::class, 'toggleStatus'])->name('permissions.toggle-status');
-    Route::get('permissions/groups', [PermissionController::class, 'groups'])->name('permissions.groups');
 
     // OTP Verifications
     Route::get('otp-verifications', [OtpVerificationController::class, 'index'])->name('otp-verifications.index');
@@ -214,140 +204,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::get('products/approved', [ProductController::class, 'approved'])->name('products.approved');
     Route::get('products/rejected', [ProductController::class, 'rejected'])->name('products.rejected');
     Route::resource('products', ProductController::class);
-    Route::post('products/{product}/approve', [ProductController::class, 'approve'])->name('products.approve');
-    Route::post('products/{product}/reject', [ProductController::class, 'reject'])->name('products.reject');
-    Route::post('products/{product}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
-    Route::post('products/{product}/duplicate', [ProductController::class, 'duplicate'])->name('products.duplicate');
-    Route::get('products/{product}/variants', [ProductController::class, 'variants'])->name('products.variants');
-    Route::get('products/{product}/attributes', [ProductController::class, 'attributes'])->name('products.attributes');
-    Route::get('products/{product}/options', [ProductController::class, 'options'])->name('products.options');
-    Route::get('products/{product}/media', [ProductController::class, 'media'])->name('products.media');
-    Route::post('products/{product}/media', [ProductController::class, 'uploadMedia'])->name('products.media.upload');
-    Route::delete('products/{product}/media/{media}', [ProductController::class, 'deleteMedia'])->name('products.media.delete');
-
-    // Product Variants
-    Route::resource('product-variants', ProductVariantController::class)->except(['index']);
-    Route::post('product-variants/{productVariant}/toggle-status', [ProductVariantController::class, 'toggleStatus'])->name('product-variants.toggle-status');
-    Route::post('product-variants/{productVariant}/set-default', [ProductVariantController::class, 'setDefault'])->name('product-variants.set-default');
-
-    // Categories
-    Route::resource('categories', CategoryController::class);
-    Route::post('categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
-    Route::post('categories/{category}/toggle-searchable', [CategoryController::class, 'toggleSearchable'])->name('categories.toggle-searchable');
-    Route::get('categories/tree', [CategoryController::class, 'tree'])->name('categories.tree');
-    Route::post('categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
-    Route::get('categories/{category}/products', [CategoryController::class, 'products'])->name('categories.products');
-
-    // Brands
-    Route::resource('brands', BrandController::class);
-    Route::post('brands/{brand}/toggle-status', [BrandController::class, 'toggleStatus'])->name('brands.toggle-status');
-    Route::get('brands/{brand}/products', [BrandController::class, 'products'])->name('brands.products');
-
-    // Attributes
-    Route::get('attributes/categories', [AttributeController::class, 'getCategories'])->name('attributes.categories');
-    Route::resource('attributes', AttributeController::class);
-    Route::post('attributes/{attribute}/toggle-filterable', [AttributeController::class, 'toggleFilterable'])->name('attributes.toggle-filterable');
-    Route::get('attributes/{attribute}/values', [AttributeController::class, 'values'])->name('attributes.values');
-    Route::post('attributes/{attribute}/values', [AttributeController::class, 'storeValue'])->name('attributes.values.store');
-    Route::delete('attributes/{attribute}/values/{attributeValue}', [AttributeController::class, 'destroyValue'])->name('attributes.values.destroy');
-    Route::post('attributes/values/reorder', [AttributeController::class, 'reorderValues'])->name('attributes.values.reorder');
-
-    // Attribute Sets
-    Route::resource('attribute-sets', AttributeSetController::class);
-    Route::get('attribute-sets/{attributeSet}/attributes', [AttributeSetController::class, 'attributes'])->name('attribute-sets.attributes');
-    Route::post('attribute-sets/{attributeSet}/attributes', [AttributeSetController::class, 'attachAttribute'])->name('attribute-sets.attributes.attach');
-    Route::delete('attribute-sets/{attributeSet}/attributes/{attribute}', [AttributeSetController::class, 'detachAttribute'])->name('attribute-sets.attributes.detach');
-
-    // Attribute Values
-    Route::resource('attribute-values', AttributeValueController::class)->except(['index', 'show']);
-    Route::post('attribute-values/reorder', [AttributeValueController::class, 'reorder'])->name('attribute-values.reorder');
-
-    // Product Attributes
-    Route::get('product-attributes/by-product/{product}', [ProductAttributeController::class, 'byProduct'])->name('product-attributes.by-product');
-    Route::get('product-attributes/by-attribute/{attribute}', [ProductAttributeController::class, 'byAttribute'])->name('product-attributes.by-attribute');
-    Route::resource('product-attributes', ProductAttributeController::class);
-
-    // Variations
-    Route::resource('variations', VariationController::class);
-    Route::post('variations/{variation}/toggle-global', [VariationController::class, 'toggleGlobal'])->name('variations.toggle-global');
-    Route::get('variations/{variation}/values', [VariationController::class, 'values'])->name('variations.values');
-    Route::post('variations/{variation}/values', [VariationController::class, 'storeValue'])->name('variations.values.store');
-    Route::delete('variations/{variation}/values/{variationValue}', [VariationController::class, 'destroyValue'])->name('variations.values.destroy');
-    Route::post('variations/values/reorder', [VariationController::class, 'reorderValues'])->name('variations.values.reorder');
-
-    // Variation Values
-    Route::resource('variation-values', VariationValueController::class)->except(['index', 'show']);
-    Route::post('variation-values/reorder', [VariationValueController::class, 'reorder'])->name('variation-values.reorder');
-
-    // Options
-    Route::resource('options', OptionController::class);
-    Route::post('options/{option}/toggle-required', [OptionController::class, 'toggleRequired'])->name('options.toggle-required');
-    Route::post('options/{option}/toggle-global', [OptionController::class, 'toggleGlobal'])->name('options.toggle-global');
-    Route::get('options/{option}/values', [OptionController::class, 'values'])->name('options.values');
-    Route::post('options/{option}/values', [OptionController::class, 'storeValue'])->name('options.values.store');
-    Route::delete('options/{option}/values/{optionValue}', [OptionController::class, 'destroyValue'])->name('options.values.destroy');
-    Route::post('options/values/reorder', [OptionController::class, 'reorderValues'])->name('options.values.reorder');
-
-    // Option Values
-    Route::resource('option-values', OptionValueController::class)->except(['index', 'show']);
-    Route::post('option-values/reorder', [OptionValueController::class, 'reorder'])->name('option-values.reorder');
-
-    // Tags
-    Route::resource('tags', TagController::class);
-    Route::get('tags/{tag}/products', [TagController::class, 'products'])->name('tags.products');
-    Route::post('tags/merge', [TagController::class, 'merge'])->name('tags.merge');
-
-    // Related Products
-    Route::get('related-products', [RelatedProductController::class, 'index'])->name('related-products.index');
-    Route::post('related-products', [RelatedProductController::class, 'store'])->name('related-products.store');
-    Route::delete('related-products/{product}/{relatedProduct}', [RelatedProductController::class, 'destroy'])->name('related-products.destroy');
-
-    // Up Sell Products
-    Route::get('up-sell-products', [UpSellProductController::class, 'index'])->name('up-sell-products.index');
-    Route::post('up-sell-products', [UpSellProductController::class, 'store'])->name('up-sell-products.store');
-    Route::delete('up-sell-products/{product}/{upSellProduct}', [UpSellProductController::class, 'destroy'])->name('up-sell-products.destroy');
-
-    // Cross Sell Products
-    Route::get('cross-sell-products', [CrossSellProductController::class, 'index'])->name('cross-sell-products.index');
-    Route::post('cross-sell-products', [CrossSellProductController::class, 'store'])->name('cross-sell-products.store');
-    Route::delete('cross-sell-products/{product}/{crossSellProduct}', [CrossSellProductController::class, 'destroy'])->name('cross-sell-products.destroy');
-
-    // =============================================================================
-    // ORDER MANAGEMENT
-    // =============================================================================
-
-    // Orders (static GETs declared first so they win over resource show route)
-    Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
-    Route::resource('orders', OrderController::class);
-    Route::post('orders/{order}/update-status', [OrderController::class, 'updateStatus'])->name('orders.update-status');
-    Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
-    Route::get('orders/{order}/download-invoice', [OrderController::class, 'downloadInvoice'])->name('orders.download-invoice');
-    Route::post('orders/{order}/send-invoice', [OrderController::class, 'sendInvoice'])->name('orders.send-invoice');
-    Route::get('orders/{order}/tracking', [OrderController::class, 'tracking'])->name('orders.tracking');
-    Route::post('orders/{order}/tracking', [OrderController::class, 'updateTracking'])->name('orders.tracking.update');
-    Route::get('orders/by-status/{status}', [OrderController::class, 'byStatus'])->name('orders.by-status');
-    Route::get('orders/by-payment-method/{method}', [OrderController::class, 'byPaymentMethod'])->name('orders.by-payment-method');
-    Route::post('orders/bulk-update-status', [OrderController::class, 'bulkUpdateStatus'])->name('orders.bulk-update-status');
-
-    // Order Products
-    Route::get('order-products', [OrderProductController::class, 'index'])->name('order-products.index');
-    Route::get('order-products/{orderProduct}', [OrderProductController::class, 'show'])->name('order-products.show');
-    Route::post('order-products/{orderProduct}/update-vendor-status', [OrderProductController::class, 'updateVendorStatus'])->name('order-products.update-vendor-status');
-    Route::get('order-products/by-vendor/{vendor}', [OrderProductController::class, 'byVendor'])->name('order-products.by-vendor');
-    Route::get('order-products/by-status/{status}', [OrderProductController::class, 'byStatus'])->name('order-products.by-status');
-
-    // Order Downloads
-    Route::resource('order-downloads', OrderDownloadController::class);
-
-    // Order Product Options
-    Route::resource('order-product-options', OrderProductOptionController::class);
-
-    // Order Product Variations
-    Route::resource('order-product-variations', OrderProductVariationController::class);
-
-    // Transactions (static GETs declared first so they win over resource show route)
-    Route::get('transactions/failed', [TransactionController::class, 'failed'])->name('transactions.failed');
-    Route::get('transactions/refunded', [TransactionController::class, 'refunded'])->name('transactions.refunded');
     Route::resource('transactions', TransactionController::class)->except(['create', 'store', 'edit', 'update']);
     Route::get('transactions/{transaction}/details', [TransactionController::class, 'details'])->name('transactions.details');
     Route::post('transactions/{transaction}/refund', [TransactionController::class, 'refund'])->name('transactions.refund');
@@ -608,10 +464,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
 
     // Activations
     Route::get('activations', [ActivationController::class, 'index'])->name('activations.index');
-    Route::get('activations/{activation}', [ActivationController::class, 'show'])->name('activations.show');
-    Route::delete('activations/{activation}', [ActivationController::class, 'destroy'])->name('activations.destroy');
     Route::get('activations/pending', [ActivationController::class, 'pending'])->name('activations.pending');
     Route::get('activations/completed', [ActivationController::class, 'completed'])->name('activations.completed');
+    Route::get('activations/{activation}', [ActivationController::class, 'show'])->name('activations.show');
+    Route::delete('activations/{activation}', [ActivationController::class, 'destroy'])->name('activations.destroy');
     Route::post('activations/cleanup', [ActivationController::class, 'cleanup'])->name('activations.cleanup');
 
     // Persistences
@@ -701,4 +557,56 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('reports/export/customers', [ReportController::class, 'exportCustomers'])->name('reports.export.customers');
     Route::post('reports/export/vendors', [ReportController::class, 'exportVendors'])->name('reports.export.vendors');
     Route::post('reports/export/orders', [ReportController::class, 'exportOrders'])->name('reports.export.orders');
+
+    // =============================================================================
+    // INVENTORY / STOCK MANAGEMENT
+    // =============================================================================
+
+    // Inventory Dashboard
+    Route::get('inventory', [InventoryDashboardController::class, 'index'])->name('inventory.dashboard');
+
+    // Warehouses
+    Route::resource('warehouses', WarehouseController::class);
+
+    // Suppliers
+    Route::resource('suppliers', SupplierController::class);
+
+    // Product Stocks (on-hand)
+    Route::get('product-stocks/low-stock', [ProductStockController::class, 'lowStock'])->name('product-stocks.low-stock');
+    Route::get('product-stocks/out-of-stock', [ProductStockController::class, 'outOfStock'])->name('product-stocks.out-of-stock');
+    Route::get('product-stocks', [ProductStockController::class, 'index'])->name('product-stocks.index');
+    Route::get('product-stocks/{productStock}', [ProductStockController::class, 'show'])->name('product-stocks.show');
+    Route::get('product-stocks/{productStock}/edit', [ProductStockController::class, 'edit'])->name('product-stocks.edit');
+    Route::put('product-stocks/{productStock}', [ProductStockController::class, 'update'])->name('product-stocks.update');
+
+    // Stock Movements (read-only ledger)
+    Route::get('stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
+    Route::get('stock-movements/{stockMovement}', [StockMovementController::class, 'show'])->name('stock-movements.show');
+
+    // Stock Adjustments
+    Route::post('stock-adjustments/{stockAdjustment}/post', [StockAdjustmentController::class, 'post'])->name('stock-adjustments.post');
+    Route::post('stock-adjustments/{stockAdjustment}/cancel', [StockAdjustmentController::class, 'cancel'])->name('stock-adjustments.cancel');
+    Route::resource('stock-adjustments', StockAdjustmentController::class);
+
+    // Stock Transfers
+    Route::post('stock-transfers/{stockTransfer}/ship', [StockTransferController::class, 'ship'])->name('stock-transfers.ship');
+    Route::post('stock-transfers/{stockTransfer}/receive', [StockTransferController::class, 'receive'])->name('stock-transfers.receive');
+    Route::post('stock-transfers/{stockTransfer}/cancel', [StockTransferController::class, 'cancel'])->name('stock-transfers.cancel');
+    Route::resource('stock-transfers', StockTransferController::class);
+
+    // Purchase Orders
+    Route::post('purchase-orders/{purchaseOrder}/send', [PurchaseOrderController::class, 'send'])->name('purchase-orders.send');
+    Route::post('purchase-orders/{purchaseOrder}/approve', [PurchaseOrderController::class, 'approve'])->name('purchase-orders.approve');
+    Route::post('purchase-orders/{purchaseOrder}/cancel', [PurchaseOrderController::class, 'cancel'])->name('purchase-orders.cancel');
+    Route::resource('purchase-orders', PurchaseOrderController::class);
+
+    // Goods Receipts (GRN)
+    Route::post('goods-receipts/{goodsReceipt}/post', [GoodsReceiptController::class, 'post'])->name('goods-receipts.post');
+    Route::post('goods-receipts/{goodsReceipt}/cancel', [GoodsReceiptController::class, 'cancel'])->name('goods-receipts.cancel');
+    Route::resource('goods-receipts', GoodsReceiptController::class);
+
+    // Stock Takes / Cycle Counts
+    Route::post('stock-takes/{stockTake}/complete', [StockTakeController::class, 'complete'])->name('stock-takes.complete');
+    Route::post('stock-takes/{stockTake}/cancel', [StockTakeController::class, 'cancel'])->name('stock-takes.cancel');
+    Route::resource('stock-takes', StockTakeController::class);
 });

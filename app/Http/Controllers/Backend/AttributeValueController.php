@@ -23,7 +23,7 @@ class AttributeValueController extends BaseController
     {
         $attributes = Attribute::all();
 
-        return view('admin.attribute-values.create', compact('attributes'));
+        return view('admin.attribute_values.create', compact('attributes'));
     }
 
     public function store(Request $request)
@@ -35,7 +35,7 @@ class AttributeValueController extends BaseController
 
         AttributeValue::create($validated);
 
-        return redirect()->route('admin.attribute_values.index')->with('success', 'Attribute Value created successfully.');
+        return back()->with('success', 'Attribute Value created successfully.');
     }
 
     public function show(AttributeValue $attributeValue)
@@ -61,14 +61,14 @@ class AttributeValueController extends BaseController
 
         $attributeValue->update($validated);
 
-        return redirect()->route('admin.attribute_values.index')->with('success', 'Attribute Value updated successfully.');
+        return back()->with('success', 'Attribute Value updated successfully.');
     }
 
     public function destroy(AttributeValue $attributeValue)
     {
         $attributeValue->delete();
 
-        return redirect()->route('admin.attribute_values.index')->with('success', 'Attribute Value deleted successfully.');
+        return back()->with('success', 'Attribute Value deleted successfully.');
     }
 
     public function reorder()

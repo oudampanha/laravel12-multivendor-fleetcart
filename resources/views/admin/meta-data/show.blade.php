@@ -9,12 +9,16 @@
       <div class="card-header">
         <h4 class="card-title">Meta Data Details: {{ $meta_data->name ?? $meta_data->title ?? 'N/A' }}</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.meta-data.edit', $meta_data->id) }}" class="btn btn-warning">
+          @if (Route::has('admin.meta-data.edit'))
+<a href="{{ route('admin.meta-data.edit', $meta_data->id) }}" class="btn btn-warning">
             <i class="fas fa-edit"></i> Edit
           </a>
-          <a href="{{ route('admin.meta-data.index') }}" class="btn btn-secondary">
+@endif
+          @if (Route::has('admin.meta-data.index'))
+<a href="{{ route('admin.meta-data.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">

@@ -8,7 +8,7 @@
     <div class="card">
       <div class="card-header">
         <h4 class="card-title">Translations Management</h4>
-        @if(Route::has('admin.translation-management.create'))
+        @if (Route::has('admin.translation-management.create'))
         <div class="card-tools">
           <a href="{{ route('admin.translation-management.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Translation
@@ -44,9 +44,11 @@
                     <a href="{{ route('admin.translations.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.translations.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                    @if (Route::has('admin.translations.edit'))
+<a href="{{ route('admin.translations.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
+@endif
                     <form action="{{ route('admin.translations.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
@@ -58,9 +60,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="7" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

@@ -13,7 +13,7 @@
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
           @if(Route::has('admin.blog_categories.edit'))
-            <a href="{{ route('admin.blog_categories.edit', $blogCategory->id) }}" class="btn btn-warning">
+            <a href="{{ route('admin.blog-categories.edit', $blogCategory->id) }}" class="btn btn-warning">
               <i class="fas fa-edit"></i> Edit
             </a>
           @endif

@@ -9,9 +9,11 @@
       <div class="card-header">
         <h4 class="card-title">Entity Media Management</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.entity_media.create') }}" class="btn btn-primary">
+          @if (Route::has('admin.entity_media.create'))
+<a href="{{ route('admin.entity_media.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Add New Entity Media
           </a>
+@endif
         </div>
       </div>
       <div class="card-body">
@@ -39,12 +41,16 @@
                 <td>{{ $item->sort_order ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    <a href="{{ route('admin.entity_media.show', $item->id) }}" class="btn btn-sm btn-info">
+                    @if (Route::has('admin.entity_media.show'))
+<a href="{{ route('admin.entity_media.show', $item->id) }}" class="btn btn-sm btn-info">
                       <i class="fas fa-eye"></i>
                     </a>
-                    <a href="{{ route('admin.entity_media.edit', $item->id) }}" class="btn btn-sm btn-warning">
+@endif
+                    @if (Route::has('admin.entity_media.edit'))
+<a href="{{ route('admin.entity_media.edit', $item->id) }}" class="btn btn-sm btn-warning">
                       <i class="fas fa-edit"></i>
                     </a>
+@endif
                     <form action="{{ route('admin.entity-media.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
@@ -56,9 +62,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="7" class="text-center">No records found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>

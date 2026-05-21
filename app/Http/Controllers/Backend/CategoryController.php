@@ -112,11 +112,12 @@ class CategoryController extends BaseController
             'is_searchable' => 'boolean',
             'is_active' => 'boolean',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_url' => 'nullable|url',
+            'image' => 'nullable',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_url' => 'nullable|string|max:2048',
         ]);
 
-        $data = $request->except(['image', 'image_url', 'old_image', 'name', 'description']);
+        $data = $request->except(['image', 'image_file', 'image_url', 'old_image', 'name', 'description']);
 
         // Generate slug if not provided
         if (empty($data['slug'])) {
@@ -136,8 +137,8 @@ class CategoryController extends BaseController
         $data['is_active'] = $request->has('is_active') ? 1 : 0;
 
         // Handle image upload
-        if ($request->hasFile('image')) {
-            $data['image'] = $this->uploadImage($request, 'image', 'uploads/categories', 'category_');
+        if ($request->hasFile('image_file')) {
+            $data['image'] = $this->uploadImage($request, 'image_file', 'uploads/categories', 'category_');
         } elseif ($request->filled('image_url')) {
             $imageUrl = $request->image_url;
             if (str_contains($imageUrl, '/storage/')) {
@@ -239,11 +240,12 @@ class CategoryController extends BaseController
             'is_searchable' => 'boolean',
             'is_active' => 'boolean',
             'description' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'image_url' => 'nullable|url',
+            'image' => 'nullable',
+            'image_file' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image_url' => 'nullable|string|max:2048',
         ]);
 
-        $data = $request->except(['image', 'image_url', 'old_image', 'name', 'description']);
+        $data = $request->except(['image', 'image_file', 'image_url', 'old_image', 'name', 'description']);
 
         // Generate slug if not provided
         if (empty($data['slug'])) {
@@ -263,8 +265,8 @@ class CategoryController extends BaseController
         $data['is_active'] = $request->has('is_active') ? 1 : 0;
 
         // Handle image update
-        if ($request->hasFile('image')) {
-            $data['image'] = $this->updateImage($request, 'image', 'uploads/categories', 'category_', $category->image);
+        if ($request->hasFile('image_file')) {
+            $data['image'] = $this->updateImage($request, 'image_file', 'uploads/categories', 'category_', $category->image);
         } elseif ($request->filled('image_url')) {
             $imageUrl = $request->image_url;
             $relativePath = $imageUrl;
@@ -402,13 +404,21 @@ class CategoryController extends BaseController
      */
     public function search(Request $request)
     {
-        $query = $request->get('q');
+        $query = trim((string) $request->get('q'));
 
-        $categories = Category::where(function ($q) use ($query) {
-            $q->where('name', 'like', "%{$query}%")
-                ->orWhere('slug', 'like', "%{$query}%")
-                ->orWhere('description', 'like', "%{$query}%");
-        })->with('parent')->paginate(15);
+        $categories = Category::with('parent')
+            ->when($query !== '', function ($builder) use ($query) {
+                $builder->where(function ($q) use ($query) {
+                    $q->where('slug', 'like', "%{$query}%")
+                        ->orWhereHas('getTranslations', function ($translationQuery) use ($query) {
+                            $translationQuery->whereIn('field', ['name', 'description'])
+                                ->where('value', 'like', "%{$query}%");
+                        });
+                });
+            })
+            ->orderBy('position')
+            ->orderBy('created_at', 'desc')
+            ->paginate(15);
 
         return view('admin.categories.index', compact('categories', 'query'));
     }
@@ -419,11 +429,10 @@ class CategoryController extends BaseController
     public function tree()
     {
         $categories = Category::with(['children' => function ($query) {
-            $query->orderBy('position')->orderBy('name');
+            $query->orderBy('position');
         }])
             ->whereNull('parent_id')
             ->orderBy('position')
-            ->orderBy('name')
             ->get();
 
         return view('admin.categories.tree', compact('categories'));
@@ -440,7 +449,7 @@ class CategoryController extends BaseController
             ->when($excludeId, function ($query, $excludeId) {
                 return $query->where('id', '!=', $excludeId);
             })
-            ->orderBy('name')
+            ->orderBy('position')
             ->get();
 
         return response()->json([
@@ -454,9 +463,9 @@ class CategoryController extends BaseController
         return redirect()->back()->with('info', 'Products feature is available; please contact administrator for full implementation.');
     }
 
-    public function reorder()
+    public function reorder(Request $request)
     {
-        return redirect()->back()->with('info', 'Reorder feature is available; please contact administrator for full implementation.');
+        return $this->updatePosition($request);
     }
 
     public function toggleSearchable(Category $category)

@@ -205,38 +205,6 @@ $(document).ready(function() {
   $('#saveAllSettings').on('click', function() {
     $('#settingsForm').submit();
   });
-  
-  // Auto-save on change
-  $('input, select, textarea').on('change', function() {
-    const $this = $(this);
-    const settingKey = $this.attr('name');
-    const settingValue = $this.val();
-    
-    // Show saving indicator
-    $this.addClass('border-warning');
-    
-    $.ajax({
-      url: '{{ route("admin.settings.update-single") }}',
-      method: 'POST',
-      data: {
-        _token: '{{ csrf_token() }}',
-        key: settingKey,
-        value: settingValue
-      },
-      success: function() {
-        $this.removeClass('border-warning').addClass('border-success');
-        setTimeout(() => {
-          $this.removeClass('border-success');
-        }, 2000);
-      },
-      error: function() {
-        $this.removeClass('border-warning').addClass('border-danger');
-        setTimeout(() => {
-          $this.removeClass('border-danger');
-        }, 2000);
-      }
-    });
-  });
 });
 </script>
 @endpush

@@ -74,7 +74,7 @@ class MenuController extends BaseController
         $pages = Page::where('is_active', true)->get();
         $parentItems = $menu->menuItems()->whereNull('parent_id')->get();
 
-        return view('admin.menu-items.create', compact('menu', 'categories', 'pages', 'parentItems'));
+        return view('admin.menu_items.create', compact('menu', 'categories', 'pages', 'parentItems'));
     }
 
     public function storeItem(Request $request, Menu $menu)
@@ -105,7 +105,7 @@ class MenuController extends BaseController
         $pages = Page::where('is_active', true)->get();
         $parentItems = $menu->menuItems()->whereNull('parent_id')->where('id', '!=', $menuItem->id)->get();
 
-        return view('admin.menu-items.edit', compact('menu', 'menuItem', 'categories', 'pages', 'parentItems'));
+        return view('admin.menu_items.edit', compact('menu', 'menuItem', 'categories', 'pages', 'parentItems'));
     }
 
     public function updateItem(Request $request, Menu $menu, MenuItem $menuItem)

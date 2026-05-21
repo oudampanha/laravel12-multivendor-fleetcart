@@ -103,7 +103,7 @@ trait HasTranslations
     public function getTranslation(string $field, ?string $locale = null): ?string
     {
         if (! $this->isTranslatable($field)) {
-            return $this->getAttribute($field);
+            return parent::getAttribute($field);
         }
 
         $locale = $locale ?? $this->getCurrentLocale();
@@ -130,7 +130,7 @@ trait HasTranslations
         }
 
         // Fallback to original attribute if no translation found
-        return $translation ?? $this->getAttribute($field);
+        return $translation ?? parent::getAttribute($field);
     }
 
     /**
@@ -259,6 +259,10 @@ trait HasTranslations
      */
     public function getAvailableLocales(): array
     {
+        if (! $this->getKey()) {
+            return [];
+        }
+
         return Translation::getAvailableLocales(
             $this->getMorphClass(),
             $this->getKey()
@@ -315,7 +319,11 @@ trait HasTranslations
 
         foreach ($locales as $locale) {
             $result[$locale] = $this->translateTo($locale)->toArray();
-            $result[$locale]['_translations'] = $this->getTranslations($locale);
+            $result[$locale]['_translations'] = Translation::getTranslations(
+                $this->getMorphClass(),
+                $this->getKey(),
+                $locale
+            );
         }
 
         return $result;
@@ -334,7 +342,11 @@ trait HasTranslations
         $locales = $sourceModel->getAvailableLocales();
 
         foreach ($locales as $locale) {
-            $translations = $sourceModel->getTranslations($locale);
+            $translations = Translation::getTranslations(
+                $sourceModel->getMorphClass(),
+                $sourceModel->getKey(),
+                $locale
+            );
 
             foreach ($fields as $field) {
                 if (isset($translations[$field]) && $this->isTranslatable($field)) {
@@ -382,9 +394,8 @@ trait HasTranslations
      */
     public function getAttribute($key)
     {
-        // If it's a translatable field and we have a current locale set, return translation
-        if ($this->isTranslatable($key) && $this->currentLocale && $this->exists) {
-            $translation = $this->getTranslation($key, $this->currentLocale);
+        if ($key && $this->exists && $this->isTranslatable($key)) {
+            $translation = $this->getTranslation($key, $this->getCurrentLocale());
             if ($translation !== null) {
                 return $translation;
             }

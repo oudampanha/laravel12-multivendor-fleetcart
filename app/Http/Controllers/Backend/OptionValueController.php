@@ -23,7 +23,7 @@ class OptionValueController extends BaseController
     {
         $options = Option::all();
 
-        return view('admin.option-values.create', compact('options'));
+        return view('admin.option_values.create', compact('options'));
     }
 
     public function store(Request $request)
@@ -37,7 +37,7 @@ class OptionValueController extends BaseController
 
         OptionValue::create($validated);
 
-        return redirect()->route('admin.option_values.index')->with('success', 'Option Value created successfully.');
+        return back()->with('success', 'Option Value created successfully.');
     }
 
     public function show(OptionValue $optionValue)
@@ -65,14 +65,14 @@ class OptionValueController extends BaseController
 
         $optionValue->update($validated);
 
-        return redirect()->route('admin.option_values.index')->with('success', 'Option Value updated successfully.');
+        return back()->with('success', 'Option Value updated successfully.');
     }
 
     public function destroy(OptionValue $optionValue)
     {
         $optionValue->delete();
 
-        return redirect()->route('admin.option_values.index')->with('success', 'Option Value deleted successfully.');
+        return back()->with('success', 'Option Value deleted successfully.');
     }
 
     public function reorder()

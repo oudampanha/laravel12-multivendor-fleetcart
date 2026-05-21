@@ -39,15 +39,14 @@
                 </td>
                 <td>{{ $otp->created_at->format('Y-m-d H:i:s') }}</td>
                 <td>
-                  <a href="{{ route('admin.otp-verifications.show', $otp->id) }}" class="btn btn-sm btn-primary">
+                  @if (Route::has('admin.otp-verifications.show'))
+<a href="{{ route('admin.otp-verifications.show', $otp->id) }}" class="btn btn-sm btn-primary">
                     <i class="fas fa-eye"></i> View
                   </a>
+@endif
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="7" class="text-center">No OTP verifications found</td>
-              </tr>
               @endforelse
             </tbody>
           </table>
