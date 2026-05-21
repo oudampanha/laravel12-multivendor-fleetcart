@@ -23,7 +23,7 @@ class VariationValueController extends BaseController
     {
         $variations = Variation::all();
 
-        return view('admin.variation_values.create', compact('variations'));
+        return view('admin.variation-values.create', compact('variations'));
     }
 
     public function store(Request $request)

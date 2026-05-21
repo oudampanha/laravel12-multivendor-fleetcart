@@ -23,7 +23,7 @@ class OptionValueController extends BaseController
     {
         $options = Option::all();
 
-        return view('admin.option_values.create', compact('options'));
+        return view('admin.option-values.create', compact('options'));
     }
 
     public function store(Request $request)
