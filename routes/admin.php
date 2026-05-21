@@ -2,10 +2,14 @@
 
 use App\Http\Controllers\Backend\ActivationController;
 use App\Http\Controllers\Backend\AddressController;
+use App\Http\Controllers\Backend\AttributeController;
+use App\Http\Controllers\Backend\AttributeSetController;
 use App\Http\Controllers\Backend\BlogCategoryController;
 use App\Http\Controllers\Backend\BlogPostController;
 use App\Http\Controllers\Backend\BlogTagController;
+use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Backend\CartController;
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\CouponController;
 use App\Http\Controllers\Backend\CurrencyRateController;
 use App\Http\Controllers\Backend\DashboardController;
@@ -20,6 +24,8 @@ use App\Http\Controllers\Backend\MediaController;
 use App\Http\Controllers\Backend\MenuController;
 use App\Http\Controllers\Backend\MenuItemController;
 use App\Http\Controllers\Backend\MetaDataController;
+use App\Http\Controllers\Backend\OptionController;
+use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\OtpVerificationController;
 use App\Http\Controllers\Backend\PageController;
 use App\Http\Controllers\Backend\PermissionController;
@@ -40,6 +46,7 @@ use App\Http\Controllers\Backend\StockMovementController;
 use App\Http\Controllers\Backend\StockTakeController;
 use App\Http\Controllers\Backend\StockTransferController;
 use App\Http\Controllers\Backend\SupplierController;
+use App\Http\Controllers\Backend\TagController;
 use App\Http\Controllers\Backend\TaxClassController;
 use App\Http\Controllers\Backend\TaxRateController;
 use App\Http\Controllers\Backend\ThrottleController;
@@ -48,6 +55,7 @@ use App\Http\Controllers\Backend\TranslationController;
 use App\Http\Controllers\Backend\TranslationManagementController;
 use App\Http\Controllers\Backend\UpdaterScriptController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\VariationController;
 use App\Http\Controllers\Backend\VendorController;
 use App\Http\Controllers\Backend\VendorNotificationController;
 use App\Http\Controllers\Backend\VendorOrderController;
@@ -204,6 +212,86 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::get('products/approved', [ProductController::class, 'approved'])->name('products.approved');
     Route::get('products/rejected', [ProductController::class, 'rejected'])->name('products.rejected');
     Route::resource('products', ProductController::class);
+
+    // Categories
+    Route::get('categories/tree', [CategoryController::class, 'tree'])->name('categories.tree');
+    Route::get('categories/search', [CategoryController::class, 'search'])->name('categories.search');
+    Route::get('categories/parents', [CategoryController::class, 'getParentCategories'])->name('categories.parents');
+    Route::post('categories/reorder', [CategoryController::class, 'reorder'])->name('categories.reorder');
+    Route::post('categories/update-position', [CategoryController::class, 'updatePosition'])->name('categories.update-position');
+    Route::resource('categories', CategoryController::class);
+    Route::get('categories/{category}/products', [CategoryController::class, 'products'])->name('categories.products');
+    Route::post('categories/{category}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
+    Route::post('categories/{category}/toggle-searchable', [CategoryController::class, 'toggleSearchable'])->name('categories.toggle-searchable');
+
+    // Brands
+    Route::get('brands/search', [BrandController::class, 'search'])->name('brands.search');
+    Route::get('brands/by-status', [BrandController::class, 'byStatus'])->name('brands.by-status');
+    Route::resource('brands', BrandController::class);
+    Route::get('brands/{brand}/products', [BrandController::class, 'products'])->name('brands.products');
+    Route::post('brands/{brand}/toggle-status', [BrandController::class, 'toggleStatus'])->name('brands.toggle-status');
+
+    // Attribute Sets
+    Route::get('attribute-sets/search', [AttributeSetController::class, 'search'])->name('attribute-sets.search');
+    Route::resource('attribute-sets', AttributeSetController::class);
+    Route::get('attribute-sets/{attributeSet}/attributes', [AttributeSetController::class, 'attributes'])->name('attribute-sets.attributes');
+    Route::post('attribute-sets/{attributeSet}/attributes', [AttributeSetController::class, 'attachAttribute'])->name('attribute-sets.attributes.attach');
+    Route::delete('attribute-sets/{attributeSet}/attributes/{attribute}', [AttributeSetController::class, 'detachAttribute'])->name('attribute-sets.attributes.detach');
+
+    // Attributes
+    Route::get('attributes/categories', [AttributeController::class, 'getCategories'])->name('attributes.categories');
+    Route::post('attributes/reorder-values', [AttributeController::class, 'reorderValues'])->name('attributes.reorder-values');
+    Route::resource('attributes', AttributeController::class);
+    Route::get('attributes/{attribute}/values', [AttributeController::class, 'values'])->name('attributes.values');
+    Route::post('attributes/{attribute}/values', [AttributeController::class, 'storeValue'])->name('attributes.values.store');
+    Route::delete('attributes/{attribute}/values/{attributeValue}', [AttributeController::class, 'destroyValue'])->name('attributes.values.destroy');
+    Route::post('attributes/{attribute}/toggle-filterable', [AttributeController::class, 'toggleFilterable'])->name('attributes.toggle-filterable');
+
+    // Variations
+    Route::get('variations/search', [VariationController::class, 'search'])->name('variations.search');
+    Route::post('variations/reorder-values', [VariationController::class, 'reorderValues'])->name('variations.reorder-values');
+    Route::resource('variations', VariationController::class);
+    Route::get('variations/{variation}/values', [VariationController::class, 'values'])->name('variations.values');
+    Route::post('variations/{variation}/values', [VariationController::class, 'storeValue'])->name('variations.values.store');
+    Route::delete('variations/{variation}/values/{variationValueId}', [VariationController::class, 'destroyValue'])->name('variations.values.destroy');
+    Route::post('variations/{variation}/toggle-global', [VariationController::class, 'toggleGlobal'])->name('variations.toggle-global');
+
+    // Options
+    Route::resource('options', OptionController::class);
+    Route::get('options/{option}/values', [OptionController::class, 'values'])->name('options.values');
+    Route::post('options/{option}/values', [OptionController::class, 'storeValue'])->name('options.values.store');
+    Route::delete('options/{option}/values/{optionValueId}', [OptionController::class, 'destroyValue'])->name('options.values.destroy');
+    Route::post('options/{option}/toggle-global', [OptionController::class, 'toggleGlobal'])->name('options.toggle-global');
+    Route::post('options/{option}/toggle-required', [OptionController::class, 'toggleRequired'])->name('options.toggle-required');
+
+    // Tags
+    Route::resource('tags', TagController::class);
+    Route::get('tags/{tag}/products', [TagController::class, 'products'])->name('tags.products');
+    Route::post('tags/merge', [TagController::class, 'merge'])->name('tags.merge');
+
+    // =============================================================================
+    // ORDER MANAGEMENT
+    // =============================================================================
+
+    // Orders (static GETs declared first so they win over resource show route)
+    Route::get('orders/export', [OrderController::class, 'export'])->name('orders.export');
+    Route::get('orders/by-status/{status}', [OrderController::class, 'byStatus'])->name('orders.by-status');
+    Route::get('orders/by-payment-method/{paymentMethod}', [OrderController::class, 'byPaymentMethod'])->name('orders.by-payment-method');
+    Route::get('orders/vendor-orders', [OrderController::class, 'vendorOrders'])->name('orders.vendor-orders');
+    Route::get('orders/vendor-orders/{vendorOrder}', [OrderController::class, 'showVendorOrder'])->name('orders.vendor-orders.show');
+    Route::post('orders/vendor-orders/{vendorOrder}/status', [OrderController::class, 'updateVendorOrderStatus'])->name('orders.vendor-orders.status');
+    Route::post('orders/bulk-update-status', [OrderController::class, 'bulkUpdateStatus'])->name('orders.bulk-update-status');
+    Route::resource('orders', OrderController::class);
+    Route::post('orders/{order}/status', [OrderController::class, 'updateStatus'])->name('orders.status');
+    Route::get('orders/{order}/invoice', [OrderController::class, 'invoice'])->name('orders.invoice');
+    Route::get('orders/{order}/invoice/download', [OrderController::class, 'downloadInvoice'])->name('orders.invoice.download');
+    Route::post('orders/{order}/invoice/send', [OrderController::class, 'sendInvoice'])->name('orders.invoice.send');
+    Route::get('orders/{order}/tracking', [OrderController::class, 'tracking'])->name('orders.tracking');
+    Route::post('orders/{order}/tracking', [OrderController::class, 'updateTracking'])->name('orders.tracking.update');
+
+    // Transactions (static GETs declared first so they win over resource show route)
+    Route::get('transactions/failed', [TransactionController::class, 'failed'])->name('transactions.failed');
+    Route::get('transactions/refunded', [TransactionController::class, 'refunded'])->name('transactions.refunded');
     Route::resource('transactions', TransactionController::class)->except(['create', 'store', 'edit', 'update']);
     Route::get('transactions/{transaction}/details', [TransactionController::class, 'details'])->name('transactions.details');
     Route::post('transactions/{transaction}/refund', [TransactionController::class, 'refund'])->name('transactions.refund');
