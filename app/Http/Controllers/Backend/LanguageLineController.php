@@ -77,7 +77,7 @@ class LanguageLineController extends BaseController
 
     public function show(LanguageLine $languageLine)
     {
-        return view('admin.language_lines.show', compact('languageLine'));
+        return view('admin.language-lines.show', compact('languageLine'));
     }
 
     public function edit(LanguageLine $languageLine)
@@ -85,7 +85,7 @@ class LanguageLineController extends BaseController
         $groups = LanguageLine::distinct('group')->pluck('group')->sort();
         $languages = config('app.supported_locales', ['en', 'es', 'fr', 'de']);
 
-        return view('admin.language_lines.edit', compact('languageLine', 'groups', 'languages'));
+        return view('admin.language-lines.edit', compact('languageLine', 'groups', 'languages'));
     }
 
     public function update(Request $request, LanguageLine $languageLine)

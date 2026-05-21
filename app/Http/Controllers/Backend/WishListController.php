@@ -58,7 +58,7 @@ class WishListController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.wish_lists.by-customer', compact('wishLists', 'customer'));
+        return view('admin.wish-lists.by-customer', compact('wishLists', 'customer'));
     }
 
     /**
@@ -71,7 +71,7 @@ class WishListController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.wish_lists.by-product', compact('wishLists', 'product'));
+        return view('admin.wish-lists.by-product', compact('wishLists', 'product'));
     }
 
     public function destroy(User $customer, Product $product)
@@ -111,7 +111,7 @@ class WishListController extends BaseController
 
         $popularProducts = $query->get();
 
-        return view('admin.wish_lists.popular-products', compact('popularProducts', 'limit', 'period'));
+        return view('admin.wish-lists.popular-products', compact('popularProducts', 'limit', 'period'));
     }
 
     /**
@@ -140,7 +140,7 @@ class WishListController extends BaseController
             ->limit(10)
             ->get();
 
-        return view('admin.wish_lists.statistics', compact('stats', 'topCategories'));
+        return view('admin.wish-lists.statistics', compact('stats', 'topCategories'));
     }
 
     /**
@@ -164,7 +164,7 @@ class WishListController extends BaseController
 
         $topCustomers = $query->get();
 
-        return view('admin.wish_lists.top-customers', compact('topCustomers', 'limit', 'period'));
+        return view('admin.wish-lists.top-customers', compact('topCustomers', 'limit', 'period'));
     }
 
     /**
@@ -229,7 +229,7 @@ class WishListController extends BaseController
             ->orderBy('period')
             ->get();
 
-        return view('admin.wish_lists.trends', compact('trends', 'period', 'days'));
+        return view('admin.wish-lists.trends', compact('trends', 'period', 'days'));
     }
 
     /**

@@ -19,7 +19,7 @@ class OrderProductOptionController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.order_product_options.index', compact('orderProductOptions'));
+        return view('admin.order-product-options.index', compact('orderProductOptions'));
     }
 
     public function create()
@@ -27,7 +27,7 @@ class OrderProductOptionController extends BaseController
         $orderProducts = OrderProduct::all();
         $options = Option::all();
 
-        return view('admin.order_product_options.create', compact('orderProducts', 'options'));
+        return view('admin.order-product-options.create', compact('orderProducts', 'options'));
     }
 
     public function store(Request $request)
@@ -47,7 +47,7 @@ class OrderProductOptionController extends BaseController
     {
         $orderProductOption->load(['orderProduct', 'option']);
 
-        return view('admin.order_product_options.show', compact('orderProductOption'));
+        return view('admin.order-product-options.show', compact('orderProductOption'));
     }
 
     public function edit(OrderProductOption $orderProductOption)
@@ -55,7 +55,7 @@ class OrderProductOptionController extends BaseController
         $orderProducts = OrderProduct::all();
         $options = Option::all();
 
-        return view('admin.order_product_options.edit', compact('orderProductOption', 'orderProducts', 'options'));
+        return view('admin.order-product-options.edit', compact('orderProductOption', 'orderProducts', 'options'));
     }
 
     public function update(Request $request, OrderProductOption $orderProductOption)

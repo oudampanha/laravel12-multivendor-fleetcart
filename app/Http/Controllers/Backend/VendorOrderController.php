@@ -27,7 +27,7 @@ class VendorOrderController extends BaseController
         $vendors = Vendor::all();
         $orders = Order::all();
 
-        return view('admin.vendor_orders.create', compact('vendors', 'orders'));
+        return view('admin.vendor-orders.create', compact('vendors', 'orders'));
     }
 
     public function store(Request $request)
@@ -59,7 +59,7 @@ class VendorOrderController extends BaseController
         $vendors = Vendor::all();
         $orders = Order::all();
 
-        return view('admin.vendor_orders.edit', compact('vendorOrder', 'vendors', 'orders'));
+        return view('admin.vendor-orders.edit', compact('vendorOrder', 'vendors', 'orders'));
     }
 
     public function update(Request $request, VendorOrder $vendorOrder)

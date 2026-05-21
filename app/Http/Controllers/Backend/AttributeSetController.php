@@ -96,7 +96,7 @@ class AttributeSetController extends BaseController
             ]);
         }
 
-        return view('admin.attribute_sets.show', compact('attributeSet'));
+        return view('admin.attribute-sets.show', compact('attributeSet'));
     }
 
     /**
@@ -115,7 +115,7 @@ class AttributeSetController extends BaseController
             ]);
         }
 
-        return view('admin.attribute_sets.edit', compact('attributeSet'));
+        return view('admin.attribute-sets.edit', compact('attributeSet'));
     }
 
     /**

@@ -31,7 +31,7 @@ class OrderProductController extends BaseController
         $vendors = Vendor::all();
         $productVariants = ProductVariant::all();
 
-        return view('admin.order_products.create', compact('orders', 'products', 'vendors', 'productVariants'));
+        return view('admin.order-products.create', compact('orders', 'products', 'vendors', 'productVariants'));
     }
 
     public function store(Request $request)
@@ -57,7 +57,7 @@ class OrderProductController extends BaseController
     {
         $orderProduct->load(['order', 'product', 'vendor', 'productVariant']);
 
-        return view('admin.order_products.show', compact('orderProduct'));
+        return view('admin.order-products.show', compact('orderProduct'));
     }
 
     public function edit(OrderProduct $orderProduct)
@@ -67,7 +67,7 @@ class OrderProductController extends BaseController
         $vendors = Vendor::all();
         $productVariants = ProductVariant::all();
 
-        return view('admin.order_products.edit', compact('orderProduct', 'orders', 'products', 'vendors', 'productVariants'));
+        return view('admin.order-products.edit', compact('orderProduct', 'orders', 'products', 'vendors', 'productVariants'));
     }
 
     public function update(Request $request, OrderProduct $orderProduct)

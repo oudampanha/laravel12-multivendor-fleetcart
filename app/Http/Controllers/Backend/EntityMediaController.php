@@ -27,7 +27,7 @@ class EntityMediaController extends BaseController
             ->orderBy('sort_order')
             ->paginate(15);
 
-        return view('admin.entity_media.index', compact('entityMedia', 'entityType', 'entityId'));
+        return view('admin.entity-media.index', compact('entityMedia', 'entityType', 'entityId'));
     }
 
     public function store(Request $request, string $entityType, int $entityId)

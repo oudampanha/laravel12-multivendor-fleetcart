@@ -16,7 +16,7 @@ class ProductVariantController extends BaseController
     {
         $productVariants = ProductVariant::with('product')->orderBy('position', 'asc')->paginate(15);
 
-        return view('admin.product_variants.index', compact('productVariants'));
+        return view('admin.product-variants.index', compact('productVariants'));
     }
 
     public function create()
@@ -57,14 +57,14 @@ class ProductVariantController extends BaseController
     {
         $productVariant->load('product');
 
-        return view('admin.product_variants.show', compact('productVariant'));
+        return view('admin.product-variants.show', compact('productVariant'));
     }
 
     public function edit(ProductVariant $productVariant)
     {
         $products = Product::all();
 
-        return view('admin.product_variants.edit', compact('productVariant', 'products'));
+        return view('admin.product-variants.edit', compact('productVariant', 'products'));
     }
 
     public function update(Request $request, ProductVariant $productVariant)

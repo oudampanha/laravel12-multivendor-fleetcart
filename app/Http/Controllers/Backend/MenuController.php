@@ -14,7 +14,7 @@ class MenuController extends BaseController
 
     public function index()
     {
-        $menus = Menu::withCount('items')->paginate(15);
+        $menus = Menu::withCount('menuItems')->paginate(15);
 
         return view('admin.menus.index', compact('menus'));
     }
@@ -38,7 +38,7 @@ class MenuController extends BaseController
 
     public function show(Menu $menu)
     {
-        $menu->load('items.category', 'items.page', 'items.children');
+        $menu->load('menuItems.category', 'menuItems.page', 'menuItems.children');
 
         return view('admin.menus.show', compact('menu'));
     }
@@ -72,7 +72,7 @@ class MenuController extends BaseController
     {
         $categories = Category::where('is_active', true)->get();
         $pages = Page::where('is_active', true)->get();
-        $parentItems = $menu->items()->whereNull('parent_id')->get();
+        $parentItems = $menu->menuItems()->whereNull('parent_id')->get();
 
         return view('admin.menu_items.create', compact('menu', 'categories', 'pages', 'parentItems'));
     }
@@ -93,7 +93,7 @@ class MenuController extends BaseController
             'is_active' => 'boolean',
         ]);
 
-        $menu->items()->create($request->all());
+        $menu->menuItems()->create($request->all());
 
         return redirect()->route('admin.menus.show', $menu)
             ->with('success', 'Menu item created successfully.');
@@ -103,7 +103,7 @@ class MenuController extends BaseController
     {
         $categories = Category::where('is_active', true)->get();
         $pages = Page::where('is_active', true)->get();
-        $parentItems = $menu->items()->whereNull('parent_id')->where('id', '!=', $menuItem->id)->get();
+        $parentItems = $menu->menuItems()->whereNull('parent_id')->where('id', '!=', $menuItem->id)->get();
 
         return view('admin.menu_items.edit', compact('menu', 'menuItem', 'categories', 'pages', 'parentItems'));
     }

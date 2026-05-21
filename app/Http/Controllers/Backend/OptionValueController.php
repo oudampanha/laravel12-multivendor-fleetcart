@@ -16,7 +16,7 @@ class OptionValueController extends BaseController
     {
         $optionValues = OptionValue::with('option')->orderBy('position', 'asc')->paginate(15);
 
-        return view('admin.option_values.index', compact('optionValues'));
+        return view('admin.option-values.index', compact('optionValues'));
     }
 
     public function create()
@@ -44,14 +44,14 @@ class OptionValueController extends BaseController
     {
         $optionValue->load('option');
 
-        return view('admin.option_values.show', compact('optionValue'));
+        return view('admin.option-values.show', compact('optionValue'));
     }
 
     public function edit(OptionValue $optionValue)
     {
         $options = Option::all();
 
-        return view('admin.option_values.edit', compact('optionValue', 'options'));
+        return view('admin.option-values.edit', compact('optionValue', 'options'));
     }
 
     public function update(Request $request, OptionValue $optionValue)

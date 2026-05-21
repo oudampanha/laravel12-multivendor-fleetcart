@@ -94,12 +94,12 @@ class ReviewController extends BaseController
     {
         $vendorReview->load(['vendor', 'customer', 'order']);
 
-        return view('admin.vendor_reviews.show', compact('vendorReview'));
+        return view('admin.vendor-reviews.show', compact('vendorReview'));
     }
 
     public function editVendorReview(VendorReview $vendorReview)
     {
-        return view('admin.vendor_reviews.edit', compact('vendorReview'));
+        return view('admin.vendor-reviews.edit', compact('vendorReview'));
     }
 
     public function updateVendorReview(Request $request, VendorReview $vendorReview)

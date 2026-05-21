@@ -74,6 +74,21 @@ class SettingController extends BaseController
             ->with('success', 'Setting updated successfully.');
     }
 
+    /**
+     * Persist a single setting by key (used by the settings index auto-save).
+     */
+    public function updateSingle(Request $request)
+    {
+        $data = $request->validate([
+            'key' => 'required|string|exists:settings,key',
+            'value' => 'nullable|string',
+        ]);
+
+        Setting::where('key', $data['key'])->update(['plain_value' => $data['value']]);
+
+        return response()->json(['success' => true]);
+    }
+
     public function destroy(Setting $setting)
     {
         $setting->delete();
@@ -93,7 +108,7 @@ class SettingController extends BaseController
     {
         $vendors = Vendor::where('is_active', true)->get();
 
-        return view('admin.vendor_settings.create', compact('vendors'));
+        return view('admin.vendor-settings.create', compact('vendors'));
     }
 
     public function storeVendorSetting(Request $request)
@@ -117,7 +132,7 @@ class SettingController extends BaseController
     {
         $vendors = Vendor::where('is_active', true)->get();
 
-        return view('admin.vendor_settings.edit', compact('vendorSetting', 'vendors'));
+        return view('admin.vendor-settings.edit', compact('vendorSetting', 'vendors'));
     }
 
     public function updateVendorSetting(Request $request, VendorSetting $vendorSetting)

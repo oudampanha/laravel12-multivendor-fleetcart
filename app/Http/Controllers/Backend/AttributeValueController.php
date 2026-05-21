@@ -16,7 +16,7 @@ class AttributeValueController extends BaseController
     {
         $attributeValues = AttributeValue::with('attribute')->orderBy('position', 'asc')->paginate(15);
 
-        return view('admin.attribute_values.index', compact('attributeValues'));
+        return view('admin.attribute-values.index', compact('attributeValues'));
     }
 
     public function create()
@@ -42,14 +42,14 @@ class AttributeValueController extends BaseController
     {
         $attributeValue->load('attribute');
 
-        return view('admin.attribute_values.show', compact('attributeValue'));
+        return view('admin.attribute-values.show', compact('attributeValue'));
     }
 
     public function edit(AttributeValue $attributeValue)
     {
         $attributes = Attribute::all();
 
-        return view('admin.attribute_values.edit', compact('attributeValue', 'attributes'));
+        return view('admin.attribute-values.edit', compact('attributeValue', 'attributes'));
     }
 
     public function update(Request $request, AttributeValue $attributeValue)

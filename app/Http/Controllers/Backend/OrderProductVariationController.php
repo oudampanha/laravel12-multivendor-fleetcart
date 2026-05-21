@@ -19,7 +19,7 @@ class OrderProductVariationController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.order_product_variations.index', compact('orderProductVariations'));
+        return view('admin.order-product-variations.index', compact('orderProductVariations'));
     }
 
     public function create()
@@ -27,7 +27,7 @@ class OrderProductVariationController extends BaseController
         $orderProducts = OrderProduct::all();
         $variations = Variation::all();
 
-        return view('admin.order_product_variations.create', compact('orderProducts', 'variations'));
+        return view('admin.order-product-variations.create', compact('orderProducts', 'variations'));
     }
 
     public function store(Request $request)
@@ -48,7 +48,7 @@ class OrderProductVariationController extends BaseController
     {
         $orderProductVariation->load(['orderProduct', 'variation']);
 
-        return view('admin.order_product_variations.show', compact('orderProductVariation'));
+        return view('admin.order-product-variations.show', compact('orderProductVariation'));
     }
 
     public function edit(OrderProductVariation $orderProductVariation)

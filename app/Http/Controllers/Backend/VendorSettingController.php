@@ -25,7 +25,7 @@ class VendorSettingController extends BaseController
     {
         $vendors = Vendor::all();
 
-        return view('admin.vendor_settings.create', compact('vendors'));
+        return view('admin.vendor-settings.create', compact('vendors'));
     }
 
     public function store(Request $request)
@@ -52,7 +52,7 @@ class VendorSettingController extends BaseController
     {
         $vendors = Vendor::all();
 
-        return view('admin.vendor_settings.edit', compact('vendorSetting', 'vendors'));
+        return view('admin.vendor-settings.edit', compact('vendorSetting', 'vendors'));
     }
 
     public function update(Request $request, VendorSetting $vendorSetting)

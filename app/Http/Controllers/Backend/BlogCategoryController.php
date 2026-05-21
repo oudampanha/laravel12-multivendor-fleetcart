@@ -11,7 +11,7 @@ class BlogCategoryController extends BaseController
 
     public function index()
     {
-        $blogCategories = BlogCategory::withCount('posts')->paginate(15);
+        $blogCategories = BlogCategory::withCount('blogPosts')->paginate(15);
 
         return view('admin.blog_categories.index', compact('blogCategories'));
     }
@@ -35,14 +35,14 @@ class BlogCategoryController extends BaseController
 
     public function show(BlogCategory $blogCategory)
     {
-        $blogCategory->load('posts');
+        $blogCategory->load('blogPosts');
 
-        return view('admin.blog_categories.show', compact('blogCategory'));
+        return view('admin.blog-categories.show', compact('blogCategory'));
     }
 
     public function edit(BlogCategory $blogCategory)
     {
-        return view('admin.blog_categories.edit', compact('blogCategory'));
+        return view('admin.blog-categories.edit', compact('blogCategory'));
     }
 
     public function update(Request $request, BlogCategory $blogCategory)
