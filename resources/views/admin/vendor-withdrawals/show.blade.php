@@ -11,7 +11,7 @@
           <div class="card-tools">
             <a href="{{ route('admin.vendor-withdrawals.index') }}" class="btn btn-secondary">
               <i class="fas fa-arrow-left"></i> Back to List
->>>>>>> 2e1c1e9f (fixed some error)
+              >>>>>>> 2e1c1e9f (fixed some error)
             </a>
             @if (Route::has('admin.vendor-withdrawals.edit'))
               <a href="{{ route('admin.vendor-withdrawals.edit', $vendorWithdrawal->id) }}" class="btn btn-warning">
@@ -26,9 +26,9 @@
               <th width="200">ID:</th>
               <td>{{ $vendorWithdrawal->id ?? 'N/A' }}</td>
             </tr>
-              $attrs = method_exists($vendorWithdrawal ?? null, 'getAttributes')
-                  ? $vendorWithdrawal->getAttributes()
-                  : (array) ($vendorWithdrawal ?? []);
+            $attrs = method_exists($vendorWithdrawal ?? null, 'getAttributes')
+            ? $vendorWithdrawal->getAttributes()
+            : (array) ($vendorWithdrawal ?? []);
             @endphp
             @foreach ($attrs as $key => $value)
               @continue(in_array($key, ['id', 'password', 'remember_token']))
