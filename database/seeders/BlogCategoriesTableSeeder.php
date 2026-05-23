@@ -22,7 +22,6 @@ class BlogCategoriesTableSeeder extends Seeder
         $rows = [
             [
                 'slug' => 'general',
-                'is_active' => true,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
