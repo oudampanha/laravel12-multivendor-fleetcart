@@ -31,7 +31,7 @@ class OptionValuesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('option_values')->insert($rows);
         }
     }

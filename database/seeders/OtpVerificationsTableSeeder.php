@@ -31,7 +31,7 @@ class OtpVerificationsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('otp_verifications')->insert($rows);
         }
     }

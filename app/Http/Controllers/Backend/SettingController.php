@@ -101,7 +101,7 @@ class SettingController extends BaseController
     {
         $vendorSettings = VendorSetting::with('vendor')->paginate(15);
 
-        return view('admin.vendor_settings.index', compact('vendorSettings'));
+        return view('admin.vendor-settings.index', compact('vendorSettings'));
     }
 
     public function createVendorSetting()

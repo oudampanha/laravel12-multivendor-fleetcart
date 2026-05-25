@@ -24,7 +24,7 @@ class ProductCategoriesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('product_categories')->insert($rows);
         }
     }

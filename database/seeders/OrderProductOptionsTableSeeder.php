@@ -27,7 +27,7 @@ class OrderProductOptionsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('order_product_options')->insert($rows);
         }
     }

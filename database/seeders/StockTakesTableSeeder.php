@@ -40,7 +40,7 @@ class StockTakesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('stock_takes')->insert($rows);
         }
     }

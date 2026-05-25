@@ -47,7 +47,7 @@ class MenuItemsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('menu_items')->insert($rows);
         }
     }

@@ -42,7 +42,7 @@ class StockAdjustmentsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('stock_adjustments')->insert($rows);
         }
     }

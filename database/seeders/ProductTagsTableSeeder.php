@@ -24,7 +24,7 @@ class ProductTagsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('product_tags')->insert($rows);
         }
     }

@@ -38,7 +38,7 @@ class BlogPost extends Model
 
     public function media()
     {
-        return $this->morphToMany(Media::class, 'entity', 'entity_media')
+        return $this->morphToMany(Media::class, 'entity', 'entity_media', 'entity_id', 'file_id')
             ->withPivot('zone')
             ->withTimestamps();
     }

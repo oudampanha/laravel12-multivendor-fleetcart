@@ -61,7 +61,7 @@ class VendorsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('vendors')->insert($rows);
         }
     }

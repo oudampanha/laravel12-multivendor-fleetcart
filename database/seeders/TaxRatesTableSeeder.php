@@ -38,7 +38,7 @@ class TaxRatesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('tax_rates')->insert($rows);
         }
     }

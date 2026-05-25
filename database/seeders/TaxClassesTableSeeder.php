@@ -28,7 +28,7 @@ class TaxClassesTableSeeder extends Seeder
             ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('tax_classes')->insert($rows);
         }
     }

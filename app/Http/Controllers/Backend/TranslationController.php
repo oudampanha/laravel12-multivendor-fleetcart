@@ -14,11 +14,11 @@ class TranslationController extends BaseController
 
     public function index(Request $request)
     {
-        $query = Translation::orderBy('entity_type')->orderBy('entity_id')->orderBy('attribute');
+        $query = Translation::orderBy('translatable_type')->orderBy('translatable_id')->orderBy('field');
 
         // Filter by entity type if provided
         if ($request->filled('entity_type')) {
-            $query->where('entity_type', $request->entity_type);
+            $query->where('translatable_type', $request->entity_type);
         }
 
         // Filter by locale if provided
@@ -33,7 +33,7 @@ class TranslationController extends BaseController
         }
 
         $translations = $query->paginate(15);
-        $entityTypes = Translation::distinct('entity_type')->pluck('entity_type')->sort();
+        $entityTypes = Translation::distinct('translatable_type')->pluck('translatable_type')->sort();
         $locales = Translation::distinct('locale')->pluck('locale')->sort();
 
         return view('admin.translations.index', compact('translations', 'entityTypes', 'locales'));
@@ -41,12 +41,12 @@ class TranslationController extends BaseController
 
     public function show(string $entityType, int $entityId)
     {
-        $translations = Translation::where('entity_type', $entityType)
-            ->where('entity_id', $entityId)
-            ->orderBy('attribute')
+        $translations = Translation::where('translatable_type', $entityType)
+            ->where('translatable_id', $entityId)
+            ->orderBy('field')
             ->orderBy('locale')
             ->get()
-            ->groupBy('attribute');
+            ->groupBy('field');
 
         return view('admin.translations.show', compact('translations', 'entityType', 'entityId'));
     }
@@ -60,9 +60,9 @@ class TranslationController extends BaseController
         ]);
 
         // Check if translation already exists
-        $exists = Translation::where('entity_type', $entityType)
-            ->where('entity_id', $entityId)
-            ->where('attribute', $request->attribute)
+        $exists = Translation::where('translatable_type', $entityType)
+            ->where('translatable_id', $entityId)
+            ->where('field', $request->attribute)
             ->where('locale', $request->locale)
             ->exists();
 
@@ -73,9 +73,9 @@ class TranslationController extends BaseController
         }
 
         Translation::create([
-            'entity_type' => $entityType,
-            'entity_id' => $entityId,
-            'attribute' => $request->attribute,
+            'translatable_type' => $entityType,
+            'translatable_id' => $entityId,
+            'field' => $request->attribute,
             'locale' => $request->locale,
             'value' => $request->value,
         ]);
@@ -94,14 +94,14 @@ class TranslationController extends BaseController
             'value' => $request->value,
         ]);
 
-        return redirect()->route('admin.translations.show', [$translation->entity_type, $translation->entity_id])
+        return redirect()->route('admin.translations.show', [$translation->translatable_type, $translation->translatable_id])
             ->with('success', 'Translation updated successfully.');
     }
 
     public function destroy(Translation $translation)
     {
-        $entityType = $translation->entity_type;
-        $entityId = $translation->entity_id;
+        $entityType = $translation->translatable_type;
+        $entityId = $translation->translatable_id;
 
         $translation->delete();
 
@@ -120,15 +120,15 @@ class TranslationController extends BaseController
         // This is a complex query to find entities that don't have translations for specific attributes
         $query = '
             SELECT DISTINCT 
-                t1.entity_type,
-                t1.entity_id,
-                t1.attribute
+                t1.translatable_type AS entity_type,
+                t1.translatable_id AS entity_id,
+                t1.field AS attribute
             FROM translations t1
             WHERE NOT EXISTS (
                 SELECT 1 FROM translations t2 
-                WHERE t2.entity_type = t1.entity_type 
-                AND t2.entity_id = t1.entity_id 
-                AND t2.attribute = t1.attribute 
+                WHERE t2.translatable_type = t1.translatable_type 
+                AND t2.translatable_id = t1.translatable_id 
+                AND t2.field = t1.field 
                 AND t2.locale = ?
             )
         ';
@@ -136,11 +136,11 @@ class TranslationController extends BaseController
         $params = [$locale];
 
         if ($entityType) {
-            $query .= ' AND t1.entity_type = ?';
+            $query .= ' AND t1.translatable_type = ?';
             $params[] = $entityType;
         }
 
-        $query .= ' ORDER BY t1.entity_type, t1.entity_id, t1.attribute';
+        $query .= ' ORDER BY t1.translatable_type, t1.translatable_id, t1.field';
 
         $missingTranslations = DB::select($query, $params);
 
@@ -162,7 +162,7 @@ class TranslationController extends BaseController
         $query = Translation::where('locale', $request->source_locale);
 
         if ($request->entity_type) {
-            $query->where('entity_type', $request->entity_type);
+            $query->where('translatable_type', $request->entity_type);
         }
 
         $sourceTranslations = $query->get();
@@ -170,9 +170,9 @@ class TranslationController extends BaseController
         $skipped = 0;
 
         foreach ($sourceTranslations as $sourceTranslation) {
-            $exists = Translation::where('entity_type', $sourceTranslation->entity_type)
-                ->where('entity_id', $sourceTranslation->entity_id)
-                ->where('attribute', $sourceTranslation->attribute)
+            $exists = Translation::where('translatable_type', $sourceTranslation->translatable_type)
+                ->where('translatable_id', $sourceTranslation->translatable_id)
+                ->where('field', $sourceTranslation->field)
                 ->where('locale', $request->target_locale)
                 ->exists();
 
@@ -184,9 +184,9 @@ class TranslationController extends BaseController
 
             Translation::updateOrCreate(
                 [
-                    'entity_type' => $sourceTranslation->entity_type,
-                    'entity_id' => $sourceTranslation->entity_id,
-                    'attribute' => $sourceTranslation->attribute,
+                    'translatable_type' => $sourceTranslation->translatable_type,
+                    'translatable_id' => $sourceTranslation->translatable_id,
+                    'field' => $sourceTranslation->field,
                     'locale' => $request->target_locale,
                 ],
                 [
@@ -217,7 +217,7 @@ class TranslationController extends BaseController
         $query = Translation::where('locale', $locale);
 
         if ($entityType) {
-            $query->where('entity_type', $entityType);
+            $query->where('translatable_type', $entityType);
         }
 
         $translations = $query->get();
@@ -228,7 +228,7 @@ class TranslationController extends BaseController
 
         $data = [];
         foreach ($translations as $translation) {
-            $key = "{$translation->entity_type}.{$translation->entity_id}.{$translation->attribute}";
+            $key = "{$translation->translatable_type}.{$translation->translatable_id}.{$translation->field}";
             $data[$key] = $translation->value;
         }
 
@@ -273,9 +273,9 @@ class TranslationController extends BaseController
                 $entityId = $parts[1];
                 $attribute = implode('.', array_slice($parts, 2));
 
-                $exists = Translation::where('entity_type', $entityType)
-                    ->where('entity_id', $entityId)
-                    ->where('attribute', $attribute)
+                $exists = Translation::where('translatable_type', $entityType)
+                    ->where('translatable_id', $entityId)
+                    ->where('field', $attribute)
                     ->where('locale', $request->locale)
                     ->exists();
 
@@ -287,9 +287,9 @@ class TranslationController extends BaseController
 
                 Translation::updateOrCreate(
                     [
-                        'entity_type' => $entityType,
-                        'entity_id' => $entityId,
-                        'attribute' => $attribute,
+                        'translatable_type' => $entityType,
+                        'translatable_id' => $entityId,
+                        'field' => $attribute,
                         'locale' => $request->locale,
                     ],
                     [

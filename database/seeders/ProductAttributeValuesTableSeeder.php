@@ -24,7 +24,7 @@ class ProductAttributeValuesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('product_attribute_values')->insert($rows);
         }
     }

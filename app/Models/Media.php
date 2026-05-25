@@ -36,28 +36,28 @@ class Media extends Model
 
     public function products(): MorphToMany
     {
-        return $this->morphedByMany(Product::class, 'entity', 'entity_media')
+        return $this->morphedByMany(Product::class, 'entity', 'entity_media', 'file_id', 'entity_id')
             ->withPivot('zone')
             ->withTimestamps();
     }
 
     public function categories(): MorphToMany
     {
-        return $this->morphedByMany(Category::class, 'entity', 'entity_media')
+        return $this->morphedByMany(Category::class, 'entity', 'entity_media', 'file_id', 'entity_id')
             ->withPivot('zone')
             ->withTimestamps();
     }
 
     public function brands(): MorphToMany
     {
-        return $this->morphedByMany(Brand::class, 'entity', 'entity_media')
+        return $this->morphedByMany(Brand::class, 'entity', 'entity_media', 'file_id', 'entity_id')
             ->withPivot('zone')
             ->withTimestamps();
     }
 
     public function vendors(): MorphToMany
     {
-        return $this->morphedByMany(Vendor::class, 'entity', 'entity_media')
+        return $this->morphedByMany(Vendor::class, 'entity', 'entity_media', 'file_id', 'entity_id')
             ->withPivot('zone')
             ->withTimestamps();
     }

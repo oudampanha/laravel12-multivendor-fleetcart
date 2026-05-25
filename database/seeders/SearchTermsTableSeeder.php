@@ -29,7 +29,7 @@ class SearchTermsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('search_terms')->insert($rows);
         }
     }

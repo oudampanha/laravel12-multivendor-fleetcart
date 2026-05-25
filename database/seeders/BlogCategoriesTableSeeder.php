@@ -27,7 +27,7 @@ class BlogCategoriesTableSeeder extends Seeder
             ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('blog_categories')->insert($rows);
         }
     }

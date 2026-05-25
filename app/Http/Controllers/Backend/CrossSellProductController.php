@@ -25,7 +25,7 @@ class CrossSellProductController extends BaseController
 
         $products = $query->orderBy('name')->paginate(15);
 
-        return view('admin.cross_sell_products.index', compact('products'));
+        return view('admin.cross-sell-products.index', compact('products'));
     }
 
     public function store(Request $request)

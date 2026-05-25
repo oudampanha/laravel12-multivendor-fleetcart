@@ -25,7 +25,7 @@ class RelatedProductController extends BaseController
 
         $products = $query->orderBy('name')->paginate(15);
 
-        return view('admin.related_products.index', compact('products'));
+        return view('admin.related-products.index', compact('products'));
     }
 
     public function store(Request $request)

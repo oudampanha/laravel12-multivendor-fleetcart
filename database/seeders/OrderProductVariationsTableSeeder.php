@@ -29,7 +29,7 @@ class OrderProductVariationsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('order_product_variations')->insert($rows);
         }
     }

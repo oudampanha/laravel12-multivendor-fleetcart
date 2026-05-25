@@ -24,7 +24,7 @@ class AttributeCategoriesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('attribute_categories')->insert($rows);
         }
     }

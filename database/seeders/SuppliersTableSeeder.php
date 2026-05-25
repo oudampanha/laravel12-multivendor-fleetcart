@@ -44,7 +44,7 @@ class SuppliersTableSeeder extends Seeder
             ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('suppliers')->insert($rows);
         }
     }

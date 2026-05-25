@@ -23,7 +23,7 @@ class FlashSalesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('flash_sales')->insert($rows);
         }
     }

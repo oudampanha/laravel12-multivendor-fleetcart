@@ -27,7 +27,7 @@ class BlogTagsTableSeeder extends Seeder
             ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('blog_tags')->insert($rows);
         }
     }

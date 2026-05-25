@@ -35,7 +35,7 @@ class SlidersTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('sliders')->insert($rows);
         }
     }

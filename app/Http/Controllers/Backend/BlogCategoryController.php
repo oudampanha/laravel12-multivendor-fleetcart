@@ -13,12 +13,12 @@ class BlogCategoryController extends BaseController
     {
         $blogCategories = BlogCategory::withCount('blogPosts')->paginate(15);
 
-        return view('admin.blog_categories.index', compact('blogCategories'));
+        return view('admin.blog-categories.index', compact('blogCategories'));
     }
 
     public function create()
     {
-        return view('admin.blog_categories.create');
+        return view('admin.blog-categories.create');
     }
 
     public function store(Request $request)

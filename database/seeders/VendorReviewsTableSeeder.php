@@ -37,7 +37,7 @@ class VendorReviewsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('vendor_reviews')->insert($rows);
         }
     }

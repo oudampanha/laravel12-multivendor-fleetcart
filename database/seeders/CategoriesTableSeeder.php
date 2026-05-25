@@ -35,7 +35,7 @@ class CategoriesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('categories')->insert($rows);
         }
     }

@@ -41,7 +41,7 @@ class GoodsReceiptItemsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('goods_receipt_items')->insert($rows);
         }
     }

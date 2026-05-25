@@ -87,7 +87,7 @@ class ReviewController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function showVendorReview(VendorReview $vendorReview)

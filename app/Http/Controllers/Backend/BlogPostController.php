@@ -18,7 +18,7 @@ class BlogPostController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.blog_posts.index', compact('blogPosts'));
+        return view('admin.blog-posts.index', compact('blogPosts'));
     }
 
     public function create()
@@ -27,7 +27,7 @@ class BlogPostController extends BaseController
         $tags = BlogTag::all();
         $users = User::all();
 
-        return view('admin.blog_posts.create', compact('categories', 'tags', 'users'));
+        return view('admin.blog-posts.create', compact('categories', 'tags', 'users'));
     }
 
     public function store(Request $request)
@@ -53,7 +53,7 @@ class BlogPostController extends BaseController
     {
         $blogPost->load(['user', 'category', 'tags']);
 
-        return view('admin.blog_posts.show', compact('blogPost'));
+        return view('admin.blog-posts.show', compact('blogPost'));
     }
 
     public function edit(BlogPost $blogPost)
@@ -62,7 +62,7 @@ class BlogPostController extends BaseController
         $tags = BlogTag::all();
         $users = User::all();
 
-        return view('admin.blog_posts.edit', compact('blogPost', 'categories', 'tags', 'users'));
+        return view('admin.blog-posts.edit', compact('blogPost', 'categories', 'tags', 'users'));
     }
 
     public function update(Request $request, BlogPost $blogPost)
@@ -112,14 +112,14 @@ class BlogPostController extends BaseController
     {
         $blogPosts = BlogCategory::where('author', $author)->paginate(15);
 
-        return view('admin.blog_posts.index', compact('blogPosts'));
+        return view('admin.blog-posts.index', compact('blogPosts'));
     }
 
     public function draft()
     {
         $blogPosts = BlogCategory::where('publish_status', 'draft')->paginate(15);
 
-        return view('admin.blog_posts.index', compact('blogPosts'));
+        return view('admin.blog-posts.index', compact('blogPosts'));
     }
 
     public function duplicate(BlogCategory $blogPost)
@@ -134,6 +134,6 @@ class BlogPostController extends BaseController
     {
         $blogPosts = BlogCategory::where('publish_status', 'published')->paginate(15);
 
-        return view('admin.blog_posts.index', compact('blogPosts'));
+        return view('admin.blog-posts.index', compact('blogPosts'));
     }
 }

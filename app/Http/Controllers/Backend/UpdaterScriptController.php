@@ -29,7 +29,7 @@ class UpdaterScriptController extends BaseController
 
         $updaterScripts = $query->paginate(15);
 
-        return view('admin.updater_scripts.index', compact('updaterScripts'));
+        return view('admin.updater-scripts.index', compact('updaterScripts'));
     }
 
     public function run(Request $request, UpdaterScript $updaterScript)

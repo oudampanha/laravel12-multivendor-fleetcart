@@ -45,7 +45,7 @@ class WishListController extends BaseController
 
         $wishLists = $query->orderBy('created_at', 'desc')->paginate(15);
 
-        return view('admin.wish_lists.index', compact('wishLists'));
+        return view('admin.wish-lists.index', compact('wishLists'));
     }
 
     /**
@@ -105,6 +105,7 @@ class WishListController extends BaseController
                     $query->where('created_at', '>=', now()->subDays($days));
                 }
             }])
+            ->groupBy('id')
             ->having('wish_count', '>', 0)
             ->orderBy('wish_count', 'desc')
             ->limit($limit);
@@ -158,6 +159,7 @@ class WishListController extends BaseController
                     $query->where('created_at', '>=', now()->subDays($days));
                 }
             }])
+            ->groupBy('id')
             ->having('wish_count', '>', 0)
             ->orderBy('wish_count', 'desc')
             ->limit($limit);

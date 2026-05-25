@@ -26,7 +26,7 @@ class WishListsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('wish_lists')->insert($rows);
         }
     }

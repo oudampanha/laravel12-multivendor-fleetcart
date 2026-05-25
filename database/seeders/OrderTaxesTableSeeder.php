@@ -26,7 +26,7 @@ class OrderTaxesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('order_taxes')->insert($rows);
         }
     }

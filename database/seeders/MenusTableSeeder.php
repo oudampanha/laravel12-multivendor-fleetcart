@@ -25,7 +25,7 @@ class MenusTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('menus')->insert($rows);
         }
     }

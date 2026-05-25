@@ -33,7 +33,7 @@ class FlashSaleProductsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('flash_sale_products')->insert($rows);
         }
     }

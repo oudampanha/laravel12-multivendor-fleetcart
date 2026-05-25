@@ -26,7 +26,7 @@ class CrossSellProductsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('cross_sell_products')->insert($rows);
         }
     }

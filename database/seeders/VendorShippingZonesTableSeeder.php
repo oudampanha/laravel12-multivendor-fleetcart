@@ -41,7 +41,7 @@ class VendorShippingZonesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('vendor_shipping_zones')->insert($rows);
         }
     }
