@@ -429,10 +429,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
     Route::post('media/organize', [MediaController::class, 'organize'])->name('media.organize');
 
     // Entity Media
+    Route::post('entity-media/{entityType}/{entityId}/bulk-attach', [EntityMediaController::class, 'bulkAttach'])->name('entity-media.bulk-attach');
+    Route::delete('entity-media/{entityType}/{entityId}/clear-all', [EntityMediaController::class, 'clearAll'])->name('entity-media.clear-all');
+    Route::patch('entity-media/{entityMedia}/zone', [EntityMediaController::class, 'updateZone'])->name('entity-media.update-zone');
+    Route::get('entity-media/{entityType}/{entityId}/by-zone/{zone}', [EntityMediaController::class, 'byZone'])->name('entity-media.by-zone');
     Route::get('entity-media/{entityType}/{entityId}', [EntityMediaController::class, 'index'])->name('entity-media.index');
     Route::post('entity-media/{entityType}/{entityId}', [EntityMediaController::class, 'store'])->name('entity-media.store');
     Route::delete('entity-media/{entityMedia}', [EntityMediaController::class, 'destroy'])->name('entity-media.destroy');
-    Route::post('entity-media/reorder', [EntityMediaController::class, 'reorder'])->name('entity-media.reorder');
 
     // =============================================================================
     // CUSTOMER MANAGEMENT
