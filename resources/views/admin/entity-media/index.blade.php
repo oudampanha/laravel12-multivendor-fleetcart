@@ -52,9 +52,6 @@
                 </td>
               </tr>
               @empty
-              <tr>
-                <td colspan="5" class="text-center text-muted">No media attached to this entity.</td>
-              </tr>
               @endforelse
             </tbody>
           </table>
