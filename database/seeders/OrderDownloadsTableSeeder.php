@@ -25,7 +25,7 @@ class OrderDownloadsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('order_downloads')->insert($rows);
         }
     }

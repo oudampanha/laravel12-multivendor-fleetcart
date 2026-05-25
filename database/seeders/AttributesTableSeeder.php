@@ -29,7 +29,7 @@ class AttributesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('attributes')->insert($rows);
         }
     }

@@ -25,7 +25,7 @@ class UpSellProductController extends BaseController
 
         $products = $query->orderBy('name')->paginate(15);
 
-        return view('admin.up_sell_products.index', compact('products'));
+        return view('admin.up-sell-products.index', compact('products'));
     }
 
     public function store(Request $request)

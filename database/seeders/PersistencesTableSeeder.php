@@ -27,7 +27,7 @@ class PersistencesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('persistences')->insert($rows);
         }
     }

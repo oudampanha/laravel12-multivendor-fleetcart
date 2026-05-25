@@ -30,7 +30,7 @@ class TransactionsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('transactions')->insert($rows);
         }
     }

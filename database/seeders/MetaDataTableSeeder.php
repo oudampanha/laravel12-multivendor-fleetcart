@@ -27,7 +27,7 @@ class MetaDataTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('meta_data')->insert($rows);
         }
     }

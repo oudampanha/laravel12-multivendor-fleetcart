@@ -31,7 +31,7 @@ class BlogPostsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('blog_posts')->insert($rows);
         }
     }

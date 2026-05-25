@@ -13,12 +13,12 @@ class CurrencyRateController extends BaseController
     {
         $currencyRates = CurrencyRate::orderBy('currency')->paginate(15);
 
-        return view('admin.currency_rates.index', compact('currencyRates'));
+        return view('admin.currency-rates.index', compact('currencyRates'));
     }
 
     public function create()
     {
-        return view('admin.currency_rates.create');
+        return view('admin.currency-rates.create');
     }
 
     public function store(Request $request)

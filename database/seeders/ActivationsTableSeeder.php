@@ -31,7 +31,7 @@ class ActivationsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('activations')->insert($rows);
         }
     }

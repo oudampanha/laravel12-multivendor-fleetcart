@@ -26,7 +26,7 @@ class VendorPayoutController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_payouts.index', compact('vendorPayouts'));
+        return view('admin.vendor-payouts.index', compact('vendorPayouts'));
     }
 
     public function create()
@@ -35,7 +35,7 @@ class VendorPayoutController extends BaseController
             ->where('balance', '>', 0)
             ->get();
 
-        return view('admin.vendor_payouts.create', compact('vendors'));
+        return view('admin.vendor-payouts.create', compact('vendors'));
     }
 
     public function store(Request $request)
@@ -159,7 +159,7 @@ class VendorPayoutController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_payouts.index', compact('vendorPayouts'));
+        return view('admin.vendor-payouts.index', compact('vendorPayouts'));
     }
 
     public function markPaid(VendorPayout $vendorPayout)
@@ -183,7 +183,7 @@ class VendorPayoutController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_payouts.index', compact('vendorPayouts'));
+        return view('admin.vendor-payouts.index', compact('vendorPayouts'));
     }
 
     public function reject(VendorPayout $vendorPayout)

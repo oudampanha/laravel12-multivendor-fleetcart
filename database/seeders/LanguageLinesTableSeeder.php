@@ -29,7 +29,7 @@ class LanguageLinesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('language_lines')->insert($rows);
         }
     }

@@ -41,7 +41,7 @@ class ProductStocksTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('product_stocks')->insert($rows);
         }
     }

@@ -29,7 +29,7 @@ class ThrottleTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('throttle')->insert($rows);
         }
     }

@@ -25,7 +25,7 @@ class AttributeSetsTableSeeder extends Seeder
             ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('attribute_sets')->insert($rows);
         }
     }

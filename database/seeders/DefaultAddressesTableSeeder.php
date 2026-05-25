@@ -25,7 +25,7 @@ class DefaultAddressesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('default_addresses')->insert($rows);
         }
     }

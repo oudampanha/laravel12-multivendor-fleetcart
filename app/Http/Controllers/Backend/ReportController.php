@@ -8,12 +8,29 @@ use App\Models\Product;
 use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends BaseController
 {
     protected string $resource = 'report';
 
     protected array $additionalPermissions = ['report_access'];
+
+    /**
+     * Return a SQL snippet that extracts a date part from `created_at`,
+     * compatible with the currently configured driver.
+     */
+    private function datePart(string $part): string
+    {
+        $driver = DB::connection()->getDriverName();
+        $map = [
+            'hour' => ['mysql' => 'HOUR(created_at)',  'sqlite' => "CAST(strftime('%H', created_at) AS INTEGER)"],
+            'day' => ['mysql' => 'DAY(created_at)',   'sqlite' => "CAST(strftime('%d', created_at) AS INTEGER)"],
+            'month' => ['mysql' => 'MONTH(created_at)', 'sqlite' => "CAST(strftime('%m', created_at) AS INTEGER)"],
+        ];
+
+        return $map[$part][$driver] ?? $map[$part]['mysql'];
+    }
 
     /**
      * Sales Reports
@@ -38,13 +55,13 @@ class ReportController extends BaseController
                 COUNT(*) as total_orders,
                 SUM(total) as total_revenue,
                 AVG(total) as average_order_value,
-                SUM(shipping_cost) as total_shipping,
-                SUM(tax_amount) as total_tax
+                SUM(shipping_cost) as total_shipping
             ')
             ->first();
 
+        $hourPart = $this->datePart('hour');
         $hourlyBreakdown = Order::whereDate('created_at', $date)
-            ->selectRaw('HOUR(created_at) as hour, COUNT(*) as orders, SUM(total) as revenue')
+            ->selectRaw("{$hourPart} as hour, COUNT(*) as orders, SUM(total) as revenue")
             ->groupBy('hour')
             ->orderBy('hour')
             ->get();
@@ -63,14 +80,14 @@ class ReportController extends BaseController
                 COUNT(*) as total_orders,
                 SUM(total) as total_revenue,
                 AVG(total) as average_order_value,
-                SUM(shipping_cost) as total_shipping,
-                SUM(tax_amount) as total_tax
+                SUM(shipping_cost) as total_shipping
             ')
             ->first();
 
+        $dayPart = $this->datePart('day');
         $dailyBreakdown = Order::whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
-            ->selectRaw('DAY(created_at) as day, COUNT(*) as orders, SUM(total) as revenue')
+            ->selectRaw("{$dayPart} as day, COUNT(*) as orders, SUM(total) as revenue")
             ->groupBy('day')
             ->orderBy('day')
             ->get();
@@ -87,13 +104,13 @@ class ReportController extends BaseController
                 COUNT(*) as total_orders,
                 SUM(total) as total_revenue,
                 AVG(total) as average_order_value,
-                SUM(shipping_cost) as total_shipping,
-                SUM(tax_amount) as total_tax
+                SUM(shipping_cost) as total_shipping
             ')
             ->first();
 
+        $monthPart = $this->datePart('month');
         $monthlyBreakdown = Order::whereYear('created_at', $year)
-            ->selectRaw('MONTH(created_at) as month, COUNT(*) as orders, SUM(total) as revenue')
+            ->selectRaw("{$monthPart} as month, COUNT(*) as orders, SUM(total) as revenue")
             ->groupBy('month')
             ->orderBy('month')
             ->get();
@@ -132,6 +149,7 @@ class ReportController extends BaseController
                     });
                 }
             }])
+            ->groupBy('id')
             ->having('total_sold', '>', 0)
             ->orderBy('total_sold', 'desc')
             ->limit($limit);
@@ -170,6 +188,7 @@ class ReportController extends BaseController
                     $query->where('created_at', '>=', now()->subDays($days));
                 }
             }], 'total')
+            ->groupBy('id')
             ->having('total_spent', '>', 0)
             ->orderBy('total_spent', 'desc')
             ->limit($limit);
@@ -207,6 +226,7 @@ class ReportController extends BaseController
                     $query->where('created_at', '>=', now()->subDays($days));
                 }
             }], 'vendor_amount')
+            ->groupBy('id')
             ->having('total_earnings', '>', 0)
             ->orderBy('total_earnings', 'desc')
             ->limit($limit);
@@ -264,8 +284,7 @@ class ReportController extends BaseController
             COUNT(*) as total_orders,
             SUM(total) as total_revenue,
             AVG(total) as average_order_value,
-            SUM(shipping_cost) as total_shipping,
-            SUM(tax_amount) as total_tax
+            SUM(shipping_cost) as total_shipping
         ')->first();
     }
 

@@ -29,7 +29,7 @@ class SettingsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('settings')->insert($rows);
         }
     }

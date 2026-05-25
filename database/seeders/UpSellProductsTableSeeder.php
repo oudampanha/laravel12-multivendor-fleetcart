@@ -26,7 +26,7 @@ class UpSellProductsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('up_sell_products')->insert($rows);
         }
     }

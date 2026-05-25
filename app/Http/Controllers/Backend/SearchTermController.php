@@ -15,7 +15,7 @@ class SearchTermController extends BaseController
     {
         $searchTerms = SearchTerm::orderBy('hits', 'desc')->paginate(15);
 
-        return view('admin.search_terms.index', compact('searchTerms'));
+        return view('admin.search-terms.index', compact('searchTerms'));
     }
 
     public function create()
@@ -38,7 +38,7 @@ class SearchTermController extends BaseController
 
     public function show(SearchTerm $searchTerm)
     {
-        return view('admin.search_terms.show', compact('searchTerm'));
+        return view('admin.search-terms.show', compact('searchTerm'));
     }
 
     public function edit(SearchTerm $searchTerm)

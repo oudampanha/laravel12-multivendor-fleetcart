@@ -20,7 +20,7 @@ class VendorReviewController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function create()
@@ -107,20 +107,20 @@ class VendorReviewController extends BaseController
     {
         $vendorReviews = Order::where('status', 'approved')->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function byVendor($vendor)
     {
         $vendorReviews = Order::where('vendor_id', $vendor)->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 
     public function pending()
     {
         $vendorReviews = Order::where('status', 'pending')->paginate(15);
 
-        return view('admin.vendor_reviews.index', compact('vendorReviews'));
+        return view('admin.vendor-reviews.index', compact('vendorReviews'));
     }
 }

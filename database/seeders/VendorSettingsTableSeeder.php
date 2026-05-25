@@ -29,7 +29,7 @@ class VendorSettingsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('vendor_settings')->insert($rows);
         }
     }

@@ -28,7 +28,7 @@ class ThrottleController extends BaseController
 
         $throttles = $query->paginate(15);
 
-        return view('admin.throttle.index', compact('throttles'));
+        return view('admin.throttles.index', compact('throttles'));
     }
 
     public function destroy(Throttle $throttle)

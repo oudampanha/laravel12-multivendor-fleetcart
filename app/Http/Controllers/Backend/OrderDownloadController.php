@@ -18,14 +18,14 @@ class OrderDownloadController extends BaseController
             ->orderBy('created_at', 'desc')
             ->paginate(15);
 
-        return view('admin.order_downloads.index', compact('orderDownloads'));
+        return view('admin.order-downloads.index', compact('orderDownloads'));
     }
 
     public function create()
     {
         $orders = Order::all();
 
-        return view('admin.order_downloads.create', compact('orders'));
+        return view('admin.order-downloads.create', compact('orders'));
     }
 
     public function store(Request $request)

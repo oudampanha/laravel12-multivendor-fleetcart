@@ -9,13 +9,13 @@
       <div class="card-header">
         <h4 class="card-title">Create New Translation</h4>
         <div class="card-tools">
-          <a href="{{ route('admin.translations.index') }}" class="btn btn-secondary">
+          <a href="{{ route('admin.translation-management.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Back to List
           </a>
         </div>
       </div>
       <div class="card-body">
-        <form action="{{ route('admin.translations.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.translation-management.store') }}" method="POST" enctype="multipart/form-data">
           @csrf
           
           <div class="form-group">

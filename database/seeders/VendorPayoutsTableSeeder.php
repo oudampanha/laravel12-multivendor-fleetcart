@@ -37,7 +37,7 @@ class VendorPayoutsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('vendor_payouts')->insert($rows);
         }
     }

@@ -450,18 +450,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
 
     // Wish Lists
     Route::get('wish-lists', [WishListController::class, 'index'])->name('wish-lists.index');
+    Route::get('wish-lists/popular-products', [WishListController::class, 'popularProducts'])->name('wish-lists.popular-products');
     Route::get('wish-lists/by-customer/{customer}', [WishListController::class, 'byCustomer'])->name('wish-lists.by-customer');
     Route::get('wish-lists/by-product/{product}', [WishListController::class, 'byProduct'])->name('wish-lists.by-product');
     Route::delete('wish-lists/{customer}/{product}', [WishListController::class, 'destroy'])->name('wish-lists.destroy');
-    Route::get('wish-lists/popular-products', [WishListController::class, 'popularProducts'])->name('wish-lists.popular-products');
 
     // Carts
     Route::get('carts', [CartController::class, 'index'])->name('carts.index');
-    Route::get('carts/{cart}', [CartController::class, 'show'])->name('carts.show');
-    Route::delete('carts/{cart}', [CartController::class, 'destroy'])->name('carts.destroy');
-    Route::post('carts/cleanup-abandoned', [CartController::class, 'cleanupAbandoned'])->name('carts.cleanup-abandoned');
     Route::get('carts/abandoned', [CartController::class, 'abandoned'])->name('carts.abandoned');
     Route::get('carts/statistics', [CartController::class, 'statistics'])->name('carts.statistics');
+    Route::post('carts/cleanup-abandoned', [CartController::class, 'cleanupAbandoned'])->name('carts.cleanup-abandoned');
+    Route::get('carts/{cart}', [CartController::class, 'show'])->name('carts.show');
+    Route::delete('carts/{cart}', [CartController::class, 'destroy'])->name('carts.destroy');
 
     // =============================================================================
     // SYSTEM SETTINGS
@@ -539,12 +539,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'permission:dashboar
 
     // Search Terms
     Route::get('search-terms', [SearchTermController::class, 'index'])->name('search-terms.index');
-    Route::get('search-terms/{searchTerm}', [SearchTermController::class, 'show'])->name('search-terms.show');
-    Route::delete('search-terms/{searchTerm}', [SearchTermController::class, 'destroy'])->name('search-terms.destroy');
     Route::get('search-terms/popular', [SearchTermController::class, 'popular'])->name('search-terms.popular');
     Route::get('search-terms/no-results', [SearchTermController::class, 'noResults'])->name('search-terms.no-results');
-    Route::post('search-terms/cleanup', [SearchTermController::class, 'cleanup'])->name('search-terms.cleanup');
     Route::get('search-terms/export', [SearchTermController::class, 'export'])->name('search-terms.export');
+    Route::post('search-terms/cleanup', [SearchTermController::class, 'cleanup'])->name('search-terms.cleanup');
+    Route::get('search-terms/{searchTerm}', [SearchTermController::class, 'show'])->name('search-terms.show');
+    Route::delete('search-terms/{searchTerm}', [SearchTermController::class, 'destroy'])->name('search-terms.destroy');
 
     // =============================================================================
     // AUTHENTICATION & SECURITY

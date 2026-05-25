@@ -64,7 +64,7 @@ class PurchaseOrdersTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('purchase_orders')->insert($rows);
         }
     }

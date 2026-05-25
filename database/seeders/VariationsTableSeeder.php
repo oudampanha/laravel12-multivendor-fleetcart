@@ -32,7 +32,7 @@ class VariationsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('variations')->insert($rows);
         }
     }

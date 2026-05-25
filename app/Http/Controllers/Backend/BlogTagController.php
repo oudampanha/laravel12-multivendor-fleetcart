@@ -13,12 +13,12 @@ class BlogTagController extends BaseController
     {
         $blogTags = BlogTag::withCount('blogPosts')->paginate(15);
 
-        return view('admin.blog_tags.index', compact('blogTags'));
+        return view('admin.blog-tags.index', compact('blogTags'));
     }
 
     public function create()
     {
-        return view('admin.blog_tags.create');
+        return view('admin.blog-tags.create');
     }
 
     public function store(Request $request)
@@ -37,12 +37,12 @@ class BlogTagController extends BaseController
     {
         $blogTag->load('blogPosts');
 
-        return view('admin.blog_tags.show', compact('blogTag'));
+        return view('admin.blog-tags.show', compact('blogTag'));
     }
 
     public function edit(BlogTag $blogTag)
     {
-        return view('admin.blog_tags.edit', compact('blogTag'));
+        return view('admin.blog-tags.edit', compact('blogTag'));
     }
 
     public function update(Request $request, BlogTag $blogTag)

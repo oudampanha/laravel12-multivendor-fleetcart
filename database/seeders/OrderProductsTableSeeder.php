@@ -39,7 +39,7 @@ class OrderProductsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('order_products')->insert($rows);
         }
     }

@@ -26,7 +26,7 @@ class RelatedProductsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('related_products')->insert($rows);
         }
     }

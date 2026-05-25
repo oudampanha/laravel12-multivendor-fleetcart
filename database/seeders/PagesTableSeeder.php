@@ -27,7 +27,7 @@ class PagesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('pages')->insert($rows);
         }
     }

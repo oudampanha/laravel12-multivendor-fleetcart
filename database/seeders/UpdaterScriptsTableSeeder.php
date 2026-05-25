@@ -23,7 +23,7 @@ class UpdaterScriptsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('updater_scripts')->insert($rows);
         }
     }

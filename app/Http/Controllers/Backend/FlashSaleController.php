@@ -13,12 +13,12 @@ class FlashSaleController extends BaseController
     {
         $flashSales = FlashSale::withCount('products')->paginate(15);
 
-        return view('admin.flash_sales.index', compact('flashSales'));
+        return view('admin.flash-sales.index', compact('flashSales'));
     }
 
     public function create()
     {
-        return view('admin.flash_sales.create');
+        return view('admin.flash-sales.create');
     }
 
     public function store(Request $request)
@@ -33,12 +33,12 @@ class FlashSaleController extends BaseController
     {
         $flashSale->load('products.product');
 
-        return view('admin.flash_sales.show', compact('flashSale'));
+        return view('admin.flash-sales.show', compact('flashSale'));
     }
 
     public function edit(FlashSale $flashSale)
     {
-        return view('admin.flash_sales.edit', compact('flashSale'));
+        return view('admin.flash-sales.edit', compact('flashSale'));
     }
 
     public function update(Request $request, FlashSale $flashSale)

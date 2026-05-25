@@ -47,7 +47,7 @@ class MediaTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('media')->insert($rows);
         }
     }

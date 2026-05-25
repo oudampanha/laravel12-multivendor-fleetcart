@@ -50,7 +50,7 @@ class CouponsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('coupons')->insert($rows);
         }
     }

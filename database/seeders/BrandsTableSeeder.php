@@ -29,7 +29,7 @@ class BrandsTableSeeder extends Seeder
             ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('brands')->insert($rows);
         }
     }

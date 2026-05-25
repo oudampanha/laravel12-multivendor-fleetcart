@@ -25,7 +25,7 @@ class CartsTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('carts')->insert($rows);
         }
     }

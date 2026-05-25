@@ -44,7 +44,7 @@ class WarehousesTableSeeder extends Seeder
             ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('warehouses')->insert($rows);
         }
     }

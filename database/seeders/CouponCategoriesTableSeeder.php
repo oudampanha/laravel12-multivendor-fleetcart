@@ -26,7 +26,7 @@ class CouponCategoriesTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('coupon_categories')->insert($rows);
         }
     }

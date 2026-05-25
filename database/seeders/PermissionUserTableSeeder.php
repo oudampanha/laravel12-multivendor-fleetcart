@@ -26,7 +26,7 @@ class PermissionUserTableSeeder extends Seeder
             // ],
         ];
 
-        if (!empty($rows)) {
+        if (! empty($rows)) {
             DB::table('permission_user')->insert($rows);
         }
     }
