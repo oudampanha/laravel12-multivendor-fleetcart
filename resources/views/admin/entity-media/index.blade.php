@@ -7,14 +7,10 @@
   <div class="col-12">
     <div class="card">
       <div class="card-header">
-        <h4 class="card-title">Entity Media Management</h4>
-        <div class="card-tools">
-          @if (Route::has('admin.entity_media.create'))
-<a href="{{ route('admin.entity_media.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Add New Entity Media
-          </a>
-@endif
-        </div>
+        <h4 class="card-title">
+          Entity Media &mdash;
+          <small class="text-muted">{{ $entityType ?? '' }} #{{ $entityId ?? '' }}</small>
+        </h4>
       </div>
       <div class="card-body">
         <div class="table-responsive">
@@ -22,49 +18,50 @@
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Entity Type</th>
-                <th>Entity Id</th>
-                <th>Media</th>
+                <th>File</th>
+                <th>Original name</th>
                 <th>Zone</th>
-                <th>Sort Order</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              @forelse($items ?? [] as $item)
+              @forelse($entityMedia ?? [] as $item)
               <tr>
                 <td>{{ $item->id }}</td>
-                <td>{{ $item->entity_type ?? 'N/A' }}</td>
-                <td>{{ $item->entity_id ?? 'N/A' }}</td>
-                <td>{{ $item->media ?? 'N/A' }}</td>
+                <td>
+                  @if ($item->file && $item->file->file_url)
+                    <a href="{{ $item->file->file_url }}" target="_blank">
+                      {{ $item->file->file_name ?? 'file' }}
+                    </a>
+                  @else
+                    N/A
+                  @endif
+                </td>
+                <td>{{ optional($item->file)->original_name ?? 'N/A' }}</td>
                 <td>{{ $item->zone ?? 'N/A' }}</td>
-                <td>{{ $item->sort_order ?? 'N/A' }}</td>
                 <td>
                   <div class="btn-group">
-                    @if (Route::has('admin.entity_media.show'))
-<a href="{{ route('admin.entity_media.show', $item->id) }}" class="btn btn-sm btn-info">
-                      <i class="fas fa-eye"></i>
-                    </a>
-@endif
-                    @if (Route::has('admin.entity_media.edit'))
-<a href="{{ route('admin.entity_media.edit', $item->id) }}" class="btn btn-sm btn-warning">
-                      <i class="fas fa-edit"></i>
-                    </a>
-@endif
                     <form action="{{ route('admin.entity-media.destroy', $item->id) }}" method="POST" class="d-inline">
                       @csrf
                       @method('DELETE')
-                      <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                        <i class="fas fa-trash"></i>
+                      <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Detach this media from the entity?')">
+                        <i class="fas fa-trash"></i> Detach
                       </button>
                     </form>
                   </div>
                 </td>
               </tr>
               @empty
+              <tr>
+                <td colspan="5" class="text-center text-muted">No media attached to this entity.</td>
+              </tr>
               @endforelse
             </tbody>
           </table>
+
+        @if (! empty($entityMedia) && method_exists($entityMedia, 'links'))
+          {{ $entityMedia->links() }}
+        @endif
         </div>
       </div>
     </div>

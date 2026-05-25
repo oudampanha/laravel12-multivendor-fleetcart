@@ -957,37 +957,102 @@ class MediaController extends BaseController
         }
     }
 
-    public function bulkDelete()
+    /**
+     * Bulk delete media files by id.
+     */
+    public function bulkDelete(Request $request)
     {
-        return redirect()->back()->with('info', 'Bulk Delete feature is available; please contact administrator for full implementation.');
+        $validator = Validator::make($request->all(), [
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'exists:media,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $deleted = 0;
+        $failed = [];
+
+        foreach ($request->input('ids', []) as $id) {
+            try {
+                $media = Media::findOrFail($id);
+                Storage::disk($media->disk)->delete($media->file_path);
+                $media->delete();
+                $deleted++;
+            } catch (\Throwable $e) {
+                $failed[] = ['id' => $id, 'error' => $e->getMessage()];
+            }
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "Deleted {$deleted} file(s).",
+            'data' => [
+                'deleted' => $deleted,
+                'failed' => $failed,
+            ],
+        ]);
     }
 
+    /**
+     * List media filtered by folder path.
+     */
     public function byFolder($folder)
     {
-        $media = Media::where('folder', $folder)->paginate(15);
+        $media = Media::where('folder_path', $folder)->paginate(15);
 
         return view('admin.media.index', compact('media'));
     }
 
+    /**
+     * List media filtered by file_type (image/video/document/...).
+     */
     public function byType($type)
     {
-        $media = Media::where('type', $type)->paginate(15);
+        $media = Media::where('file_type', $type)->paginate(15);
 
         return view('admin.media.index', compact('media'));
     }
 
-    public function destroy()
+    /**
+     * Destroy a single media item (used by route-model-bound DELETE).
+     */
+    public function destroy(Media $media)
     {
-        return redirect()->back()->with('info', 'Destroy feature is available; please contact administrator for full implementation.');
+        return $this->delete($media->id);
     }
 
-    public function download()
+    /**
+     * Download the underlying file as an attachment.
+     */
+    public function download(Media $media)
     {
-        return redirect()->back()->with('info', 'Download feature is available; please contact administrator for full implementation.');
+        if (! Storage::disk($media->disk)->exists($media->file_path)) {
+            return redirect()->back()->with('error', 'File not found on disk.');
+        }
+
+        return Storage::disk($media->disk)->download(
+            $media->file_path,
+            $media->original_name
+        );
     }
 
-    public function organize()
+    /**
+     * Organize the media library. Currently a no-op placeholder; returns the
+     * current folder/file counts so callers can verify the endpoint is wired.
+     */
+    public function organize(Request $request)
     {
-        return redirect()->back()->with('info', 'Organize feature is available; please contact administrator for full implementation.');
+        return response()->json([
+            'success' => true,
+            'message' => 'Organize endpoint is active. Provide explicit move/copy operations via the bulk endpoints.',
+            'data' => [
+                'file_count' => Media::count(),
+            ],
+        ]);
     }
 }

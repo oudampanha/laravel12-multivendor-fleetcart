@@ -39,7 +39,7 @@
           renameFolder: '{{ route('admin.media.rename-folder') }}',
           deleteFolder: '{{ route('admin.media.delete-folder') }}',
           renameFile: '{{ route('admin.media.rename-file') }}',
-          deleteFile: '/admin.media/delete/{id}',
+          deleteFile: '{{ url('admin/media/delete') }}/{id}',
           moveToFolder: '{{ route('admin.media.move-to-folder') }}',
           copyToFolder: '{{ route('admin.media.copy-to-folder') }}',
           bulkMoveToFolder: '{{ route('admin.media.bulk-move-to-folder') }}',
